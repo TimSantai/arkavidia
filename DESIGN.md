@@ -1,11 +1,11 @@
 # BERSAMA — Design System & UI Guidelines (`DESIGN.md`)
 
 > **Tagline:** *Satu tim, semua paham.*  
-> **Aesthetic Direction:** Quiet, Tactile, Human-Centered Workspace (Hybrid Campsite + Linear Precision)  
+> **Aesthetic Direction:** Quiet, Tactile, Product-Forward Workspace (Hybrid Campsite + team-brain.com + Linear Precision)  
 > **Theme Mode:** Dual-Mode (**Default: Light Mode**, Toggleable to Dark Mode via `.dark`)  
 > **Color Foundation:** Ramps Studio OKLCH Analogous Palette (`#3d7dff`, WCAG AA $\ge 4.5:1$)  
-> **Typography:** `Allo` (Variable Sans) + `ui-monospace` (Tabular Metadata)  
-> **Component Stack:** `shadcn/ui` + `@kibo-ui/*` + `@ai-elements/*` + Custom BERSAMA Primitives
+> **Typography:** `Allo` (Display & Headings) + `Geist Variable` (Body, Subtext & UI) + `Geist Mono Variable` (Technical Metadata)  
+> **Component Stack:** `shadcn/ui` + `@kibo-ui/*` + `@ai-elements/*` + `@icons-pack/react-simple-icons` + `react-icons` + Custom BERSAMA Primitives
 
 ---
 
@@ -17,6 +17,7 @@ BERSAMA adalah ruang kerja pembelajaran kolaboratif mahasiswa (*One team, everyo
 2. **Tactile & Layered:** Permukaan dipisahkan melalui hierarki kanvas $\rightarrow$ surface $\rightarrow$ raised surface. Di Light Mode, `bg-surface` dan `bg-surface-raised` bernilai sama (`#f4f6f9`), sehingga elemen melayang (*dropdown, popover, tooltip, floating modal*) **wajib** memakai `shadow-raised` agar tetap terbaca terangkat.
 3. **Zero-Friction Privacy Signalling:** Perbedaan **M1 (Personal Memory)** dan **M2 (Team Memory / Project Brain)** harus jelas secara struktural melalui ikon kunci, batas hairline, dan badge monospace (`M1 PRIVATE` vs `M2 TEAM`), bukan lewat warna neon yang agresif.
 4. **WCAG AA Compliance:** Semua pasangan foreground/background berasal langsung dari kurva OKLCH Ramps Studio. **Jangan pernah** mengganti warna pasangan token secara manual agar rasio kontras $\ge 4.5:1$ tetap terjaga di Light maupun Dark Mode.
+5. **Product-Forward & Visual-First (Show, Don't Tell):** Utamakan mockup workspace nyata lebar penuh, foto profil anggota realistis, diagram/heatmap visual, dan slider interaktif alih-alih dinding teks. Biarkan produk berbicara terlebih dahulu sebelum salinan penjelasan singkat.
 
 ---
 
@@ -125,22 +126,23 @@ Gunakan token semantik di bawah ini (melalui CSS custom properties atau utility 
 
 ---
 
-## 4. Tipografi & Skala (Allo + Monospace — Hybrid Campsite + Linear)
+## 4. Tipografi & Skala (Allo + Geist Variable + Geist Mono — Hybrid Campsite + Linear)
 
-* **Primary UI & Display Font:** `'Allo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` (via `allo-font`).
-* **Monospace Metadata Font:** `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace` — digunakan untuk ID keputusan (`DEC-14`), versi bitemporal (`as_of`), angka probabilitas ($P(L)=0.82$), tag `M1`/`M2`, dan keyboard shortcut (`⌘K`).
+* **Display & Heading Font (`--font-heading`):** `'Allo', 'Geist Variable', -apple-system, BlinkMacSystemFont, sans-serif` (via `allo-font`) — khusus judul display, hero, heading halaman, dan judul kartu.
+* **Primary UI, Body & Subtext Font (`--font-sans`):** `'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` (via `@fontsource-variable/geist`) — digunakan untuk seluruh paragraf, subtext, eyebrow, caption, label navigasi, dan tombol agar terbaca menyatu dan bersih.
+* **Monospace Metadata Font (`--font-mono`):** `'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace` (via `@fontsource-variable/geist-mono`) — digunakan **khusus** untuk metadata teknis: ID keputusan (`DEC-14`), kode KC (`KC-01`), versi bitemporal (`as_of`), angka probabilitas ($P(L)=0.82$), tag `M1`/`M2`, URL path, rumus, dan keyboard shortcut (`⌘K`). **Jangan** memakai `font-mono` untuk subtext prosa atau eyebrow biasa.
 * **Prinsip Bobot:** Ikuti disiplin Linear/Campsite — hindari penggunaan `font-bold` (`700`) berlebihan. Gunakan **400 (Regular)** untuk teks tubuh, **500 (Medium)** untuk label UI & subheading, dan **600 (Semibold)** untuk judul utama & tombol aksi.
 
-| Role | Size | Weight | Line Height | Letter Spacing | Pemakaian |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| `display` | `36px` (`2.25rem`) | `600` | `1.15` | `-0.028em` | Hero / onboarding judul utama |
-| `h1` | `28px` (`1.75rem`) | `600` | `1.22` | `-0.022em` | Judul halaman workspace |
-| `h2` | `20px` (`1.25rem`) | `600` | `1.30` | `-0.015em` | Judul panel / section card |
-| `h3` | `16px` (`1rem`) | `500` | `1.40` | `-0.011em` | Judul kartu keputusan / modul |
-| `body` | `14px`–`15px` | `400` | `1.55` | `-0.008em` | Pesan chat, deskripsi alasan, esai |
-| `ui-label` | `13px` (`0.8125rem`) | `500` | `1.35` | `0em` | Item sidebar, tab, tombol |
-| `caption` | `12px` (`0.75rem`) | `400` | `1.35` | `+0.01em` | Timestamp, metadata helper |
-| `mono-tag` | `11px`–`12px` | `500` | `1.20` | `+0.02em` | Decision ID, status badge, shortcut |
+| Role | Font Token | Size | Weight | Line Height | Letter Spacing | Pemakaian |
+| :--- | :--- | :--- | :---: | :---: | :---: | :--- |
+| `display` | `font-heading` | `36px`–`56px` | `600` | `1.08`–`1.15` | `-0.03em` | Hero / onboarding judul utama |
+| `h1` | `font-heading` | `28px` (`1.75rem`) | `600` | `1.22` | `-0.022em` | Judul halaman workspace |
+| `h2` | `font-heading` | `20px`–`30px` | `600` | `1.30` | `-0.018em` | Judul panel / section card |
+| `h3` | `font-heading` | `16px` (`1rem`) | `500`–`600` | `1.40` | `-0.011em` | Judul kartu keputusan / modul |
+| `body` | `font-sans` | `14px`–`16px` | `400` | `1.55` | `-0.008em` | Pesan chat, deskripsi alasan, esai |
+| `ui-label` | `font-sans` | `12px`–`13px` | `500` | `1.35` | `0em` | Item sidebar, tab, eyebrow, tombol |
+| `caption` | `font-sans` | `11px`–`12px` | `400`–`500` | `1.35` | `0em` | Subtext anggota, timestamp, helper |
+| `mono-tag` | `font-mono` | `10px`–`12px` | `500`–`600` | `1.20` | `+0.02em` | Decision ID, kode KC, status tag, rumus, shortcut |
 
 ---
 
@@ -162,10 +164,10 @@ Gunakan token semantik di bawah ini (melalui CSS custom properties atau utility 
 
 ### 6.1 Base Primitives (`shadcn/ui` + `@kibo-ui/*`)
 Selalu cek dan pasang komponen dari `@kibo-ui/*` terlebih dahulu sebelum membuat komponen baru:
-* **Kolaborasi & Identitas:** `@kibo-ui/avatar-stack` (anggota tim & pemilik pemahaman KC), `@kibo-ui/pill`, `@kibo-ui/status` (status konfirmasi & sinkronisasi).
-* **Manajemen Keputusan & Proyek:** `@kibo-ui/list`, `@kibo-ui/table`, `@kibo-ui/gantt` *(sudah terpasang)*, `@kibo-ui/tags` (label KC), `@kibo-ui/tree` (struktur dependensi modul).
-* **Input & Evaluasi:** `@kibo-ui/choicebox` (pemilihan opsi Explain-back / onboarding), `@kibo-ui/dropzone` (import log chat/WhatsApp), `@kibo-ui/code-block` & `@kibo-ui/snippet` (cuplikan kode di Project Brain).
-* **Utilitas:** `@kibo-ui/theme-switcher` (Light/Dark toggle), `@kibo-ui/announcement`, `@kibo-ui/dialog-stack`.
+* **Kolaborasi & Identitas:** `@kibo-ui/avatar-stack` *(terpasang)* (anggota tim & pemilik pemahaman KC), `@kibo-ui/pill` *(terpasang)*, `@kibo-ui/status` *(terpasang)* (status konfirmasi & sinkronisasi), `@kibo-ui/cursor` *(terpasang)* (indikator kolaborasi ruang aktif).
+* **Manajemen Keputusan & Proyek:** `@kibo-ui/list`, `@kibo-ui/table`, `@kibo-ui/gantt` *(terpasang)*, `@kibo-ui/tags` *(terpasang)* (label KC), `@kibo-ui/tree` (struktur dependensi modul).
+* **Input & Evaluasi:** `@kibo-ui/choicebox` (pemilihan opsi Explain-back / onboarding), `@kibo-ui/dropzone` (import log chat/WhatsApp), `@kibo-ui/code-block` & `@kibo-ui/snippet` (cuplikan kode di Project Brain), `@kibo-ui/comparison` *(terpasang)* (slider visual Before/After).
+* **Utilitas:** `@kibo-ui/theme-switcher` *(terpasang)* (Light/Dark toggle), `@kibo-ui/announcement` *(terpasang)*, `@kibo-ui/dialog-stack`.
 
 ### 6.2 Komponen AI (`@ai-elements/*` — Penerus Komponen AI Kibo UI)
 Komponen AI dari pencipta Kibo UI kini dikelola resmi di registry **AI Elements** (`npx shadcn@latest add @ai-elements/<name>`):
@@ -180,3 +182,9 @@ Jika suatu komponen tidak tersedia di `@kibo-ui` maupun `@ai-elements`, bangun k
    * **Knowledge Coverage Matrix & Bus Factor Gauge:** Heatmap penguasaan per `(anggota, KC)` memakai palet `chart-1..5` (`brand`, `accent-violet`, `tertiary`).
    * **Context Passport PII Diff Drawer:** Tampilan berdampingan sebelum/sesudah penyamaran PII (highlighting pakai `bg-warning-subtle` / `bg-error-subtle`).
    * **Explain-Back Check Modal:** Timer ringan 5 menit, input teks / voice note waveform, serta tampilan status *Conformal Abstention* (*"Diteruskan ke penulis keputusan untuk peer explanation"*).
+
+### 6.4 Ikonografi & Logo Brand
+* **UI Icons:** Gunakan `lucide-react` secara konsisten untuk seluruh ikon kontrol, navigasi, dan status.
+* **Official Brand Logos:** Wajib mengambil logo resmi pihak ketiga dari `@icons-pack/react-simple-icons` (plus `react-icons/ri` untuk `RiOpenaiFill` karena penghapusan slug OpenAI di Simple Icons) — **dilarang** menggambar SVG ikon brand generik manual.
+  * Brand monokrom gelap (`OpenAI`, `Notion`, `GitHub`) wajib memakai `color="currentColor"` (mewarisi `text-ink-primary`) agar tetap kontras di Dark Mode.
+  * Brand berwarna (`Claude`, `Gemini`, `WhatsApp`, `PostgreSQL`, `Supabase`, `FastAPI`) gunakan `color="default"` dengan warna resmi masing-masing brand.
