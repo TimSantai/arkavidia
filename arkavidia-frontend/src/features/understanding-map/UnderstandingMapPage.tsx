@@ -9,7 +9,7 @@ import type { Team, TeamUnderstandingMetrics } from "@/types/bersama"
 import { BusFactorGauge } from "./components/BusFactorGauge"
 import { CoverageMatrix } from "./components/CoverageMatrix"
 import { KcDetailCard } from "./components/KcDetailCard"
-import { PairingPanelSlot } from "./components/PairingPanelSlot"
+import { SiloPairingPanel } from "./components/SiloPairingPanel"
 
 export function UnderstandingMapPage() {
   const { teamId = "team-pbo-01" } = useParams()
@@ -259,8 +259,14 @@ export function UnderstandingMapPage() {
       {/* 4. Selected KC Detail Card */}
       {selectedSummary && <KcDetailCard summary={selectedSummary} teamId={teamId} />}
 
-      {/* 5. Dedicated Mount Slot for Issue S5b (Pairing Panel) */}
-      <PairingPanelSlot suggestions={metrics.pairingSuggestions} />
+      {/* 5. Silo Alert & Pairing Flow (Fitur F7 — Issue S5b) */}
+      <SiloPairingPanel
+        suggestions={metrics.pairingSuggestions}
+        teamId={teamId}
+        busFactor={metrics.busFactor}
+        siloKcTitle={siloKc?.kc.name}
+        siloExpertName={siloExpert?.name.split(" ")[0]}
+      />
     </div>
   )
 }
