@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Link, useParams } from "react-router"
-import { Bot, CheckCircle2, GitPullRequestDraft, ShieldAlert } from "lucide-react"
+import {
+  Bot,
+  CheckCircle2,
+  GitPullRequestDraft,
+  Maximize2,
+  Minimize2,
+  ShieldAlert,
+} from "lucide-react"
 import {
   Conversation,
   ConversationContent,
@@ -19,6 +26,7 @@ import { Shimmer } from "@/components/ai-elements/shimmer"
 import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion"
 import { Status, StatusIndicator, StatusLabel } from "@/components/kibo-ui/status"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import { getStoredDemoUser } from "@/features/auth/components/demoSession"
 import { cn } from "@/lib/utils"
 import { bersamaApi } from "@/services/api"
@@ -38,8 +46,20 @@ export function TeamChatPage() {
   const [brainItems, setBrainItems] = useState<readonly MemoryItem[]>([])
   const [inputText, setInputText] = useState("")
   const [isAgentThinking, setIsAgentThinking] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const [highlightedMsgId, setHighlightedMsgId] = useState<string | null>(null)
   const highlightTimerRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    if (!isFullscreen) return
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsFullscreen(false)
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [isFullscreen])
 
   useEffect(() => {
     void Promise.all([
@@ -249,9 +269,14 @@ export function TeamChatPage() {
   )
 
   return (
-    <div className="flex h-[calc(100vh-5.75rem)] min-h-[540px] flex-col overflow-hidden rounded-2xl border border-line-subtle bg-surface shadow-surface">
+    <div
+      className={cn(
+        "fixed flex flex-col bg-surface",
+        isFullscreen ? "inset-0 z-40" : "inset-x-0 top-14 bottom-0 z-20 lg:left-64"
+      )}
+    >
       {/* Slim Top Context Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line-subtle bg-surface px-4 py-3 sm:px-5">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line-subtle bg-surface px-4 py-3 sm:px-6">
         <div className="flex flex-wrap items-center gap-2.5">
           <h1 className="font-heading text-base font-semibold text-ink-primary sm:text-lg">
             Ruang Tim
@@ -289,12 +314,28 @@ export function TeamChatPage() {
               <span>Semua Terkonfirmasi</span>
             </Link>
           )}
+
+          <Button
+            type="button"
+            variant="outline"
+            size="icon-sm"
+            onClick={() => setIsFullscreen((prev) => !prev)}
+            aria-label={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
+            title={isFullscreen ? "Keluar layar penuh (Esc)" : "Layar penuh"}
+            className="border-line-subtle bg-canvas text-ink-secondary hover:text-ink-primary"
+          >
+            {isFullscreen ? (
+              <Minimize2 className="size-4" />
+            ) : (
+              <Maximize2 className="size-4" />
+            )}
+          </Button>
         </div>
       </div>
 
       {/* Scrollable AI Elements Conversation Stream */}
       <Conversation className="flex-1 bg-canvas/35">
-        <ConversationContent className="gap-4 p-4 sm:p-5">
+        <ConversationContent className="mx-auto w-full max-w-4xl gap-4 px-4 py-5 sm:px-6">
           {messages.map((msg) => (
             <TeamChatMessageItem
               key={msg.id}
@@ -330,65 +371,67 @@ export function TeamChatPage() {
       </Conversation>
 
       {/* Bottom Sticky Quick Prompt Chips + PromptInput Composer */}
-      <div className="space-y-2.5 border-t border-line-subtle bg-surface p-3 sm:px-5 sm:py-3.5">
-        <Suggestions className="gap-2">
-          {TEAM_CHAT_SUGGESTIONS.map((chip) => (
-            <Suggestion
-              key={chip.id}
-              suggestion={chip.prompt}
-              onClick={(prompt) => void handleSendText(prompt)}
-              className={cn(
-                "h-7 rounded-full border px-3 text-xs font-medium",
-                chip.isRedTeam
-                  ? "border-line-error/40 bg-error-subtle/60 text-text-error hover:bg-error-subtle"
-                  : "border-line-subtle bg-canvas text-ink-secondary hover:border-line-default hover:text-ink-primary"
-              )}
-            >
-              {chip.isRedTeam && <ShieldAlert className="mr-1 size-3 shrink-0" />}
-              <span>{chip.label}</span>
-            </Suggestion>
-          ))}
-        </Suggestions>
+      <div className="border-t border-line-subtle bg-surface px-4 py-3 sm:px-6">
+        <div className="mx-auto w-full max-w-4xl space-y-2.5">
+          <Suggestions className="gap-2">
+            {TEAM_CHAT_SUGGESTIONS.map((chip) => (
+              <Suggestion
+                key={chip.id}
+                suggestion={chip.prompt}
+                onClick={(prompt) => void handleSendText(prompt)}
+                className={cn(
+                  "h-7 rounded-full border px-3 text-xs font-medium",
+                  chip.isRedTeam
+                    ? "border-line-error/40 bg-error-subtle/60 text-text-error hover:bg-error-subtle"
+                    : "border-line-subtle bg-canvas text-ink-secondary hover:border-line-default hover:text-ink-primary"
+                )}
+              >
+                {chip.isRedTeam && <ShieldAlert className="mr-1 size-3 shrink-0" />}
+                <span>{chip.label}</span>
+              </Suggestion>
+            ))}
+          </Suggestions>
 
-        <PromptInput
-          onSubmit={({ text }) => void handleSendText(text || inputText)}
-          className="[&_[data-slot=input-group]]:rounded-xl [&_[data-slot=input-group]]:border-line-default [&_[data-slot=input-group]]:bg-canvas/45"
-        >
-          <PromptInputBody>
-            <PromptInputTextarea
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              placeholder="Tulis pesan ke tim atau mention @TeamAgent..."
-              className="min-h-11 px-3.5 py-2.5 text-sm text-ink-primary"
-            />
-          </PromptInputBody>
-          <PromptInputFooter className="border-t border-line-subtle/60 px-3 py-1.5">
-            <PromptInputTools className="gap-2">
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface py-0.5 pr-2.5 pl-1">
-                <Avatar size="sm" className="size-4">
-                  {activeAvatarSrc && (
-                    <AvatarImage src={activeAvatarSrc} alt={activeUser.name} />
-                  )}
-                  <AvatarFallback className="text-[9px] font-semibold">
-                    {activeUser.initials}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-[11px] font-medium text-ink-secondary">
-                  {activeUser.name.split(" ")[0]}
+          <PromptInput
+            onSubmit={({ text }) => void handleSendText(text || inputText)}
+            className="[&_[data-slot=input-group]]:rounded-xl [&_[data-slot=input-group]]:border-line-default [&_[data-slot=input-group]]:bg-canvas/45"
+          >
+            <PromptInputBody>
+              <PromptInputTextarea
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder="Tulis pesan ke tim atau mention @TeamAgent..."
+                className="min-h-11 px-3.5 py-2.5 text-sm text-ink-primary"
+              />
+            </PromptInputBody>
+            <PromptInputFooter className="border-t border-line-subtle/60 px-3 py-1.5">
+              <PromptInputTools className="gap-2">
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface py-0.5 pr-2.5 pl-1">
+                  <Avatar size="sm" className="size-4">
+                    {activeAvatarSrc && (
+                      <AvatarImage src={activeAvatarSrc} alt={activeUser.name} />
+                    )}
+                    <AvatarFallback className="text-[9px] font-semibold">
+                      {activeUser.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-[11px] font-medium text-ink-secondary">
+                    {activeUser.name.split(" ")[0]}
+                  </span>
+                </div>
+                <span className="rounded-full bg-info-subtle px-2 py-0.5 font-mono text-[10px] font-medium text-text-info">
+                  M2 TEAM
                 </span>
-              </div>
-              <span className="rounded-full bg-info-subtle px-2 py-0.5 font-mono text-[10px] font-medium text-text-info">
-                M2 TEAM
-              </span>
-            </PromptInputTools>
+              </PromptInputTools>
 
-            <PromptInputSubmit
-              status={isAgentThinking ? "submitted" : undefined}
-              disabled={!inputText.trim() || isAgentThinking}
-              className="bg-brand text-on-brand hover:bg-brand-hover disabled:opacity-40"
-            />
-          </PromptInputFooter>
-        </PromptInput>
+              <PromptInputSubmit
+                status={isAgentThinking ? "submitted" : undefined}
+                disabled={!inputText.trim() || isAgentThinking}
+                className="bg-brand text-on-brand hover:bg-brand-hover disabled:opacity-40"
+              />
+            </PromptInputFooter>
+          </PromptInput>
+        </div>
       </div>
     </div>
   )
