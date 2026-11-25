@@ -280,7 +280,7 @@ export function TeamChatPage() {
   return (
     <div
       className={cn(
-        "fixed flex flex-col bg-surface",
+        "fixed flex flex-col bg-canvas",
         isFullscreen ? "inset-0 z-40" : "inset-x-0 top-14 bottom-0 z-20 lg:left-64"
       )}
     >
@@ -349,8 +349,8 @@ export function TeamChatPage() {
       </div>
 
       {/* Scrollable AI Elements Conversation Stream */}
-      <Conversation className="min-h-0 flex-1 overflow-hidden bg-canvas/35 [&>div]:h-full [&>div]:overflow-y-auto">
-        <ConversationContent className="mx-auto w-full max-w-5xl gap-3 px-4 py-5 sm:px-8">
+      <Conversation className="min-h-0 flex-1 overflow-hidden bg-canvas [&>div]:h-full [&>div]:overflow-y-auto">
+        <ConversationContent className="mx-auto w-full max-w-5xl gap-3 px-4 pt-5 pb-44 sm:px-8 sm:pb-40">
           {messages.map((msg) => (
             <TeamChatMessageItem
               key={msg.id}
@@ -382,12 +382,12 @@ export function TeamChatPage() {
             </div>
           )}
         </ConversationContent>
-        <ConversationScrollButton className="right-6 bottom-4 left-auto translate-x-0 border-line-subtle bg-surface-raised text-ink-primary shadow-raised" />
+        <ConversationScrollButton className="right-6 bottom-40 left-auto translate-x-0 border-line-subtle bg-surface-raised text-ink-primary shadow-raised sm:bottom-36" />
       </Conversation>
 
-      {/* Bottom Sticky Quick Prompt Chips + PromptInput Composer */}
-      <div className="shrink-0 border-t border-line-subtle bg-surface px-4 py-3 sm:px-8">
-        <div className="mx-auto w-full max-w-5xl space-y-2.5">
+      {/* Floating Bottom Quick Prompt Chips + PromptInput Composer */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-canvas via-canvas/90 to-transparent px-4 pt-8 pb-4 sm:px-8 sm:pb-5">
+        <div className="pointer-events-auto mx-auto w-full max-w-4xl space-y-2.5">
           <div className="flex flex-wrap items-center gap-2">
             {TEAM_CHAT_SUGGESTIONS.map((chip) => (
               <Suggestion
@@ -395,10 +395,10 @@ export function TeamChatPage() {
                 suggestion={chip.prompt}
                 onClick={(prompt) => void handleSendText(prompt)}
                 className={cn(
-                  "h-7 rounded-full border px-3 text-xs font-medium",
+                  "h-7 rounded-full border px-3 text-xs font-medium shadow-surface backdrop-blur-sm",
                   chip.isRedTeam
-                    ? "border-line-error/40 bg-error-subtle/60 text-text-error hover:bg-error-subtle"
-                    : "border-line-subtle bg-canvas text-ink-secondary hover:border-line-default hover:text-ink-primary"
+                    ? "border-line-error/40 bg-error-subtle/90 text-text-error hover:bg-error-subtle"
+                    : "border-line-subtle bg-surface/95 text-ink-secondary hover:border-line-default hover:text-ink-primary"
                 )}
               >
                 {chip.isRedTeam && <ShieldAlert className="mr-1 size-3 shrink-0" />}
@@ -409,7 +409,7 @@ export function TeamChatPage() {
 
           <PromptInput
             onSubmit={({ text }) => void handleSendText(text || inputText)}
-            className="[&_[data-slot=input-group]]:rounded-xl [&_[data-slot=input-group]]:border-line-default [&_[data-slot=input-group]]:bg-canvas/45"
+            className="[&_[data-slot=input-group]]:rounded-2xl [&_[data-slot=input-group]]:border-line-subtle [&_[data-slot=input-group]]:bg-surface-raised [&_[data-slot=input-group]]:shadow-raised"
           >
             <PromptInputBody>
               <PromptInputTextarea
