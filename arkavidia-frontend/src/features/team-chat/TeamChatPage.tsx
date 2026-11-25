@@ -23,7 +23,7 @@ import {
   PromptInputTools,
 } from "@/components/ai-elements/prompt-input"
 import { Shimmer } from "@/components/ai-elements/shimmer"
-import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion"
+import { Suggestion } from "@/components/ai-elements/suggestion"
 import { Status, StatusIndicator, StatusLabel } from "@/components/kibo-ui/status"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -49,6 +49,15 @@ export function TeamChatPage() {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [highlightedMsgId, setHighlightedMsgId] = useState<string | null>(null)
   const highlightTimerRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [])
 
   useEffect(() => {
     if (!isFullscreen) return
@@ -275,9 +284,15 @@ export function TeamChatPage() {
         isFullscreen ? "inset-0 z-40" : "inset-x-0 top-14 bottom-0 z-20 lg:left-64"
       )}
     >
-      {/* Slim Top Context Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line-subtle bg-surface px-4 py-3 sm:px-6">
-        <div className="flex flex-wrap items-center gap-2.5">
+      {/* Top Context Bar — docked into AppShell's empty left/center h-14 header on desktop */}
+      <div
+        className={cn(
+          "flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-line-subtle bg-surface px-4 py-2.5 sm:px-6",
+          !isFullscreen &&
+            "lg:fixed lg:top-0 lg:right-52 lg:left-64 lg:z-30 lg:h-14 lg:border-b-0 lg:bg-transparent lg:py-0"
+        )}
+      >
+        <div className="flex flex-wrap items-center gap-2">
           <h1 className="font-heading text-base font-semibold text-ink-primary sm:text-lg">
             Ruang Tim
           </h1>
@@ -334,8 +349,8 @@ export function TeamChatPage() {
       </div>
 
       {/* Scrollable AI Elements Conversation Stream */}
-      <Conversation className="flex-1 bg-canvas/35">
-        <ConversationContent className="mx-auto w-full max-w-4xl gap-4 px-4 py-5 sm:px-6">
+      <Conversation className="min-h-0 flex-1 overflow-hidden bg-canvas/35 [&>div]:h-full [&>div]:overflow-y-auto">
+        <ConversationContent className="mx-auto w-full max-w-5xl gap-3 px-4 py-5 sm:px-8">
           {messages.map((msg) => (
             <TeamChatMessageItem
               key={msg.id}
@@ -367,13 +382,13 @@ export function TeamChatPage() {
             </div>
           )}
         </ConversationContent>
-        <ConversationScrollButton className="border-line-subtle bg-surface-raised text-ink-primary shadow-raised" />
+        <ConversationScrollButton className="right-6 bottom-4 left-auto translate-x-0 border-line-subtle bg-surface-raised text-ink-primary shadow-raised" />
       </Conversation>
 
       {/* Bottom Sticky Quick Prompt Chips + PromptInput Composer */}
-      <div className="border-t border-line-subtle bg-surface px-4 py-3 sm:px-6">
-        <div className="mx-auto w-full max-w-4xl space-y-2.5">
-          <Suggestions className="gap-2">
+      <div className="shrink-0 border-t border-line-subtle bg-surface px-4 py-3 sm:px-8">
+        <div className="mx-auto w-full max-w-5xl space-y-2.5">
+          <div className="flex flex-wrap items-center gap-2">
             {TEAM_CHAT_SUGGESTIONS.map((chip) => (
               <Suggestion
                 key={chip.id}
@@ -390,7 +405,7 @@ export function TeamChatPage() {
                 <span>{chip.label}</span>
               </Suggestion>
             ))}
-          </Suggestions>
+          </div>
 
           <PromptInput
             onSubmit={({ text }) => void handleSendText(text || inputText)}

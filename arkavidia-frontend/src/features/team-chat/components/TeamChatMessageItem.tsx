@@ -100,8 +100,8 @@ export function TeamChatMessageItem({
           {/* Message Body Column */}
           <div
             className={cn(
-              "flex min-w-0 max-w-2xl flex-1 flex-col gap-1",
-              isCurrentUser && "items-end"
+              "flex min-w-0 flex-1 flex-col gap-1",
+              isCurrentUser ? "max-w-xl items-end" : "max-w-3xl"
             )}
           >
             {/* Sender Metadata Row */}
@@ -135,10 +135,15 @@ export function TeamChatMessageItem({
             {/* Bubble Content */}
             <MessageContent
               className={cn(
-                "w-full rounded-2xl px-4 py-3 text-sm leading-relaxed",
+                "rounded-2xl px-4 py-3 text-sm leading-relaxed",
                 isCurrentUser
-                  ? "rounded-tr-sm bg-brand text-on-brand group-[.is-user]:bg-brand group-[.is-user]:text-on-brand"
-                  : "rounded-tl-sm border border-line-subtle bg-surface text-ink-primary shadow-surface"
+                  ? "ml-auto w-fit max-w-full rounded-tr-sm bg-brand text-on-brand group-[.is-user]:bg-brand group-[.is-user]:text-on-brand"
+                  : cn(
+                      "rounded-tl-sm border border-line-subtle bg-surface text-ink-primary shadow-surface",
+                      proposedItem || message.policyBlocked || (message.citations?.length ?? 0) > 0
+                        ? "w-full"
+                        : "w-fit max-w-full"
+                    )
               )}
             >
               <p className="whitespace-pre-wrap">{message.body}</p>
