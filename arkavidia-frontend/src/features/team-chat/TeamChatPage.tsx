@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Link, useParams } from "react-router"
+import { useParams } from "react-router"
 import {
+  ArrowDown,
   Bot,
-  CheckCircle2,
   GitPullRequestDraft,
   Maximize2,
   Minimize2,
@@ -284,73 +284,81 @@ export function TeamChatPage() {
         isFullscreen ? "inset-0 z-40" : "inset-x-0 top-14 bottom-0 z-20 lg:left-64"
       )}
     >
-      {/* Top Context Bar — docked into AppShell's empty left/center h-14 header on desktop */}
+      {/* Top Context Bar — docked safely into AppShell's left/center h-14 header on desktop */}
       <div
         className={cn(
-          "flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-line-subtle bg-surface px-4 py-2.5 sm:px-6",
+          "flex shrink-0 flex-nowrap items-center justify-between gap-2 border-b border-line-subtle bg-surface px-4 py-2.5 sm:px-6",
           !isFullscreen &&
-            "lg:fixed lg:top-0 lg:right-52 lg:left-64 lg:z-30 lg:h-14 lg:border-b-0 lg:bg-transparent lg:py-0"
+            "lg:fixed lg:top-0 lg:right-64 lg:left-64 lg:z-30 lg:h-14 lg:border-b-0 lg:bg-transparent lg:py-0"
         )}
       >
-        <div className="flex flex-wrap items-center gap-2">
-          <h1 className="font-heading text-base font-semibold text-ink-primary sm:text-lg">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <h1 className="truncate font-heading text-base font-semibold text-ink-primary sm:text-lg">
             Ruang Tim
           </h1>
-          <span className="rounded-full border border-line-subtle bg-canvas px-2.5 py-0.5 font-mono text-[11px] font-medium text-ink-secondary">
-            M2 TEAM MEMORY
-          </span>
           <Status
             status="online"
-            className="border border-line-subtle bg-canvas px-2.5 py-0.5 font-mono text-[11px]"
+            className="shrink-0 border border-line-subtle bg-canvas px-2.5 py-0.5 font-mono text-[11px]"
           >
             <StatusIndicator />
             <StatusLabel className="text-ink-secondary">
-              Online · RLS Aktif
+              M2 · RLS Aktif
             </StatusLabel>
           </Status>
         </div>
 
-        <div className="flex items-center gap-2">
-          {pendingProposals.length > 0 ? (
-            <button
-              type="button"
-              onClick={handleJumpToPendingProposal}
-              className="inline-flex items-center gap-1.5 rounded-full border border-line-default bg-warning-subtle px-3 py-1 font-mono text-xs font-medium text-text-warning transition-colors hover:border-line-active"
-            >
-              <GitPullRequestDraft className="size-3.5" />
-              <span>{pendingProposals.length} Usulan Menunggu</span>
-            </button>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon-sm"
+          onClick={() => setIsFullscreen((prev) => !prev)}
+          aria-label={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
+          title={isFullscreen ? "Keluar layar penuh (Esc)" : "Layar penuh"}
+          className="shrink-0 border-line-subtle bg-canvas text-ink-secondary hover:text-ink-primary"
+        >
+          {isFullscreen ? (
+            <Minimize2 className="size-4" />
           ) : (
-            <Link
-              to={`/teams/${teamId}/brain`}
-              className="inline-flex items-center gap-1.5 rounded-full bg-success-subtle px-3 py-1 font-mono text-xs font-medium text-text-success"
-            >
-              <CheckCircle2 className="size-3.5" />
-              <span>Semua Terkonfirmasi</span>
-            </Link>
+            <Maximize2 className="size-4" />
           )}
-
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
-            onClick={() => setIsFullscreen((prev) => !prev)}
-            aria-label={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
-            title={isFullscreen ? "Keluar layar penuh (Esc)" : "Layar penuh"}
-            className="border-line-subtle bg-canvas text-ink-secondary hover:text-ink-primary"
-          >
-            {isFullscreen ? (
-              <Minimize2 className="size-4" />
-            ) : (
-              <Maximize2 className="size-4" />
-            )}
-          </Button>
-        </div>
+        </Button>
       </div>
+
+      {/* Dedicated Floating Pending-Proposal Pill (Top Center of Canvas) */}
+      {pendingProposals.length > 0 && (
+        <div className="pointer-events-none absolute inset-x-0 top-3 z-20 flex justify-center px-4">
+          <button
+            type="button"
+            onClick={handleJumpToPendingProposal}
+            className="pointer-events-auto inline-flex items-center gap-2.5 rounded-full border border-line-active/40 bg-surface-raised/95 py-1.5 pr-2 pl-3.5 text-xs shadow-raised backdrop-blur-md transition-colors hover:border-line-active"
+          >
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-warning opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-warning" />
+            </span>
+            <GitPullRequestDraft className="size-3.5 text-text-warning" />
+            <span className="font-medium text-ink-primary">
+              {pendingProposals.length} Usulan Menunggu
+            </span>
+            <span className="rounded-full border border-line-subtle bg-canvas px-2 py-0.5 font-mono text-[10px] font-semibold text-ink-secondary">
+              {pendingProposals[0].code}
+            </span>
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-ink-link">
+              Tinjau
+              <ArrowDown className="size-2.5" />
+            </span>
+          </button>
+        </div>
+      )}
 
       {/* Scrollable AI Elements Conversation Stream */}
       <Conversation className="min-h-0 flex-1 overflow-hidden bg-canvas [&>div]:h-full [&>div]:overflow-y-auto">
-        <ConversationContent className="mx-auto w-full max-w-5xl gap-3 px-4 pt-5 pb-44 sm:px-8 sm:pb-40">
+        <ConversationContent
+          className={cn(
+            "mx-auto w-full max-w-5xl gap-4 px-4 pb-44 sm:px-8 sm:pb-40",
+            pendingProposals.length > 0 ? "pt-14" : "pt-5"
+          )}
+        >
           {messages.map((msg) => (
             <TeamChatMessageItem
               key={msg.id}

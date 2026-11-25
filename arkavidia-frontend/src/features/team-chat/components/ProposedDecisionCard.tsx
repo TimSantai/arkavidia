@@ -53,10 +53,10 @@ export function ProposedDecisionCard({
   return (
     <div
       className={cn(
-        "mt-2.5 rounded-xl border p-3.5 transition-colors duration-150",
+        "w-full rounded-2xl border transition-[border-color,box-shadow,background-color] duration-150",
         isConfirmed
-          ? "border-line-subtle bg-success-subtle/40"
-          : "border-line-active bg-surface shadow-surface"
+          ? "border-line-subtle bg-surface p-3.5 shadow-surface"
+          : "border-line-active/70 bg-surface-raised p-4 shadow-raised"
       )}
     >
       {/* Top Meta Row */}
@@ -73,14 +73,14 @@ export function ProposedDecisionCard({
               CONFIRMED · M2
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 rounded-full bg-brand/10 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-ink-link">
-              PROPOSED
+            <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2.5 py-0.5 font-mono text-[10px] font-semibold text-text-warning">
+              MENUNGGU KONFIRMASI
             </span>
           )}
 
           {item.aiAssisted && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2 py-0.5 font-mono text-[10px] font-medium text-text-warning">
-              <Sparkles className="size-2.5" />
+            <span className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-canvas px-2 py-0.5 font-mono text-[10px] font-medium text-ink-secondary">
+              <Sparkles className="size-2.5 text-text-warning" />
               Dibantu AI
             </span>
           )}
@@ -100,8 +100,13 @@ export function ProposedDecisionCard({
         </div>
       </div>
 
-      {/* Concise 1-line Title */}
-      <h4 className="mt-2 font-heading text-sm font-semibold text-ink-primary">
+      {/* Crisp Title */}
+      <h4
+        className={cn(
+          "mt-2.5 font-heading font-semibold text-ink-primary",
+          isConfirmed ? "text-sm" : "text-[15px]"
+        )}
+      >
         {item.content.title}
       </h4>
 
@@ -113,8 +118,8 @@ export function ProposedDecisionCard({
             className="inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-ink-secondary transition-colors hover:text-ink-primary"
           >
             <span>
-              {detailsOpen ? "Sembunyikan alasan" : "Lihat alasan"}
-              {rejectedCount > 0 ? ` & ${rejectedCount} alternatif ditolak` : ""}
+              {detailsOpen ? "Sembunyikan alasan" : "Detail alasan"}
+              {rejectedCount > 0 ? ` · ${rejectedCount} alternatif ditolak` : ""}
             </span>
             <ChevronDown
               className={cn(
@@ -125,7 +130,7 @@ export function ProposedDecisionCard({
           </button>
         </CollapsibleTrigger>
 
-        <CollapsibleContent className="mt-2.5 space-y-2 rounded-lg border border-line-subtle bg-canvas/70 p-3 text-xs">
+        <CollapsibleContent className="mt-2 space-y-2 rounded-xl bg-canvas/70 px-3.5 py-2.5 text-xs">
           <p className="leading-relaxed text-ink-secondary">
             <span className="font-semibold text-ink-primary">Alasan: </span>
             {item.content.rationale}
@@ -139,7 +144,7 @@ export function ProposedDecisionCard({
               {item.content.rejectedAlternatives.map((alt) => (
                 <span
                   key={alt}
-                  className="rounded-md border border-line-subtle bg-surface px-2 py-0.5 text-[11px] text-ink-tertiary line-through"
+                  className="rounded-md bg-surface px-2 py-0.5 text-[11px] text-ink-tertiary line-through"
                 >
                   {alt}
                 </span>
@@ -172,7 +177,7 @@ export function ProposedDecisionCard({
           to={`/teams/${teamId}/brain`}
           className="inline-flex items-center gap-1 text-xs font-medium text-ink-link hover:underline"
         >
-          <span>Lihat di Project Brain</span>
+          <span>Project Brain</span>
           <ArrowUpRight className="size-3.5" />
         </Link>
       </div>

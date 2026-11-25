@@ -100,7 +100,7 @@ export function TeamChatMessageItem({
           {/* Message Body Column */}
           <div
             className={cn(
-              "flex min-w-0 flex-1 flex-col gap-1",
+              "flex min-w-0 flex-1 flex-col gap-2",
               isCurrentUser ? "max-w-xl items-end" : "max-w-3xl"
             )}
           >
@@ -140,7 +140,7 @@ export function TeamChatMessageItem({
                   ? "ml-auto w-fit max-w-full rounded-tr-sm bg-brand text-on-brand group-[.is-user]:bg-brand group-[.is-user]:text-on-brand"
                   : cn(
                       "rounded-tl-sm border border-line-subtle bg-surface text-ink-primary shadow-surface",
-                      proposedItem || message.policyBlocked || (message.citations?.length ?? 0) > 0
+                      (message.citations?.length ?? 0) > 0
                         ? "w-full"
                         : "w-fit max-w-full"
                     )
@@ -181,19 +181,18 @@ export function TeamChatMessageItem({
                   ))}
                 </div>
               )}
-
-              {/* Inline Propose-Confirm Decision Card */}
-              {proposedItem && (
-                <ProposedDecisionCard
-                  item={proposedItem}
-                  teamId={teamId}
-                  onConfirm={onConfirmMemory}
-                />
-              )}
-
-              {/* Inline Live IFC Guardrail Block Card */}
-              {message.policyBlocked && <IfcBlockedCard teamId={teamId} />}
             </MessageContent>
+
+            {/* De-nested Artifact Cards directly below bubble */}
+            {proposedItem && (
+              <ProposedDecisionCard
+                item={proposedItem}
+                teamId={teamId}
+                onConfirm={onConfirmMemory}
+              />
+            )}
+
+            {message.policyBlocked && <IfcBlockedCard teamId={teamId} />}
           </div>
         </div>
       </Message>
