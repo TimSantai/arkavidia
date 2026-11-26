@@ -3,9 +3,9 @@ import { Link } from "react-router"
 import { SiGithub } from "@icons-pack/react-simple-icons"
 import { ArrowRight } from "lucide-react"
 import { motion, useInView, useReducedMotion } from "motion/react"
+import { MagnetLines } from "@/components/ui/magnet-lines"
 import { CLOSING_CONTENT } from "../landingData"
 import { HeroAgentStage3D } from "./closing/HeroAgentStage3D"
-import { LightBeams } from "./closing/LightBeams"
 import { PixelHeart } from "./closing/PixelHeart"
 import { useTilt } from "./closing/useTilt"
 
@@ -38,11 +38,25 @@ export function LandingFooterCta() {
       data-nav-theme="dark"
       className="relative overflow-hidden bg-[#0c0d0f] pt-28 text-[#f4f6f9] sm:pt-36 lg:pt-40"
     >
-      <LightBeams
-        rotateY={rotateY}
-        active={hasEntered}
-        reducedMotion={prefersReducedMotion}
-      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden opacity-65"
+      >
+        <MagnetLines
+          lineColor="#898b90"
+          accentColor="#6ea0ff"
+          spacing={22}
+          lineWidth={1.5}
+          lineHeight={13}
+          mode="dipole"
+          shape="line"
+          radius={240}
+          fade={0.65}
+          edgeFade={0.25}
+          stretch={0.5}
+          idle
+        />
+      </div>
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-5 sm:px-8">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
