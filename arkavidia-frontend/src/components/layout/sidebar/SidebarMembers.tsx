@@ -1,6 +1,4 @@
 import { Plus } from "lucide-react"
-import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher"
-import { useTheme } from "@/components/theme/useTheme"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Tooltip,
@@ -23,7 +21,6 @@ export interface SidebarMembersProps {
 const ONLINE_MEMBERS = new Set(["user-rani", "user-dimas", "user-budi"])
 
 export function SidebarMembers({ team, currentUser }: SidebarMembersProps) {
-  const { theme, setTheme } = useTheme()
   const members = team?.members ?? []
 
   return (
@@ -93,11 +90,6 @@ export function SidebarMembers({ team, currentUser }: SidebarMembersProps) {
           </Tooltip>
         </div>
       </TooltipProvider>
-
-      {/* Compact ThemeSwitcher at bottom */}
-      <div className="mt-4 pl-3 pr-4 flex items-center justify-between">
-        <ThemeSwitcher value={theme} onChange={setTheme} />
-      </div>
     </div>
   )
 }

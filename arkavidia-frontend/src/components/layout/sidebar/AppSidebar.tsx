@@ -164,7 +164,7 @@ export function AppSidebar({
         </nav>
       </div>
 
-      {/* 5. Anggota Tim & Theme Switcher di bagian bawah */}
+      {/* 5. Anggota Tim di bagian bawah */}
       <SidebarMembers team={team} currentUser={currentUser} />
     </aside>
   )
