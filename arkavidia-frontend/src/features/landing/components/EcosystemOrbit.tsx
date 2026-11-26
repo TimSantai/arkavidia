@@ -106,12 +106,12 @@ function BrainCard({
       animate={
         flashing && !reducedMotion
           ? {
-              boxShadow: [
-                "0 10px 28px -6px rgb(29 30 33 / 0.14), 0 0 0 0px rgb(225 236 255 / 0)",
-                "0 10px 28px -6px rgb(29 30 33 / 0.14), 0 0 0 6px rgb(71 132 255 / 0.22)",
-                "0 10px 28px -6px rgb(29 30 33 / 0.14), 0 0 0 0px rgb(225 236 255 / 0)",
-              ],
-            }
+            boxShadow: [
+              "0 10px 28px -6px rgb(29 30 33 / 0.14), 0 0 0 0px rgb(225 236 255 / 0)",
+              "0 10px 28px -6px rgb(29 30 33 / 0.14), 0 0 0 6px rgb(71 132 255 / 0.22)",
+              "0 10px 28px -6px rgb(29 30 33 / 0.14), 0 0 0 0px rgb(225 236 255 / 0)",
+            ],
+          }
           : undefined
       }
       transition={{ duration: 0.5, ease: "easeOut" }}
@@ -306,185 +306,185 @@ export function EcosystemOrbit() {
             </div>
 
             <div className="group/orbit relative z-10 mx-auto flex size-[560px] max-w-full items-center justify-center">
-            {/* Dashed concentric SVG rings */}
-            <svg
-              viewBox="0 0 560 560"
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 size-full"
-            >
-              <motion.circle
-                cx="280"
-                cy="280"
-                r={OUTER_RADIUS}
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeDasharray="4 6"
-                className="text-[#d7d9dd] dark:text-white/15"
-                initial={prefersReducedMotion ? false : { pathLength: 0, opacity: 0 }}
-                animate={hasEntered ? { pathLength: 1, opacity: 1 } : undefined}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-              />
-              <motion.circle
-                cx="280"
-                cy="280"
-                r={INNER_RADIUS}
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeDasharray="4 6"
-                className="text-[#e9ebef] dark:text-white/10"
-                initial={prefersReducedMotion ? false : { pathLength: 0, opacity: 0 }}
-                animate={hasEntered ? { pathLength: 1, opacity: 1 } : undefined}
-                transition={{ duration: 0.8, delay: 0.12, ease: "easeOut" }}
-              />
-            </svg>
+              {/* Dashed concentric SVG rings */}
+              <svg
+                viewBox="0 0 560 560"
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 size-full"
+              >
+                <motion.circle
+                  cx="280"
+                  cy="280"
+                  r={OUTER_RADIUS}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeDasharray="4 6"
+                  className="text-[#d7d9dd] dark:text-white/15"
+                  initial={prefersReducedMotion ? false : { pathLength: 0, opacity: 0 }}
+                  animate={hasEntered ? { pathLength: 1, opacity: 1 } : undefined}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <motion.circle
+                  cx="280"
+                  cy="280"
+                  r={INNER_RADIUS}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeDasharray="4 6"
+                  className="text-[#e9ebef] dark:text-white/10"
+                  initial={prefersReducedMotion ? false : { pathLength: 0, opacity: 0 }}
+                  animate={hasEntered ? { pathLength: 1, opacity: 1 } : undefined}
+                  transition={{ duration: 0.8, delay: 0.12, ease: "easeOut" }}
+                />
+              </svg>
 
-            {/* Outer Ring (6 tools, 80s clockwise) */}
-            <div
-              className={cn(
-                "pointer-events-none absolute inset-0 will-change-transform",
-                shouldSpin &&
+              {/* Outer Ring (6 tools, 80s clockwise) */}
+              <div
+                className={cn(
+                  "pointer-events-none absolute inset-0 will-change-transform",
+                  shouldSpin &&
                   "animate-[spin_80s_linear_infinite] group-hover/orbit:[animation-play-state:paused] group-focus-within/orbit:[animation-play-state:paused]"
-              )}
-            >
-              {outerNodes.map((node, index) => {
-                const angle = (360 / outerNodes.length) * index - 90
-                const isSending = activePulse?.from === node.id
-                return (
-                  <div
-                    key={node.id}
-                    className="absolute top-1/2 left-1/2"
-                    style={{
-                      transform: `rotate(${angle}deg)`,
-                    }}
-                  >
-                    {/* Inward pulse light traveling along radius */}
-                    {isSending && !prefersReducedMotion && (
-                      <motion.div
-                        key={activePulse.key}
-                        aria-hidden="true"
-                        initial={{ x: OUTER_RADIUS, opacity: 0 }}
-                        animate={{ x: 24, opacity: [0, 1, 1, 0] }}
-                        transition={{
-                          duration: PULSE_TRAVEL_MS / 1000,
-                          ease: [0.4, 0, 0.2, 1],
-                        }}
-                        className="pointer-events-none absolute top-0 left-0 flex -translate-y-1/2 items-center"
-                      >
-                        <span className="size-1.5 rounded-full bg-[#4784ff] shadow-[0_0_12px_2px_rgb(71_132_255/0.65)]" />
-                        <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#4784ff]" />
-                      </motion.div>
-                    )}
-
+                )}
+              >
+                {outerNodes.map((node, index) => {
+                  const angle = (360 / outerNodes.length) * index - 90
+                  const isSending = activePulse?.from === node.id
+                  return (
                     <div
-                      className="pointer-events-auto"
+                      key={node.id}
+                      className="absolute top-1/2 left-1/2"
                       style={{
-                        transform: `translateX(${OUTER_RADIUS}px) rotate(${-angle}deg)`,
+                        transform: `rotate(${angle}deg)`,
                       }}
                     >
-                      <motion.div
-                        initial={
-                          prefersReducedMotion ? false : { scale: 0.6, opacity: 0 }
-                        }
-                        animate={hasEntered ? { scale: 1, opacity: 1 } : undefined}
-                        transition={{
-                          duration: 0.45,
-                          delay: index * 0.06,
-                          ease: "easeOut",
+                      {/* Inward pulse light traveling along radius */}
+                      {isSending && !prefersReducedMotion && (
+                        <motion.div
+                          key={activePulse.key}
+                          aria-hidden="true"
+                          initial={{ x: OUTER_RADIUS, opacity: 0 }}
+                          animate={{ x: 24, opacity: [0, 1, 1, 0] }}
+                          transition={{
+                            duration: PULSE_TRAVEL_MS / 1000,
+                            ease: [0.4, 0, 0.2, 1],
+                          }}
+                          className="pointer-events-none absolute top-0 left-0 flex -translate-y-1/2 items-center"
+                        >
+                          <span className="size-1.5 rounded-full bg-[#4784ff] shadow-[0_0_12px_2px_rgb(71_132_255/0.65)]" />
+                          <span className="h-px w-10 bg-gradient-to-l from-transparent to-[#4784ff]" />
+                        </motion.div>
+                      )}
+
+                      <div
+                        className="pointer-events-auto"
+                        style={{
+                          transform: `translateX(${OUTER_RADIUS}px) rotate(${-angle}deg)`,
                         }}
                       >
-                        <div
-                          className={cn(
-                            "-translate-x-1/2 -translate-y-1/2",
-                            shouldSpin &&
+                        <motion.div
+                          initial={
+                            prefersReducedMotion ? false : { scale: 0.6, opacity: 0 }
+                          }
+                          animate={hasEntered ? { scale: 1, opacity: 1 } : undefined}
+                          transition={{
+                            duration: 0.45,
+                            delay: index * 0.06,
+                            ease: "easeOut",
+                          }}
+                        >
+                          <div
+                            className={cn(
+                              "-translate-x-1/2 -translate-y-1/2",
+                              shouldSpin &&
                               "animate-[spin_80s_linear_infinite] [animation-direction:reverse] group-hover/orbit:[animation-play-state:paused] group-focus-within/orbit:[animation-play-state:paused]"
-                          )}
-                        >
-                          <LogoBubble
-                            node={node}
-                            sizeClass="size-14 rounded-2xl"
-                            logoSize={24}
-                            isPulsing={isSending}
-                          />
-                        </div>
-                      </motion.div>
+                            )}
+                          >
+                            <LogoBubble
+                              node={node}
+                              sizeClass="size-14 rounded-2xl"
+                              logoSize={24}
+                              isPulsing={isSending}
+                            />
+                          </div>
+                        </motion.div>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
 
-            {/* Inner Ring (3 infrastructure nodes, 60s counter-clockwise) */}
-            <div
-              className={cn(
-                "pointer-events-none absolute inset-0 will-change-transform",
-                shouldSpin &&
+              {/* Inner Ring (3 infrastructure nodes, 60s counter-clockwise) */}
+              <div
+                className={cn(
+                  "pointer-events-none absolute inset-0 will-change-transform",
+                  shouldSpin &&
                   "animate-[spin_60s_linear_infinite] [animation-direction:reverse] group-hover/orbit:[animation-play-state:paused] group-focus-within/orbit:[animation-play-state:paused]"
-              )}
-            >
-              {innerNodes.map((node, index) => {
-                const angle = (360 / innerNodes.length) * index - 30
-                const isSending = activePulse?.from === node.id
-                return (
-                  <div
-                    key={node.id}
-                    className="absolute top-1/2 left-1/2"
-                    style={{ transform: `rotate(${angle}deg)` }}
-                  >
+                )}
+              >
+                {innerNodes.map((node, index) => {
+                  const angle = (360 / innerNodes.length) * index - 30
+                  const isSending = activePulse?.from === node.id
+                  return (
                     <div
-                      className="pointer-events-auto"
-                      style={{
-                        transform: `translateX(${INNER_RADIUS}px) rotate(${-angle}deg)`,
-                      }}
+                      key={node.id}
+                      className="absolute top-1/2 left-1/2"
+                      style={{ transform: `rotate(${angle}deg)` }}
                     >
-                      <motion.div
-                        initial={
-                          prefersReducedMotion ? false : { scale: 0.6, opacity: 0 }
-                        }
-                        animate={hasEntered ? { scale: 1, opacity: 1 } : undefined}
-                        transition={{
-                          duration: 0.45,
-                          delay: 0.36 + index * 0.06,
-                          ease: "easeOut",
+                      <div
+                        className="pointer-events-auto"
+                        style={{
+                          transform: `translateX(${INNER_RADIUS}px) rotate(${-angle}deg)`,
                         }}
                       >
-                        <div
-                          className={cn(
-                            "-translate-x-1/2 -translate-y-1/2",
-                            shouldSpin &&
-                              "animate-[spin_60s_linear_infinite] group-hover/orbit:[animation-play-state:paused] group-focus-within/orbit:[animation-play-state:paused]"
-                          )}
+                        <motion.div
+                          initial={
+                            prefersReducedMotion ? false : { scale: 0.6, opacity: 0 }
+                          }
+                          animate={hasEntered ? { scale: 1, opacity: 1 } : undefined}
+                          transition={{
+                            duration: 0.45,
+                            delay: 0.36 + index * 0.06,
+                            ease: "easeOut",
+                          }}
                         >
-                          <LogoBubble
-                            node={node}
-                            sizeClass="size-11 rounded-xl"
-                            logoSize={18}
-                            isPulsing={isSending}
-                            dimmed
-                          />
-                        </div>
-                      </motion.div>
+                          <div
+                            className={cn(
+                              "-translate-x-1/2 -translate-y-1/2",
+                              shouldSpin &&
+                              "animate-[spin_60s_linear_infinite] group-hover/orbit:[animation-play-state:paused] group-focus-within/orbit:[animation-play-state:paused]"
+                            )}
+                          >
+                            <LogoBubble
+                              node={node}
+                              sizeClass="size-11 rounded-xl"
+                              logoSize={18}
+                              isPulsing={isSending}
+                              dimmed
+                            />
+                          </div>
+                        </motion.div>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
 
-            {/* Center Project Brain Card */}
-            <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
-              animate={hasEntered ? { opacity: 1, y: 0 } : undefined}
-              transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-              className="relative z-10"
-            >
-              <BrainCard
-                sources={sources}
-                feed={feed}
-                flashing={flashing}
-                reducedMotion={prefersReducedMotion}
-              />
-            </motion.div>
+              {/* Center Project Brain Card */}
+              <motion.div
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+                animate={hasEntered ? { opacity: 1, y: 0 } : undefined}
+                transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+                className="relative z-10"
+              >
+                <BrainCard
+                  sources={sources}
+                  feed={feed}
+                  flashing={flashing}
+                  reducedMotion={prefersReducedMotion}
+                />
+              </motion.div>
             </div>
           </div>
 
