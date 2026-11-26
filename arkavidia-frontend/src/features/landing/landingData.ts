@@ -408,7 +408,7 @@ export const CLOSING_CONTENT = {
     label: "Lihat di GitHub",
     href: "https://github.com/TimSantai/arkavidia",
   },
-  clockCaption: "1 putaran = 1 minggu · 5 menit",
+  clockCaption: "Pendamping AI · membantu 4 anggota saling paham",
   phases: [
     { id: "capture", label: "Tangkap", days: [0, 1], color: "#4784ff" },
     { id: "map", label: "Petakan", days: [2], color: "#9fc1ff" },

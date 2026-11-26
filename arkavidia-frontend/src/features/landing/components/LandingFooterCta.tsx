@@ -1,10 +1,10 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { Link } from "react-router"
 import { SiGithub } from "@icons-pack/react-simple-icons"
 import { ArrowRight } from "lucide-react"
 import { motion, useInView, useReducedMotion } from "motion/react"
 import { CLOSING_CONTENT } from "../landingData"
-import { CycleClock3D } from "./closing/CycleClock3D"
+import { HeroAgentStage3D } from "./closing/HeroAgentStage3D"
 import { LightBeams } from "./closing/LightBeams"
 import { PixelHeart } from "./closing/PixelHeart"
 import { useTilt } from "./closing/useTilt"
@@ -16,6 +16,7 @@ export function LandingFooterCta() {
   const isInView = useInView(sectionRef, { amount: 0.2 })
   const hasEntered = useInView(sectionRef, { once: true, amount: 0.3 })
   const prefersReducedMotion = useReducedMotion() ?? false
+  const [ctaHovered, setCtaHovered] = useState(false)
 
   const { rotateX, rotateY } = useTilt(sectionRef, {
     max: 12,
@@ -45,13 +46,14 @@ export function LandingFooterCta() {
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-5 sm:px-8">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          {/* Left: 3D Weekly Cycle Clock */}
-          <div className="flex justify-center lg:-ml-12 lg:justify-start">
-            <CycleClock3D
+          {/* Left: Solo 3D Hero BoopFace helping the 4 teammates */}
+          <div className="flex justify-center lg:-ml-8 lg:justify-start">
+            <HeroAgentStage3D
               rotateX={rotateX}
               rotateY={rotateY}
               active={isInView}
               reducedMotion={prefersReducedMotion}
+              ctaHovered={ctaHovered}
             />
           </div>
 
@@ -84,6 +86,10 @@ export function LandingFooterCta() {
             >
               <Link
                 to={CLOSING_CONTENT.primaryCta.to}
+                onMouseEnter={() => setCtaHovered(true)}
+                onMouseLeave={() => setCtaHovered(false)}
+                onFocus={() => setCtaHovered(true)}
+                onBlur={() => setCtaHovered(false)}
                 className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-7 font-sans text-sm font-medium text-[#1d1e21] shadow-[0_0_0_1px_rgb(255_255_255/0.1),0_0_32px_-6px_rgb(224_187_108/0.7)] transition-[background-color,box-shadow,transform] duration-150 hover:bg-[#f4f6f9] hover:shadow-[0_0_0_1px_rgb(255_255_255/0.2),0_0_40px_-4px_rgb(241_214_155/0.88)] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6ea0ff] sm:w-auto"
               >
                 <span>{CLOSING_CONTENT.primaryCta.label}</span>

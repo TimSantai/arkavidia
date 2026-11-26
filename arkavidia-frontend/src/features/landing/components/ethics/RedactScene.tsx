@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Lock, LockOpen } from "lucide-react"
 import { motion } from "motion/react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 
 const ORIGINAL_PHONE = "0812-3456-7890"
 const SCRAMBLE_FRAMES = [
@@ -61,8 +62,21 @@ export function RedactScene({
 
   return (
     <div className="relative flex h-full w-full items-center justify-between gap-2.5 overflow-hidden px-1">
-      <div className="flex min-w-0 flex-wrap items-center gap-1.5 font-sans text-xs text-ink-secondary">
-        <span>Hubungi aku di</span>
+      <div className="flex min-w-0 items-center gap-2.5">
+        <AgentStickerAvatar
+          role="private"
+          state={
+            currentStage === "raw"
+              ? "idle"
+              : isRedacted
+                ? "success"
+                : "warning"
+          }
+          size={36}
+          interactive={false}
+        />
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5 font-sans text-xs text-ink-secondary">
+          <span>Hubungi aku di</span>
         {currentStage === "raw" && (
           <span className="rounded-md bg-surface-card px-2 py-0.5 font-medium tabular-nums text-ink-primary">
             {ORIGINAL_PHONE}
@@ -83,6 +97,7 @@ export function RedactScene({
             [NO_HP_DISAMARKAN]
           </span>
         )}
+        </div>
       </div>
 
       <span

@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react"
 import { Mic } from "lucide-react"
 import { motion } from "motion/react"
+import type { AgentAppearance } from "@/components/bersama/agentConfig"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
+
+const AMBER_TUTOR_APPEARANCE: AgentAppearance = {
+  skin: null,
+  color: "#d9a538",
+  eyeColor: "#fff5e0",
+  eyeStyle: "round",
+  view: "3d",
+  antenna: true,
+}
 
 const WAVE_BARS: readonly { readonly rest: number; readonly duration: number }[] = [
   { rest: 0.4, duration: 0.72 },
@@ -43,13 +54,20 @@ export function CheckIllustration({
   return (
     <div
       aria-hidden="true"
-      className="inline-flex items-center gap-4 rounded-2xl border border-white/10 bg-[#28292d]/90 px-4 py-3.5 select-none"
+      className="inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-[#28292d]/90 px-3.5 py-3 select-none"
     >
+      <AgentStickerAvatar
+        role="tutor"
+        state={active && !reducedMotion ? "speaking" : "idle"}
+        size={38}
+        interactive={false}
+        appearanceOverride={AMBER_TUTOR_APPEARANCE}
+      />
       <div className="flex items-center gap-2">
-        <span className="flex size-8 items-center justify-center rounded-full bg-[#423000] text-[#f1d69b]">
-          <Mic className="size-4" />
+        <span className="flex size-7 items-center justify-center rounded-full bg-[#423000] text-[#f1d69b]">
+          <Mic className="size-3.5" />
         </span>
-        <span className="kpi-hero text-[34px] leading-none font-semibold text-[#f1d69b]">
+        <span className="kpi-hero text-[30px] leading-none font-semibold text-[#f1d69b]">
           {formatTimer(displaySeconds)}
         </span>
       </div>

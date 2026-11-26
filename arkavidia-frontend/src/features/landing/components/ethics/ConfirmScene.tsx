@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Check } from "lucide-react"
 import { motion } from "motion/react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import {
   Cursor,
   CursorBody,
@@ -40,21 +41,29 @@ export function ConfirmScene({
 
   return (
     <div className="relative flex h-full w-full items-center justify-between gap-2 overflow-hidden px-1">
-      <div className="flex flex-col gap-1.5">
-        <span
-          className={cn(
-            "inline-flex w-fit items-center gap-1 rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold transition-colors duration-300",
-            isConfirmed
-              ? "bg-success-subtle text-text-success"
-              : "bg-warning-subtle text-text-warning"
-          )}
-        >
-          {isConfirmed && <Check className="size-3" />}
-          {isConfirmed ? "CONFIRMED" : "AI DRAFT · PROPOSED"}
-        </span>
-        <span className="font-sans text-xs text-ink-secondary">
-          DEC-14 · JWT + refresh token
-        </span>
+      <div className="flex items-center gap-2.5">
+        <AgentStickerAvatar
+          role="team"
+          state={isConfirmed ? "success" : "nudge"}
+          size={36}
+          interactive={false}
+        />
+        <div className="flex flex-col gap-1">
+          <span
+            className={cn(
+              "inline-flex w-fit items-center gap-1 rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold transition-colors duration-300",
+              isConfirmed
+                ? "bg-success-subtle text-text-success"
+                : "bg-warning-subtle text-text-warning"
+            )}
+          >
+            {isConfirmed && <Check className="size-3" />}
+            {isConfirmed ? "CONFIRMED" : "AI DRAFT · PROPOSED"}
+          </span>
+          <span className="font-sans text-xs text-ink-secondary">
+            DEC-14 · JWT + refresh token
+          </span>
+        </div>
       </div>
 
       <motion.div

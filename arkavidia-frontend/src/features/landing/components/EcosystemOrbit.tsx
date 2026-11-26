@@ -5,6 +5,7 @@ import {
   useInView,
   useReducedMotion,
 } from "motion/react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import {
   Tooltip,
   TooltipContent,
@@ -114,13 +115,24 @@ function BrainCard({
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="w-full max-w-[260px] rounded-2xl border border-line-subtle bg-white p-4 text-left shadow-raised dark:bg-surface-card"
     >
-      <span className="inline-block rounded-full bg-wash-brand px-2.5 py-0.5 font-sans text-xs font-semibold tracking-wide text-ink-link">
-        M2 · TEAM MEMORY
-      </span>
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <span className="inline-block rounded-full bg-wash-brand px-2.5 py-0.5 font-sans text-xs font-semibold tracking-wide text-ink-link">
+            M2 · TEAM MEMORY
+          </span>
 
-      <h3 className="mt-2 font-sans text-base font-semibold text-ink-primary">
-        Project Brain
-      </h3>
+          <h3 className="mt-2 font-sans text-base font-semibold text-ink-primary">
+            Project Brain
+          </h3>
+        </div>
+
+        <AgentStickerAvatar
+          role="team"
+          state={flashing ? "success" : "idle"}
+          size={38}
+          interactive
+        />
+      </div>
 
       <p className="mt-1 flex flex-wrap items-center gap-1 font-sans text-xs text-ink-secondary tabular-nums">
         <span>14 keputusan · 6 KC ·</span>

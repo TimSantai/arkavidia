@@ -1,6 +1,8 @@
+import { useState } from "react"
 import { Link } from "react-router"
 import { ArrowRight } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import {
   Announcement,
   AnnouncementTag,
@@ -24,6 +26,7 @@ const HERO_EASE = [0.2, 0.8, 0.2, 1] as const
 
 export function LandingPage() {
   const prefersReducedMotion = useReducedMotion()
+  const [ctaHovered, setCtaHovered] = useState(false)
 
   const fadeUp = (delaySeconds: number) =>
     prefersReducedMotion
@@ -105,7 +108,13 @@ export function LandingPage() {
                   asChild
                   className="btn-primary h-12 gap-2 rounded-full border-0 px-6 text-sm font-medium"
                 >
-                  <Link to={HERO_CONTENT.primaryCta.to}>
+                  <Link
+                    to={HERO_CONTENT.primaryCta.to}
+                    onMouseEnter={() => setCtaHovered(true)}
+                    onMouseLeave={() => setCtaHovered(false)}
+                    onFocus={() => setCtaHovered(true)}
+                    onBlur={() => setCtaHovered(false)}
+                  >
                     {HERO_CONTENT.primaryCta.label}
                     <ArrowRight className="size-4" aria-hidden="true" />
                   </Link>
@@ -135,6 +144,17 @@ export function LandingPage() {
                   ))}
                 </AvatarStack>
 
+                <span
+                  aria-hidden="true"
+                  className="h-4 w-px bg-line-subtle"
+                />
+
+                <div className="flex items-center gap-0.5">
+                  <AgentStickerAvatar role="team" size={28} interactive />
+                  <AgentStickerAvatar role="private" size={28} interactive />
+                  <AgentStickerAvatar role="tutor" size={28} interactive />
+                </div>
+
                 <span className="font-sans text-[13px] font-normal text-ink-tertiary">
                   {HERO_CONTENT.socialProof}
                 </span>
@@ -151,6 +171,16 @@ export function LandingPage() {
                 aria-hidden="true"
                 className="pointer-events-none absolute -top-12 left-1/2 z-0 h-[420px] w-[2px] -translate-x-1/2 bg-gradient-to-b from-transparent via-[var(--beam)] to-transparent opacity-65 blur-[0.5px] sm:-top-14 dark:opacity-50"
               />
+              {/* Interactive peeking Team Agent perched subtly on top-right corner of the dawn frame */}
+              <div className="absolute -top-7 right-7 z-20 hidden sm:flex">
+                <AgentStickerAvatar
+                  role="team"
+                  state={ctaHovered ? "nudge" : "idle"}
+                  size={52}
+                  interactive
+                  label="Team Agent BERSAMA"
+                />
+              </div>
               <div className="bg-dawn grain relative z-10 rounded-[28px] border border-line-subtle p-3 sm:p-6">
                 <div className="relative z-10">
                   <HeroWorkspaceShowcase />

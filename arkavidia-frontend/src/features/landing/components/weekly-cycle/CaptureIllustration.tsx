@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Check } from "lucide-react"
 import { motion } from "motion/react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { cn } from "@/lib/utils"
 
 export function CaptureIllustration({
@@ -69,30 +70,44 @@ export function CaptureIllustration({
             : { opacity: 0.25, y: 8 }
         }
         transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
-        className="rounded-2xl border border-white/10 bg-[#323337] p-3.5 shadow-card"
+        className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#323337] p-3.5 shadow-card"
       >
-        <div className="flex items-center justify-between gap-2">
-          <span className="font-sans text-xs font-semibold tabular-nums text-[#e9ebef]">
-            DEC-14
-          </span>
-          <span
-            className={cn(
-              "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold transition-colors duration-300",
-              isConfirmed
-                ? "bg-[#003f19] text-[#44be69]"
-                : "bg-[#4784ff]/20 text-[#9fc1ff]"
-            )}
-          >
-            {isConfirmed && <Check className="size-3" />}
-            {isConfirmed ? "CONFIRMED" : "PROPOSED"}
-          </span>
+        <AgentStickerAvatar
+          role="team"
+          state={
+            effectiveStage === 0
+              ? "idle"
+              : effectiveStage === 1
+                ? "thinking"
+                : "success"
+          }
+          size={38}
+          interactive={false}
+        />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-sans text-xs font-semibold tabular-nums text-[#e9ebef]">
+              DEC-14
+            </span>
+            <span
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold transition-colors duration-300",
+                isConfirmed
+                  ? "bg-[#003f19] text-[#44be69]"
+                  : "bg-[#4784ff]/20 text-[#9fc1ff]"
+              )}
+            >
+              {isConfirmed && <Check className="size-3" />}
+              {isConfirmed ? "CONFIRMED" : "PROPOSED"}
+            </span>
+          </div>
+          <p className="mt-1 font-sans text-sm font-medium text-[#f4f6f9]">
+            JWT + refresh token
+          </p>
+          <p className="mt-0.5 font-sans text-xs text-[#9fa2a7]">
+            3 pesan sumber · 1 alternatif ditolak
+          </p>
         </div>
-        <p className="mt-1.5 font-sans text-sm font-medium text-[#f4f6f9]">
-          JWT + refresh token
-        </p>
-        <p className="mt-0.5 font-sans text-xs text-[#9fa2a7]">
-          3 pesan sumber · 1 alternatif ditolak
-        </p>
       </motion.div>
     </div>
   )
