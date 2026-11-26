@@ -45,12 +45,12 @@ export function KcDetailCard({ summary, teamId, className }: KcDetailCardProps) 
           </div>
 
           {isSilo ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-text-warning shadow-badge">
+            <span className="inline-flex items-center gap-1 rounded-full border border-warning/20 bg-warning-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-text-warning">
               <AlertTriangle className="size-3.5 shrink-0" aria-hidden="true" />
               Silo ({understoodCount}/{totalMembers})
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-text-success shadow-badge">
+            <span className="inline-flex items-center gap-1 rounded-full border border-success/20 bg-success-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-text-success">
               <CheckCircle2 className="size-3.5 shrink-0" aria-hidden="true" />
               Aman ({understoodCount}/{totalMembers})
             </span>

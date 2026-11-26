@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import { CheckCircle2, Clock, GraduationCap } from "lucide-react"
+import {
+  MainWithAside,
+  PageContainer,
+  PageHeader,
+} from "@/components/layout/page"
 import { Pill, PillIndicator } from "@/components/kibo-ui/pill"
 import { cn } from "@/lib/utils"
 import { bersamaApi } from "@/services/api"
@@ -74,57 +79,62 @@ export function TutoredBriefingPage() {
 
   if (isLoading || steps.length === 0) {
     return (
-      <div className="space-y-4 pb-16" role="status" aria-label="Menyiapkan modul Tutored Briefing">
-        <div className="h-32 rounded-2xl border border-brand-subtle bg-wash-brand p-5 shadow-card" />
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-          <div className="h-72 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card lg:col-span-7" />
-          <div className="h-72 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card lg:col-span-5" />
+      <PageContainer width="wide" className="space-y-6 sm:space-y-8">
+        <div className="h-32 rounded-2xl border border-brand-subtle bg-wash-brand p-5" />
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_400px]">
+          <div className="h-72 rounded-2xl border border-line-subtle bg-surface-card p-5" />
+          <div className="h-72 rounded-2xl border border-line-subtle bg-surface-card p-5" />
         </div>
-      </div>
+      </PageContainer>
     )
   }
 
   return (
-    <div className="space-y-6 pb-16">
-      {/* 1. Fresh Cyan Header & Progress Strip */}
-      <section className="space-y-4 rounded-2xl border border-brand-subtle bg-wash-brand p-5 shadow-card">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+    <PageContainer width="wide" className="space-y-6 sm:space-y-8">
+      {/* 1. Standardized Unified Header */}
+      <PageHeader
+        title={
+          <>
+            Tutored <span className="font-display-oblique text-ink-link">Briefing</span>
+          </>
+        }
+        description="Pahami alasan keputusan tim lewat dialog Socratic interaktif."
+        badge={
           <Pill
             variant="secondary"
-            className="border border-brand-subtle bg-surface-card text-xs font-medium text-ink-secondary shadow-badge"
+            className="border border-brand-subtle bg-wash-brand text-xs font-medium text-ink-link"
           >
             <PillIndicator variant="success" />
             <span>Sari Wulandari · Minggu ke-3</span>
           </Pill>
-
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-subtle bg-surface-card px-3 py-1 text-xs font-medium text-ink-secondary shadow-badge">
+        }
+        actions={
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface-card px-3 py-1 text-xs font-medium text-ink-secondary shadow-xs">
             <Clock className="size-3.5 text-ink-link" aria-hidden="true" />
             <span>~10 menit</span>
           </div>
-        </div>
+        }
+      />
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="space-y-1">
-            <h1 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
-              Tutored <span className="font-display-oblique text-ink-link">Briefing</span>
-            </h1>
-            <p className="text-sm text-ink-secondary">
-              Pahami alasan keputusan tim lewat dialog Socratic interaktif.
+      {/* Progress & Stepper Section (Pastel Card) */}
+      <section className="space-y-4 rounded-2xl border border-brand-subtle bg-wash-brand p-4 sm:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <span className="text-xs font-semibold uppercase tracking-wider text-ink-secondary">
+              Progres Pemahaman
+            </span>
+            <p className="text-xs text-ink-secondary">
+              {completedStepIds.size} dari {steps.length} konsep selesai
             </p>
           </div>
 
-          <div className="flex items-baseline gap-2 sm:flex-col sm:items-end sm:gap-0.5">
-            <span className="kpi-hero text-[36px] leading-none font-semibold text-ink-link">
-              {completionPct}%
-            </span>
-            <span className="text-xs font-medium text-ink-secondary tabular-nums">
-              {completedStepIds.size}/{steps.length} konsep selesai
-            </span>
-          </div>
+          <span className="kpi-hero text-3xl font-semibold text-ink-link">
+            {completionPct}%
+          </span>
         </div>
 
         {/* Stepper Tabs */}
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
           {steps.map((s, idx) => {
             const isDone = completedStepIds.has(s.id)
             const isActive = idx === currentStepIndex
@@ -135,11 +145,11 @@ export function TutoredBriefingPage() {
                 type="button"
                 onClick={() => handleSelectStep(idx)}
                 className={cn(
-                  "flex min-h-12 items-center justify-between rounded-xl border bg-surface-card px-3.5 py-2.5 text-left shadow-card transition-[border-color,background-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.99]",
+                  "flex min-h-12 items-center justify-between rounded-xl border bg-surface-card px-3.5 py-2.5 text-left transition-[border-color,background-color] duration-150 active:scale-[0.99]",
                   isActive
-                    ? "border-line-active bg-surface-card"
+                    ? "border-line-active bg-surface-card shadow-xs"
                     : isDone
-                      ? "border-success/40 bg-success-subtle/30"
+                      ? "border-success/40 bg-success-subtle/20"
                       : "border-line-subtle hover:border-line-default",
                 )}
               >
@@ -151,7 +161,7 @@ export function TutoredBriefingPage() {
                         ? "bg-success text-on-success"
                         : isActive
                           ? "bg-brand text-on-brand"
-                          : "bg-muted text-ink-secondary",
+                          : "bg-surface text-ink-secondary",
                     )}
                   >
                     {isDone ? <CheckCircle2 className="size-3.5" aria-hidden="true" /> : idx + 1}
@@ -171,40 +181,44 @@ export function TutoredBriefingPage() {
         </div>
       </section>
 
-      {/* 2. Workspace View */}
+      {/* 2. Workspace View with MainWithAside Primitive */}
       {isAllCompleted ? (
         <BriefingCompletionCard teamId={teamId} onReset={handleReset} />
       ) : (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          {/* Left Column: Socratic Interactive Chat (7 cols) */}
-          <div className="lg:col-span-7">
-            {currentStep && (
-              <SocraticChatCard
-                key={currentStep.id}
-                step={currentStep}
-                totalSteps={steps.length}
-                isCompleted={completedStepIds.has(currentStep.id)}
-                onStepComplete={handleStepComplete}
-                onNextStep={handleNextStep}
-                hasNextStep={currentStepIndex < steps.length - 1}
-              />
-            )}
-          </div>
-
-          {/* Right Column: Project Brain Context Reference Panel (5 cols) */}
-          <div className="space-y-3 lg:col-span-5">
-            <div className="flex items-center gap-1.5 text-xs font-medium text-ink-secondary">
-              <GraduationCap className="size-4 text-ink-link" aria-hidden="true" />
-              <span>Referensi Project Brain</span>
+        <MainWithAside
+          asideWidth="400px"
+          sticky={true}
+          stickyOffset="top-6"
+          main={
+            <div>
+              {currentStep && (
+                <SocraticChatCard
+                  key={currentStep.id}
+                  step={currentStep}
+                  totalSteps={steps.length}
+                  isCompleted={completedStepIds.has(currentStep.id)}
+                  onStepComplete={handleStepComplete}
+                  onNextStep={handleNextStep}
+                  hasNextStep={currentStepIndex < steps.length - 1}
+                />
+              )}
             </div>
+          }
+          aside={
+            <div className="space-y-3">
+              <div className="flex items-center gap-1.5 text-xs font-medium text-ink-secondary">
+                <GraduationCap className="size-4 text-ink-link" aria-hidden="true" />
+                <span>Referensi Project Brain</span>
+              </div>
 
-            <DecisionContextPanel
-              decisionItem={currentDecision}
-              isStepCompleted={Boolean(currentStep && completedStepIds.has(currentStep.id))}
-            />
-          </div>
-        </div>
+              <DecisionContextPanel
+                decisionItem={currentDecision}
+                isStepCompleted={Boolean(currentStep && completedStepIds.has(currentStep.id))}
+              />
+            </div>
+          }
+        />
       )}
-    </div>
+    </PageContainer>
   )
 }

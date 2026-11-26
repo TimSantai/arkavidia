@@ -26,7 +26,7 @@ export function CoverageMatrix({
   return (
     <div
       className={cn(
-        "rounded-xl border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150",
+        "rounded-2xl border border-line-subtle bg-surface-card overflow-hidden",
         className,
       )}
     >
@@ -42,11 +42,11 @@ export function CoverageMatrix({
         </div>
         <div className="flex flex-wrap items-center gap-3 text-xs text-ink-secondary">
           <div className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-full bg-success" />
+            <span className="size-2 rounded-full bg-success" />
             <span>Bisa Membantu</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-full bg-muted" />
+            <span className="size-2 rounded-full bg-muted-foreground/30" />
             <span>Sesi Bareng</span>
           </div>
         </div>
@@ -187,7 +187,7 @@ export function CoverageMatrix({
                             {isUnderstood ? (
                               <span
                                 title={`${member.name} memahami konsep ini dan bisa membantu menjelaskan.`}
-                                className="inline-flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-1 text-xs font-medium text-text-success shadow-badge"
+                                className="inline-flex items-center gap-1 rounded-full border border-success/20 bg-success-subtle px-2.5 py-0.5 text-xs font-medium text-text-success"
                               >
                                 <CheckCircle2 className="size-3.5 shrink-0" aria-hidden="true" />
                                 <span>Bisa Membantu</span>
@@ -195,7 +195,7 @@ export function CoverageMatrix({
                             ) : (
                               <span
                                 title={`${member.name} terbuka untuk sesi belajar bersama.`}
-                                className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-surface px-2.5 py-1 text-xs text-ink-secondary"
+                                className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-surface px-2.5 py-0.5 text-xs text-ink-secondary"
                               >
                                 <Handshake className="size-3.5 shrink-0 text-ink-tertiary" aria-hidden="true" />
                                 <span>Sesi Bareng</span>
@@ -216,12 +216,12 @@ export function CoverageMatrix({
                       className="inline-flex cursor-pointer flex-col items-center gap-1 rounded-lg p-1 focus-visible:outline-2 focus-visible:outline-ring"
                     >
                       {isSilo ? (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-text-warning shadow-badge">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-warning/20 bg-warning-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-text-warning">
                           <AlertTriangle className="size-3.5 shrink-0" aria-hidden="true" />
                           Silo ({entry.understoodCount}/{entry.totalMembers})
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-text-success shadow-badge">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-success/20 bg-success-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-text-success">
                           <CheckCircle2 className="size-3.5 shrink-0" aria-hidden="true" />
                           {entry.understoodCount}/{entry.totalMembers} Paham
                         </span>

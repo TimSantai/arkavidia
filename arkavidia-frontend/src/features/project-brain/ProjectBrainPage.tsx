@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useParams } from "react-router"
-import { Bot, RotateCcw, Search } from "lucide-react"
+import { Link, useParams } from "react-router"
+import { Bot, MessageSquare, RotateCcw, Search } from "lucide-react"
+import {
+  MainWithAside,
+  PageContainer,
+  PageHeader,
+} from "@/components/layout/page"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -195,36 +200,74 @@ export function ProjectBrainPage() {
   }, [])
 
   return (
-    <div className="space-y-5">
+    <PageContainer width="wide" className="space-y-6">
+      {/* 1. Standardized Unified Page Header */}
+      <PageHeader
+        title={
+          <>
+            Project <span className="font-display-oblique text-ink-link">Brain</span>
+          </>
+        }
+        description="Rekam keputusan arsitektur tim, alasan, dan riwayat per waktu."
+        badge={
+          <div
+            aria-label="Ringkasan status keputusan"
+            className="flex flex-wrap items-center gap-1.5 rounded-full border border-line-subtle bg-surface px-3 py-1 text-xs"
+          >
+            <span className="inline-flex items-center gap-1 font-medium text-text-success">
+              <span className="tabular-nums font-semibold">{counts.confirmed}</span> Confirmed
+            </span>
+            <span className="text-ink-tertiary">·</span>
+            <span className="inline-flex items-center gap-1 font-medium text-text-info">
+              <span className="tabular-nums font-semibold">{counts.proposed}</span> Proposed
+            </span>
+            <span className="text-ink-tertiary">·</span>
+            <span className="inline-flex items-center gap-1 font-medium text-ink-secondary">
+              <span className="tabular-nums font-semibold">{counts.superseded}</span> Superseded
+            </span>
+          </div>
+        }
+        actions={
+          <Button variant="outline" size="sm" asChild className="rounded-full border-line-subtle">
+            <Link to={`/teams/${teamId}/chat`} className="gap-1.5">
+              <MessageSquare className="size-3.5 text-ink-link" />
+              <span>Buka Ruang Tim</span>
+            </Link>
+          </Button>
+        }
+      />
+
+      {/* 2. Bitemporal Time-Travel Bar */}
       <BitemporalTimelineBar
+        hideHeader
         teamId={teamId}
         asOf={asOf}
         counts={counts}
         onChangeAsOf={setAsOf}
       />
 
-      {/* Filter & Search Bar */}
+      {/* 3. Filter & Search Section (Plain Surface) */}
       <section
         aria-label="Filter dan pencarian Decision Record"
-        className="space-y-3 rounded-xl border border-line-subtle bg-surface-card p-3.5 shadow-card"
+        className="space-y-3.5 rounded-2xl border border-line-subtle bg-surface-card p-4 sm:p-5"
       >
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-ink-tertiary" />
+            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-tertiary" />
             <Input
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
               placeholder="Cari kode (DEC-02), judul, atau alasan..."
               aria-label="Cari Decision Record"
-              className="border-line-default bg-surface pl-8 text-base text-ink-primary placeholder:text-ink-tertiary sm:text-sm"
+              className="rounded-full border-line-default bg-surface pl-9 text-base text-ink-primary placeholder:text-ink-tertiary sm:text-sm"
             />
           </div>
 
           <div
             role="tablist"
             aria-label="Filter status keputusan"
-            className="inline-flex flex-wrap items-center gap-1 rounded-lg border border-line-subtle bg-surface p-1"
+            className="inline-flex flex-wrap items-center gap-1 rounded-full border border-line-subtle bg-surface p-1"
           >
             {STATUS_TABS.map((tab) => {
               const isActive = statusFilter === tab.value
@@ -236,9 +279,9 @@ export function ProjectBrainPage() {
                   aria-selected={isActive}
                   onClick={() => setStatusFilter(tab.value)}
                   className={cn(
-                    "rounded-md px-2.5 py-1 text-xs font-medium transition-[background-color,color,box-shadow] duration-150",
+                    "rounded-full px-3 py-1 text-xs font-medium transition-[background-color,color,box-shadow] duration-150",
                     isActive
-                      ? "bg-brand text-on-brand shadow-badge"
+                      ? "bg-brand text-on-brand shadow-xs"
                       : "text-ink-secondary hover:bg-surface-top hover:text-ink-primary"
                   )}
                 >
@@ -250,17 +293,17 @@ export function ProjectBrainPage() {
         </div>
 
         {/* KC Filter Chips & AI-Assisted Toggle */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line-subtle pt-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line-subtle pt-3">
           <div className="flex flex-wrap items-center gap-1.5">
             <button
               type="button"
               aria-pressed={kcFilter === "all"}
               onClick={() => setKcFilter("all")}
               className={cn(
-                "rounded-full border px-2.5 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
+                "rounded-full border px-3 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
                 kcFilter === "all"
                   ? "border-brand-subtle bg-wash-brand text-ink-link"
-                  : "border-line-subtle bg-surface text-ink-secondary hover:border-line-default hover:text-ink-primary"
+                  : "border-line-subtle bg-surface-card text-ink-secondary hover:border-line-default hover:text-ink-primary"
               )}
             >
               Semua KC
@@ -274,10 +317,10 @@ export function ProjectBrainPage() {
                   aria-pressed={isActive}
                   onClick={() => setKcFilter((prev) => (prev === kc.id ? "all" : kc.id))}
                   className={cn(
-                    "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
+                    "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
                     isActive
                       ? "border-brand-subtle bg-wash-brand text-ink-link"
-                      : "border-line-subtle bg-surface text-ink-secondary hover:border-line-default hover:text-ink-primary"
+                      : "border-line-subtle bg-surface-card text-ink-secondary hover:border-line-default hover:text-ink-primary"
                   )}
                 >
                   <span className="font-semibold">{kc.code}</span>
@@ -292,10 +335,10 @@ export function ProjectBrainPage() {
             aria-pressed={aiAssistedOnly}
             onClick={() => setAiAssistedOnly((prev) => !prev)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
+              "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
               aiAssistedOnly
                 ? "border-line-strong bg-warning-subtle text-text-warning"
-                : "border-line-subtle bg-surface text-ink-secondary hover:border-line-default hover:text-ink-primary"
+                : "border-line-subtle bg-surface-card text-ink-secondary hover:border-line-default hover:text-ink-primary"
             )}
           >
             <Bot className="size-3.5" aria-hidden="true" />
@@ -304,93 +347,97 @@ export function ProjectBrainPage() {
         </div>
       </section>
 
-      {/* Master-Detail 2-Column Layout */}
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:items-start">
-        {/* Left Master List */}
-        <div className="space-y-3 lg:col-span-7">
-          {isLoading ? (
-            <div className="space-y-3" role="status" aria-label="Memuat Decision Record">
-              {[1, 2, 3].map((slot) => (
-                <div
-                  key={slot}
-                  className="h-36 rounded-xl border border-line-subtle bg-surface-card p-4 shadow-card"
-                >
-                  <div className="h-4 w-28 rounded bg-muted" />
-                  <div className="mt-3 h-5 w-3/4 rounded bg-muted/80" />
-                  <div className="mt-2 h-3.5 w-full rounded bg-muted/60" />
-                </div>
-              ))}
-            </div>
-          ) : filteredItems.length === 0 ? (
-            <div className="rounded-xl border border-line-subtle bg-surface-card p-8 text-center shadow-card">
-              <p className="font-display text-xl font-semibold text-ink-primary">
-                Tidak ada keputusan yang cocok
-              </p>
-              <p className="mt-1 text-sm text-ink-secondary">
-                {asOf
-                  ? "Ubah filter atau kembali ke Live untuk melihat semua keputusan."
-                  : "Ubah kata kunci pencarian atau reset filter aktif."}
-              </p>
-              <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                {hasActiveFilters && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleResetFilters}
-                    className="gap-1.5"
+      {/* 4. Responsive Master-Detail Layout with MainWithAside Primitive */}
+      <MainWithAside
+        asideWidth="360px"
+        sticky={true}
+        stickyOffset="top-6"
+        main={
+          <div className="space-y-3.5">
+            {isLoading ? (
+              <div className="space-y-3.5" role="status" aria-label="Memuat Decision Record">
+                {[1, 2, 3].map((slot) => (
+                  <div
+                    key={slot}
+                    className="h-36 rounded-2xl border border-line-subtle bg-surface-card p-4"
                   >
-                    <RotateCcw className="size-3.5" />
-                    <span>Reset Filter</span>
-                  </Button>
-                )}
-                {asOf && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => setAsOf(undefined)}
-                    className="bg-brand text-on-brand hover:bg-brand-hover"
-                  >
-                    Kembali ke Live
-                  </Button>
-                )}
+                    <div className="h-4 w-28 rounded bg-muted" />
+                    <div className="mt-3 h-5 w-3/4 rounded bg-muted/80" />
+                    <div className="mt-2 h-3.5 w-full rounded bg-muted/60" />
+                  </div>
+                ))}
               </div>
-            </div>
-          ) : (
-            filteredItems.map((item) => (
-              <DecisionRecordCard
-                key={item.id}
-                item={item}
-                kcs={SEED_KCS}
-                supersedingItem={supersedingByTargetId.get(item.id)}
-                isSelected={selectedItem?.id === item.id}
-                isConfirming={confirmingId === item.id}
-                onSelect={handleSelectCard}
-                onConfirm={handleConfirmDecision}
-              />
-            ))
-          )}
-        </div>
+            ) : filteredItems.length === 0 ? (
+              <div className="rounded-2xl border border-line-subtle bg-surface-card p-8 text-center">
+                <p className="font-heading text-xl font-medium text-ink-primary">
+                  Tidak ada keputusan yang cocok
+                </p>
+                <p className="mt-1 text-sm text-ink-secondary">
+                  {asOf
+                    ? "Ubah filter atau kembali ke Live untuk melihat semua keputusan."
+                    : "Ubah kata kunci pencarian atau reset filter aktif."}
+                </p>
+                <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                  {hasActiveFilters && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleResetFilters}
+                      className="gap-1.5 rounded-full"
+                    >
+                      <RotateCcw className="size-3.5" />
+                      <span>Reset Filter</span>
+                    </Button>
+                  )}
+                  {asOf && (
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={() => setAsOf(undefined)}
+                      className="rounded-full bg-brand text-on-brand hover:bg-brand-hover"
+                    >
+                      Kembali ke Live
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              filteredItems.map((item) => (
+                <DecisionRecordCard
+                  key={item.id}
+                  item={item}
+                  kcs={SEED_KCS}
+                  supersedingItem={supersedingByTargetId.get(item.id)}
+                  isSelected={selectedItem?.id === item.id}
+                  isConfirming={confirmingId === item.id}
+                  onSelect={handleSelectCard}
+                  onConfirm={handleConfirmDecision}
+                />
+              ))
+            )}
+          </div>
+        }
+        aside={
+          <div className="hidden lg:block">
+            <DecisionDetailInspector
+              item={selectedItem}
+              teamId={teamId}
+              snapshotItems={items}
+              allKnownItems={allTeamItems}
+              kcs={SEED_KCS}
+              isConfirming={selectedItem ? confirmingId === selectedItem.id : false}
+              onSelectDecision={handleSelectRelatedDecision}
+              onFilterKc={(kcId) => setKcFilter((prev) => (prev === kcId ? "all" : kcId))}
+              onConfirm={handleConfirmDecision}
+            />
+          </div>
+        }
+      />
 
-        {/* Right Sticky Desktop Inspector */}
-        <aside className="hidden lg:sticky lg:top-20 lg:col-span-5 lg:block">
-          <DecisionDetailInspector
-            item={selectedItem}
-            teamId={teamId}
-            snapshotItems={items}
-            allKnownItems={allTeamItems}
-            kcs={SEED_KCS}
-            isConfirming={selectedItem ? confirmingId === selectedItem.id : false}
-            onSelectDecision={handleSelectRelatedDecision}
-            onFilterKc={(kcId) => setKcFilter((prev) => (prev === kcId ? "all" : kcId))}
-            onConfirm={handleConfirmDecision}
-          />
-        </aside>
-      </div>
-
-      {/* Responsive Mobile Detail Dialog (< lg) */}
+      {/* 5. Responsive Mobile Detail Dialog (< lg) */}
       <Dialog open={mobileDialogOpen} onOpenChange={setMobileDialogOpen}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto border border-line-subtle bg-surface-raised p-5 ring-0 shadow-raised sm:max-w-lg lg:hidden">
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl border border-line-subtle bg-surface-raised p-6 ring-0 shadow-raised sm:max-w-lg lg:hidden">
           <DialogHeader className="sr-only">
             <DialogTitle>
               {selectedItem ? `${selectedItem.code}: ${selectedItem.content.title}` : "Detail Keputusan"}
@@ -416,6 +463,6 @@ export function ProjectBrainPage() {
           />
         </DialogContent>
       </Dialog>
-    </div>
+    </PageContainer>
   )
 }

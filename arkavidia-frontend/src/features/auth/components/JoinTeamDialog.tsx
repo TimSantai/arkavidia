@@ -73,7 +73,7 @@ export function JoinTeamDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="border border-line-subtle bg-surface-raised shadow-raised ring-0 sm:max-w-md">
+      <DialogContent className="rounded-3xl border border-line-subtle bg-surface-raised p-6 shadow-raised ring-0 sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="font-display text-xl font-semibold text-ink-primary">
             Gabung Tim via Kode Undangan

@@ -175,7 +175,7 @@ export function DecisionDetailInspector({
     <div
       className={cn(
         "space-y-4",
-        !inDialog && "rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card"
+        !inDialog && "rounded-2xl border border-line-subtle bg-surface-card p-5 sm:p-6 shadow-card"
       )}
     >
       {/* Header: Code, Status, Title, PIC */}
