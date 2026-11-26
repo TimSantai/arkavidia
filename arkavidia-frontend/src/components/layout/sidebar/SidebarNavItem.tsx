@@ -81,7 +81,7 @@ export function SidebarNavItem({
             {badge && (
               <span
                 className={cn(
-                  "font-mono text-[10px] px-1.5 py-0.5 rounded-md leading-none select-none",
+                  "font-sans text-xs px-1.5 py-0.5 rounded-md leading-none select-none",
                   isActive
                     ? "bg-[#f4f6f9] dark:bg-canvas text-ink-tertiary"
                     : "bg-white dark:bg-surface-card text-ink-tertiary border border-line-subtle/50"
@@ -92,7 +92,7 @@ export function SidebarNavItem({
             )}
 
             {count !== undefined && count > 0 && (
-              <span className="font-mono text-[11px] min-w-6 h-5 px-1.5 rounded-full bg-[#e1ecff] text-[#1a51c4] inline-flex items-center justify-center font-medium leading-none">
+              <span className="font-sans text-xs min-w-6 h-5 px-1.5 rounded-full bg-[#e1ecff] text-[#1a51c4] inline-flex items-center justify-center font-medium leading-none tabular-nums">
                 {count}
                 {countSrText && <span className="sr-only">{countSrText}</span>}
               </span>

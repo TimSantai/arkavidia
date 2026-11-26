@@ -11,6 +11,7 @@ import {
   Search,
 } from "lucide-react"
 import type { Team, User } from "@/types/bersama"
+import { cn } from "@/lib/utils"
 import { SidebarMembers } from "./SidebarMembers"
 import { SidebarNavItem } from "./SidebarNavItem"
 import { TeamSwitcher } from "./TeamSwitcher"
@@ -93,7 +94,7 @@ export function AppSidebar({
     >
       <div className="flex-1 overflow-y-auto scrollbar-none">
         {/* 1. Baris Logo + Tombol Search & Settings */}
-        <div className="flex items-center justify-between pr-4 pb-4">
+        <div className={cn("flex items-center justify-between pb-4", isMobile ? "pr-0" : "pr-4")}>
           <Link
             to="/"
             onClick={onNavigate}
@@ -119,7 +120,7 @@ export function AppSidebar({
         </div>
 
         {/* 2. Team Switcher */}
-        <TeamSwitcher team={team} />
+        <TeamSwitcher team={team} isMobile={isMobile} />
 
         {/* 3. Grup Navigasi: Kolaborasi & Memori */}
         <nav aria-label="Navigasi aplikasi" className="space-y-1 mt-4">
@@ -165,7 +166,7 @@ export function AppSidebar({
       </div>
 
       {/* 5. Anggota Tim di bagian bawah */}
-      <SidebarMembers team={team} currentUser={currentUser} />
+      <SidebarMembers team={team} currentUser={currentUser} isMobile={isMobile} />
     </aside>
   )
 }

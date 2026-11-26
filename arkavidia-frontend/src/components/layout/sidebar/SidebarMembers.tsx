@@ -11,16 +11,18 @@ import {
   USER_ROLE_LABEL,
 } from "@/features/team-chat/components/teamChatAvatars"
 import type { Team, User } from "@/types/bersama"
+import { cn } from "@/lib/utils"
 
 export interface SidebarMembersProps {
   readonly team?: Team
   readonly currentUser?: User
+  readonly isMobile?: boolean
 }
 
 // Online indicators for team collaboration presence
 const ONLINE_MEMBERS = new Set(["user-rani", "user-dimas", "user-budi"])
 
-export function SidebarMembers({ team, currentUser }: SidebarMembersProps) {
+export function SidebarMembers({ team, currentUser, isMobile = false }: SidebarMembersProps) {
   const members = team?.members ?? []
 
   return (
@@ -30,7 +32,7 @@ export function SidebarMembers({ team, currentUser }: SidebarMembersProps) {
       </p>
 
       <TooltipProvider delayDuration={150}>
-        <div className="grid grid-cols-5 gap-2 pr-4 pl-3 items-center">
+        <div className={cn("grid grid-cols-5 gap-2 pl-3 items-center", isMobile ? "pr-0" : "pr-4")}>
           {members.map((member) => {
             const avatarSrc = USER_AVATAR_MAP[member.id]
             const roleLabel = USER_ROLE_LABEL[member.id] || member.role
