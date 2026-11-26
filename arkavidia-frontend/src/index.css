@@ -356,11 +356,13 @@
   }
   html {
     @apply font-sans;
+    overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   body {
     @apply bg-background text-foreground antialiased min-h-screen font-sans;
+    overscroll-behavior: none;
   }
   a[href],
   button:not(:disabled),

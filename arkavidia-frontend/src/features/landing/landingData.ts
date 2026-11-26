@@ -20,16 +20,44 @@ export interface NavLinkItem {
   readonly label: string
 }
 
+export interface EcosystemNode {
+  readonly id: EcosystemBrandId
+  readonly name: string
+  readonly role: string
+  readonly ring: "outer" | "inner"
+  readonly status: "live" | "soon"
+}
+
+export interface PulseEvent {
+  readonly from: EcosystemBrandId
+  readonly text: string
+}
+
 export interface EmpiricalStat {
   readonly id: string
   readonly value: string
   readonly description: string
   readonly citation: string
   readonly methodNote: string
-  readonly barPercentA: number
-  readonly barPercentB: number
-  readonly barLabelA: string
-  readonly barLabelB: string
+}
+
+export interface DecisionRow {
+  readonly id: string
+  readonly title: string
+  readonly kc: string
+  readonly understood: number
+  readonly total: number
+  readonly aiAssisted?: boolean
+  readonly comments?: number
+  readonly date: string
+  readonly ownerId: string
+}
+
+export interface DecisionGroup {
+  readonly label: string
+  readonly count: number
+  readonly faded?: boolean
+  readonly rows: readonly DecisionRow[]
 }
 
 export interface WeeklyCyclePhase {
@@ -43,6 +71,8 @@ export interface WeeklyCyclePhase {
   readonly technicalNote: string
   readonly demoPath: string
   readonly demoCta: string
+  readonly size: "wide" | "narrow"
+  readonly glow: "brand" | "violet" | "amber" | "cyan"
 }
 
 export interface EthicsGuardrail {
@@ -76,10 +106,49 @@ export interface HeatmapMemberRow {
 
 export const TEAM_COLLAB_SCENE_SRC = teamCollabScene
 
+export const HERO_CONTENT = {
+  announcementTag: "HACKVIDIA 11.0",
+  announcementText: "AI for Learning & Self-Growth",
+  title: "Satu tim, semua paham.",
+  titleLead: "Satu tim,",
+  titleAccent: "semua paham.",
+  leadBefore: "ChatGPT membantu tim tahu",
+  leadWhat: "apa",
+  leadMiddle: "yang diputuskan. BERSAMA memastikan setiap anggota bisa menjelaskan",
+  leadWhy: "kenapa",
+  primaryCta: { label: "Coba demo gratis", to: "/teams/team-pbo-01/chat" },
+  secondaryCta: { label: "Lihat cara kerjanya", href: "#cara-kerja" },
+  socialProof: "Dicoba tim IF2210 PBO · 5 menit per minggu",
+} as const
+
 export const NAV_LINKS: readonly NavLinkItem[] = [
-  { href: "#perbedaan", label: "Perbedaan" },
-  { href: "#cara-kerja", label: "Cara Kerja" },
-  { href: "#privasi-etika", label: "Privasi & Etika" },
+  { href: "#cara-kerja", label: "Cara kerja" },
+  { href: "#privasi", label: "Privasi" },
+  { href: "#riset", label: "Riset" },
+  { href: "#tim", label: "Tim" },
+]
+
+export const ECOSYSTEM_NODES: readonly EcosystemNode[] = [
+  // Outer ring: everyday student collaboration & AI tools
+  { id: "whatsapp", name: "WhatsApp", role: "Import riwayat chat grup", ring: "outer", status: "soon" },
+  { id: "github", name: "GitHub", role: "PR & commit jadi konteks keputusan", ring: "outer", status: "soon" },
+  { id: "notion", name: "Notion", role: "Catatan rapat jadi usulan keputusan", ring: "outer", status: "soon" },
+  { id: "chatgpt", name: "ChatGPT", role: "Model AI pilihan tim", ring: "outer", status: "live" },
+  { id: "claude", name: "Claude", role: "Model AI pilihan tim", ring: "outer", status: "live" },
+  { id: "gemini", name: "Gemini", role: "Model AI pilihan tim", ring: "outer", status: "live" },
+  // Inner ring: core infrastructure behind the scenes
+  { id: "supabase", name: "Supabase", role: "Auth & Row-Level Security", ring: "inner", status: "live" },
+  { id: "postgresql", name: "PostgreSQL", role: "Memori tim + pencarian hybrid", ring: "inner", status: "live" },
+  { id: "fastapi", name: "FastAPI", role: "Orkestrator agent", ring: "inner", status: "live" },
+]
+
+export const PULSE_EVENTS: readonly PulseEvent[] = [
+  { from: "whatsapp", text: "12 pesan grup diimpor" },
+  { from: "claude", text: "Kandidat DEC-15 diekstrak" },
+  { from: "github", text: "PR #18 ditautkan ke DEC-14" },
+  { from: "notion", text: "Catatan rapat jadi 2 usulan" },
+  { from: "gemini", text: "Ringkasan mingguan dibuat" },
+  { from: "chatgpt", text: "Pertanyaan explain-back disusun" },
 ]
 
 export const DEMO_TEAM_MEMBERS: readonly DemoTeamMember[] = [
@@ -131,6 +200,69 @@ export const HEATMAP_MATRIX: readonly HeatmapMemberRow[] = [
   { memberId: "user-sari", scores: [0.58, 0.18, 0.41, 0.62] },
 ]
 
+export const DECISION_GROUPS: readonly DecisionGroup[] = [
+  {
+    label: "PERLU DIPAHAMI",
+    count: 3,
+    rows: [
+      {
+        id: "DEC-14",
+        title: "Autentikasi pakai JWT + refresh token",
+        kc: "KC-02 JWT",
+        understood: 1,
+        total: 4,
+        aiAssisted: true,
+        date: "12 Mar",
+        ownerId: "user-dimas",
+      },
+      {
+        id: "DEC-12",
+        title: "Antrean pasien pakai priority queue",
+        kc: "KC-03 Skema DB",
+        understood: 2,
+        total: 4,
+        date: "10 Mar",
+        ownerId: "user-budi",
+      },
+      {
+        id: "DEC-11",
+        title: "Validasi input dipindah ke service layer",
+        kc: "KC-04 REST",
+        understood: 2,
+        total: 4,
+        comments: 4,
+        date: "9 Mar",
+        ownerId: "user-sari",
+      },
+    ],
+  },
+  {
+    label: "SUDAH DIPAHAMI",
+    count: 6,
+    faded: true,
+    rows: [
+      {
+        id: "DEC-09",
+        title: "Arsitektur MVC untuk modul klinik",
+        kc: "KC-01 MVC",
+        understood: 4,
+        total: 4,
+        date: "5 Mar",
+        ownerId: "user-rani",
+      },
+      {
+        id: "DEC-07",
+        title: "Penamaan endpoint REST pakai kata benda jamak",
+        kc: "KC-04 REST",
+        understood: 3,
+        total: 4,
+        date: "3 Mar",
+        ownerId: "user-dimas",
+      },
+    ],
+  },
+]
+
 export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
   {
     id: "bastani",
@@ -139,10 +271,6 @@ export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
     citation: "Bastani et al., PNAS 2025",
     methodNote:
       "Studi eksperimental pada pembelajaran pemrograman menunjukkan ketergantungan pada jawaban instan AI menurunkan transfer pemahaman mandiri ketika bantuan dilepas.",
-    barPercentA: 83,
-    barPercentB: 100,
-    barLabelA: "Tanpa Guardrail",
-    barLabelB: "Kontrol Belajar",
   },
   {
     id: "anthropic",
@@ -151,10 +279,6 @@ export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
     citation: "Anthropic Research, Jan 2026",
     methodNote:
       "Developer yang hanya menyalin solusi LLM mencetak skor pemahaman konseptual lebih rendah dibanding yang melakukan penjelasan aktif.",
-    barPercentA: 50,
-    barPercentB: 67,
-    barLabelA: "AI Pasif",
-    barLabelB: "Aktif",
   },
   {
     id: "cscl",
@@ -163,10 +287,6 @@ export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
     citation: "Chen et al., IJCSCL 2024",
     methodNote:
       "Meta-analisis Computer-Supported Collaborative Learning menunjukkan alat kesadaran kelompok meningkatkan regulasi belajar dan koordinasi tim.",
-    barPercentA: 45,
-    barPercentB: 84,
-    barLabelA: "Chat Biasa",
-    barLabelB: "Group Awareness",
   },
 ]
 
@@ -174,8 +294,9 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
   {
     id: "capture",
     step: "01",
-    title: "Tangkap",
-    shortSummary: "Ekstrak keputusan dari chat lewat konfirmasi tim.",
+    title: "Tangkap.",
+    shortSummary:
+      "Keputusan, alasan, dan alternatif yang ditolak diekstrak dari chat. Tim selalu mengonfirmasi dulu.",
     mechanismTitle: "Project Brain & Propose-Confirm",
     formulaTag: "M1 · Context Passport · M2",
     mechanismPlain:
@@ -184,12 +305,15 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
       "Disimpan pada graf bitemporal (valid_from / recorded_at) dengan tautan langsung ke pesan sumber M2.",
     demoPath: "/teams/team-pbo-01/brain",
     demoCta: "Lihat Project Brain",
+    size: "wide",
+    glow: "brand",
   },
   {
     id: "map",
     step: "02",
-    title: "Petakan",
-    shortSummary: "Sorot penguasaan tiap topik & silo pengetahuan.",
+    title: "Petakan.",
+    shortSummary:
+      "Lihat siapa paham bagian mana, dan silo mana yang berisiko.",
     mechanismTitle: "Knowledge Coverage & Bus Factor",
     formulaTag: "Bus Factor = min |S| : cov < 50%",
     mechanismPlain:
@@ -198,12 +322,15 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
       "Ambang penguasaan memakai probabilitas BKT P(L) >= 0.70 serta deteksi konsentrasi Gini.",
     demoPath: "/teams/team-pbo-01/understanding",
     demoCta: "Buka Peta Pemahaman",
+    size: "narrow",
+    glow: "violet",
   },
   {
     id: "check",
     step: "03",
-    title: "Uji Paham",
-    shortSummary: "Explain-back adaptif maksimal 5 menit per minggu.",
+    title: "Uji paham.",
+    shortSummary:
+      "Jelaskan ulang keputusan rekanmu lewat teks atau voice note. Kalau AI ragu, ia tidak menebak.",
     mechanismTitle: "Adaptive Explain-Back Check",
     formulaTag: "IRT 2PL · Conformal s > lambda",
     mechanismPlain:
@@ -211,13 +338,16 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
     technicalNote:
       "Pemilihan item memakai informasi Fisher I_j(theta) * w_j dan kontrol risiko konformal alpha = 0.10.",
     demoPath: "/teams/team-pbo-01/check",
-    demoCta: "Coba Explain-Back Check",
+    demoCta: "Coba Explain-back",
+    size: "narrow",
+    glow: "amber",
   },
   {
     id: "close",
     step: "04",
-    title: "Tutup Celah",
-    shortSummary: "Pairing 10 menit & briefing anggota baru.",
+    title: "Tutup celah.",
+    shortSummary:
+      "Sesi 10 menit \"jelaskan ke aku\" antar rekan, plus briefing interaktif untuk anggota yang tertinggal.",
     mechanismTitle: "Peer Pairing & Tutored Briefing",
     formulaTag: "Pairing 10 mnt · Socratic BKT",
     mechanismPlain:
@@ -226,44 +356,67 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
       "Rekomendasi pairing memakai optimasi submodular greedy dan pembaruan BKT dengan faktor pelupaan.",
     demoPath: "/teams/team-pbo-01/briefing",
     demoCta: "Lihat Tutored Briefing",
+    size: "wide",
+    glow: "cyan",
   },
 ]
 
 export const ETHICS_GUARDRAILS: readonly EthicsGuardrail[] = [
   {
     id: "no-override",
-    badge: "Propose · Confirm",
+    badge: "PROPOSE -> CONFIRM",
     title: "Tidak memutuskan atas nama tim",
-    description:
-      "AI hanya mengekstrak kandidat keputusan; konfirmasi dan revisi tetap di tangan mahasiswa.",
+    description: "AI mengusulkan, keputusan tetap di tangan tim.",
     technicalNote:
       "Setiap usulan dari chat atau Context Passport berstatus proposed hingga disetujui anggota di Ruang Tim.",
   },
   {
     id: "no-leak",
-    badge: "IFC Zero-Leak",
-    title: "Tidak membocorkan M1 tanpa Context Passport",
-    description:
-      "Catatan pribadi M1 terisolasi dan wajib melewati pratinjau penyamaran PII sebelum dibagikan.",
+    badge: "RLS + CEDAR + PII MASK",
+    title: "Tidak membocorkan catatan pribadi",
+    description: "Data pribadi disamarkan otomatis sebelum masuk ruang tim.",
     technicalNote:
       "Isolasi ditegakkan lewat Postgres Row-Level Security (RLS), Cedar Policy pre-LLM gate, dan deteksi PII otomatis.",
   },
   {
     id: "no-grading",
-    badge: "Formatif Only",
-    title: "Skor pemahaman bukan untuk nilai kuliah",
-    description:
-      "Probabilitas P(L) hanya menjadi cermin belajar pribadi agar tim berani menutup celah.",
+    badge: "FORMATIF ONLY",
+    title: "Bukan untuk nilai kuliah",
+    description: "Cermin belajar tim, terputus dari nilai akademik.",
     technicalNote:
       "Tidak ada ekspor nilai individu ke rubrik penilaian akademik atau peringkat kelas.",
   },
   {
     id: "no-surveillance",
-    badge: "Agregat Tim",
-    title: "Tidak mengirim skor individu ke dosen",
-    description:
-      "Dosen hanya melihat kesehatan belajar agregat tim tanpa akses ke catatan M1 maupun skor pribadi.",
+    badge: "AGREGAT TIM ONLY",
+    title: "Dosen tidak melihat skor individu",
+    description: "Dosen hanya melihat kesehatan tim secara agregat.",
     technicalNote:
       "Dirancang selaras dengan prinsip minimalisasi data dan persetujuan eksplisit UU PDP No. 27/2022.",
   },
 ]
+
+export const CLOSING_CONTENT = {
+  title: "Mulai paham bersama.",
+  subtitle: "Buka demo dan rasakan siklus satu minggu dalam lima menit.",
+  primaryCta: { label: "Coba demo gratis", to: "/teams/team-pbo-01/chat" },
+  secondaryCta: {
+    label: "Lihat di GitHub",
+    href: "https://github.com/TimSantai/arkavidia",
+  },
+  clockCaption: "Pendamping AI · membantu 4 anggota saling paham",
+  phases: [
+    { id: "capture", label: "Tangkap", days: [0, 1], color: "#4784ff" },
+    { id: "map", label: "Petakan", days: [2], color: "#9fc1ff" },
+    { id: "check", label: "Uji Paham", days: [3], color: "#f1d69b" },
+    { id: "close", label: "Tutup Celah", days: [4], color: "#e0bb6c" },
+  ],
+  days: ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"],
+  copyright: "© 2026 Tim BERSAMA · Hackvidia, Arkavidia 11.0",
+  legal: [
+    { label: "Ketentuan", href: "#etika" },
+    { label: "Privasi", href: "#privasi" },
+  ],
+  madeWithPrefix: "Dibuat dengan",
+  madeWithSuffix: "untuk Hackvidia",
+} as const
