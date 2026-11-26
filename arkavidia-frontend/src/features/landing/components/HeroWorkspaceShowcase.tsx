@@ -91,7 +91,7 @@ function getScoreStyle(score: number, isSiloCol?: boolean) {
 }
 
 export function HeroWorkspaceShowcase() {
-  const [activeView, setActiveView] = useState<ShowcaseViewId>("bus")
+  const [activeView, setActiveView] = useState<ShowcaseViewId>("ifc")
   const activeMeta =
     SHOWCASE_VIEWS.find((v) => v.id === activeView) ?? SHOWCASE_VIEWS[0]
 
@@ -99,16 +99,16 @@ export function HeroWorkspaceShowcase() {
   const dimas = MEMBER_MAP.get("user-dimas")
 
   return (
-    <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-line-subtle bg-surface shadow-raised">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line-subtle bg-surface-card/70 px-4 py-2.5">
+    <div className="mx-auto w-full overflow-hidden rounded-2xl border border-line-subtle bg-white shadow-[0_30px_80px_-30px_rgb(4_42_123/0.45)] dark:bg-surface-card dark:shadow-[0_30px_80px_-30px_rgb(0_0_0/0.72)]">
+      <div className="flex min-h-9 flex-wrap items-center justify-between gap-3 border-b border-line-subtle bg-surface/65 px-4 py-2 dark:bg-surface/80">
         <div className="flex items-center gap-3">
           <div className="hidden items-center gap-1.5 sm:flex" aria-hidden="true">
             <span className="size-2.5 rounded-full bg-muted" />
             <span className="size-2.5 rounded-full bg-muted" />
             <span className="size-2.5 rounded-full bg-muted" />
           </div>
-          <span className="rounded-md border border-line-subtle bg-surface-card px-2.5 py-0.5 font-sans text-xs text-ink-secondary">
-            bersama.app / if2210-pbo / kelompok-4
+          <span className="rounded-md border border-line-subtle bg-white px-2.5 py-0.5 font-sans text-xs font-medium tracking-[0.01em] text-ink-secondary dark:bg-surface-card">
+            team-pbo-01 / {activeMeta.label}
           </span>
         </div>
 
@@ -163,7 +163,7 @@ export function HeroWorkspaceShowcase() {
       </div>
 
       {/* 2-Pane Desktop Workspace */}
-      <div className="grid grid-cols-1 md:grid-cols-[240px_1fr]">
+      <div className="grid grid-cols-1 md:grid-cols-[264px_1fr]">
         <aside className="hidden flex-col justify-between border-r border-line-subtle bg-well/65 p-3 md:flex">
           <div className="space-y-3">
             <div className="rounded-xl border border-line-subtle bg-surface-card px-3 py-2.5 shadow-card">

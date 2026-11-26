@@ -76,6 +76,21 @@ export interface HeatmapMemberRow {
 
 export const TEAM_COLLAB_SCENE_SRC = teamCollabScene
 
+export const HERO_CONTENT = {
+  announcementTag: "HACKVIDIA 11.0",
+  announcementText: "AI for Learning & Self-Growth",
+  title: "Satu tim, semua paham.",
+  titleLead: "Satu tim,",
+  titleAccent: "semua paham.",
+  leadBefore: "ChatGPT membantu tim tahu",
+  leadWhat: "apa",
+  leadMiddle: "yang diputuskan. BERSAMA memastikan setiap anggota bisa menjelaskan",
+  leadWhy: "kenapa",
+  primaryCta: { label: "Coba demo gratis", to: "/teams/team-pbo-01/chat" },
+  secondaryCta: { label: "Lihat cara kerjanya", href: "#cara-kerja" },
+  socialProof: "Dicoba tim IF2210 PBO · 5 menit per minggu",
+} as const
+
 export const NAV_LINKS: readonly NavLinkItem[] = [
   { href: "#perbedaan", label: "Perbedaan" },
   { href: "#cara-kerja", label: "Cara Kerja" },
