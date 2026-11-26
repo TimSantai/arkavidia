@@ -54,7 +54,7 @@ export function CheckIllustration({
   return (
     <div
       aria-hidden="true"
-      className="inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-[#28292d]/90 px-3.5 py-3 select-none"
+      className="inline-flex items-center gap-3 rounded-2xl border border-[#e4ecfb] bg-white px-3.5 py-3 shadow-[0_6px_18px_-10px_rgb(29_30_33/0.1)] select-none dark:border-white/12 dark:bg-[#1e263b]"
     >
       <AgentStickerAvatar
         role="tutor"
@@ -64,10 +64,10 @@ export function CheckIllustration({
         appearanceOverride={AMBER_TUTOR_APPEARANCE}
       />
       <div className="flex items-center gap-2">
-        <span className="flex size-7 items-center justify-center rounded-full bg-[#423000] text-[#f1d69b]">
+        <span className="flex size-7 items-center justify-center rounded-full bg-warning-subtle text-text-warning dark:bg-[#423000] dark:text-[#f1d69b]">
           <Mic className="size-3.5" />
         </span>
-        <span className="kpi-hero text-[30px] leading-none font-semibold text-[#f1d69b]">
+        <span className="kpi-hero text-[30px] leading-none font-semibold text-[#755700] dark:text-[#f1d69b]">
           {formatTimer(displaySeconds)}
         </span>
       </div>
@@ -76,7 +76,7 @@ export function CheckIllustration({
         {WAVE_BARS.map((bar, idx) => (
           <motion.span
             key={idx}
-            className="h-7 w-1 origin-center rounded-full bg-[#f1d69b]"
+            className="h-7 w-1 origin-center rounded-full bg-[#c59b37] dark:bg-[#f1d69b]"
             animate={
               reducedMotion || !active
                 ? { scaleY: bar.rest }

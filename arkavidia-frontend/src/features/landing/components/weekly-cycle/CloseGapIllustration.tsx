@@ -15,26 +15,28 @@ export function CloseGapIllustration({
   return (
     <div
       aria-hidden="true"
-      className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-2xl border border-white/10 bg-[#28292d]/90 p-4 select-none"
+      className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-2xl border border-[#e4ecfb] bg-white p-4 shadow-[0_6px_18px_-10px_rgb(29_30_33/0.1)] select-none dark:border-white/12 dark:bg-[#1e263b]"
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="rounded-full bg-[#163644] px-2.5 py-0.5 font-sans text-xs font-semibold tracking-wide text-[#73cdf8]">
+        <span className="rounded-full bg-info-subtle px-2.5 py-0.5 font-sans text-xs font-semibold tracking-wide text-text-info dark:bg-[#163644] dark:text-[#73cdf8]">
           PAIRING · 10 MNT
         </span>
-        <span className="font-sans text-xs text-[#9fa2a7]">KC-02 JWT</span>
+        <span className="font-sans text-xs text-ink-tertiary dark:text-[#9fa2a7]">
+          KC-02 JWT
+        </span>
       </div>
 
       <div className="flex items-center gap-3">
         <div className="flex flex-col items-center gap-1">
-          <Avatar size="sm" className="size-10 border border-white/15">
+          <Avatar size="sm" className="size-10 border border-line-subtle dark:border-white/15">
             {DIMAS?.avatarSrc && (
               <AvatarImage src={DIMAS.avatarSrc} alt="Dimas" />
             )}
-            <AvatarFallback className="bg-[#323337] text-xs font-semibold text-[#f4f6f9]">
+            <AvatarFallback className="bg-surface text-xs font-semibold text-ink-primary dark:bg-[#323337] dark:text-[#f4f6f9]">
               DP
             </AvatarFallback>
           </Avatar>
-          <span className="font-sans text-xs font-medium text-[#bec0c5]">
+          <span className="font-sans text-xs font-medium text-ink-secondary dark:text-[#bec0c5]">
             DP
           </span>
         </div>
@@ -51,7 +53,7 @@ export function CloseGapIllustration({
               y1="6"
               x2="156"
               y2="6"
-              stroke="#3dafe0"
+              stroke="#007fa9"
               strokeWidth="2"
               strokeDasharray="5 5"
               strokeLinecap="round"
@@ -62,7 +64,7 @@ export function CloseGapIllustration({
           </svg>
           {!reducedMotion && active && (
             <motion.span
-              className="absolute top-1/2 left-1 size-2 -translate-y-1/2 rounded-full bg-[#73cdf8] shadow-[0_0_10px_2px_rgb(61_175_224/0.75)]"
+              className="absolute top-1/2 left-1 size-2 -translate-y-1/2 rounded-full bg-[#0098ca] shadow-[0_0_10px_2px_rgb(0_152_202/0.6)] dark:bg-[#73cdf8]"
               animate={{ left: ["6%", "90%", "6%"] }}
               transition={{
                 duration: 3.2,
@@ -75,13 +77,13 @@ export function CloseGapIllustration({
         </div>
 
         <div className="flex flex-col items-center gap-1">
-          <Avatar size="sm" className="size-10 border border-white/15">
+          <Avatar size="sm" className="size-10 border border-line-subtle dark:border-white/15">
             {SARI?.avatarSrc && <AvatarImage src={SARI.avatarSrc} alt="Sari" />}
-            <AvatarFallback className="bg-[#323337] text-xs font-semibold text-[#f4f6f9]">
+            <AvatarFallback className="bg-surface text-xs font-semibold text-ink-primary dark:bg-[#323337] dark:text-[#f4f6f9]">
               SW
             </AvatarFallback>
           </Avatar>
-          <span className="font-sans text-xs font-medium text-[#bec0c5]">
+          <span className="font-sans text-xs font-medium text-ink-secondary dark:text-[#bec0c5]">
             SW
           </span>
         </div>

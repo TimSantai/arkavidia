@@ -1,7 +1,7 @@
 import { motion, type MotionValue } from "motion/react"
 import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { CLOSING_CONTENT, DEMO_TEAM_MEMBERS } from "../../landingData"
+import { DEMO_TEAM_MEMBERS } from "../../landingData"
 
 const MEMBER_MAP = new Map(DEMO_TEAM_MEMBERS.map((m) => [m.id, m]))
 
@@ -93,21 +93,21 @@ export function HeroAgentStage3D({
           }}
           className="relative flex size-full items-center justify-center"
         >
-          {/* Layer -40px: Grounded deep shadow */}
+          {/* Layer -40px: Soft cool-cobalt grounded shadow */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-1/2 size-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/85 blur-[42px]"
-            style={{ transform: "translateZ(-40px) translateY(28px)" }}
+            className="pointer-events-none absolute top-1/2 left-1/2 size-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#4784ff]/20 blur-[38px] dark:bg-black/75"
+            style={{ transform: "translateZ(-40px) translateY(26px)" }}
           />
 
-          {/* Layer -16px: Subtle two-temperature ambient aura behind Hero BoopFace */}
+          {/* Layer -16px: Whisper Fajar warm-cobalt aura behind Hero BoopFace */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-55 blur-[56px] sm:size-72"
+            className="pointer-events-none absolute top-1/2 left-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-55 blur-[52px] sm:size-72 dark:opacity-45"
             style={{
               transform: "translateZ(-16px)",
               background:
-                "radial-gradient(circle at 32% 35%, rgb(241 214 155 / 0.55), rgb(71 132 255 / 0.65) 55%, transparent 78%)",
+                "radial-gradient(circle at 32% 35%, rgb(252 233 194 / 0.65), rgb(159 193 255 / 0.55) 56%, transparent 78%)",
             }}
           />
 
@@ -121,28 +121,28 @@ export function HeroAgentStage3D({
             <path
               d="M 240 225 Q 160 155 92 78"
               fill="none"
-              stroke="rgb(159 193 255 / 0.28)"
+              stroke="rgb(45 106 231 / 0.34)"
               strokeWidth="1.5"
               strokeDasharray="4 6"
             />
             <path
               d="M 240 225 Q 325 160 390 86"
               fill="none"
-              stroke="rgb(196 179 255 / 0.28)"
+              stroke="rgb(127 81 219 / 0.34)"
               strokeWidth="1.5"
               strokeDasharray="4 6"
             />
             <path
               d="M 240 225 Q 155 295 92 368"
               fill="none"
-              stroke="rgb(115 205 248 / 0.28)"
+              stroke="rgb(0 127 169 / 0.34)"
               strokeWidth="1.5"
               strokeDasharray="4 6"
             />
             <path
               d="M 240 225 Q 330 295 390 374"
               fill="none"
-              stroke="rgb(121 217 144 / 0.28)"
+              stroke="rgb(22 166 79 / 0.34)"
               strokeWidth="1.5"
               strokeDasharray="4 6"
             />
@@ -201,19 +201,19 @@ export function HeroAgentStage3D({
                           ease: "easeInOut",
                         }
                   }
-                  className="flex items-center gap-2.5 rounded-2xl border border-white/12 bg-[#1d1e21]/88 px-2.5 py-2 shadow-[0_14px_30px_-10px_rgb(0_0_0/0.8)] backdrop-blur-md sm:px-3"
+                  className="flex items-center gap-2.5 rounded-2xl border border-[#dce7fb] bg-white/92 px-2.5 py-2 shadow-[0_8px_22px_-12px_rgb(26_81_196/0.18)] backdrop-blur-md sm:px-3 dark:border-white/15 dark:bg-[#1e263b]/85 dark:shadow-[0_14px_30px_-10px_rgb(0_0_0/0.6)]"
                 >
-                  <Avatar size="sm" className="size-8 shrink-0 border border-white/15">
+                  <Avatar size="sm" className="size-8 shrink-0 border border-line-subtle dark:border-white/15">
                     <AvatarImage src={member.avatarSrc} alt={member.name} />
-                    <AvatarFallback className="bg-[#323337] text-xs font-semibold text-[#f4f6f9]">
+                    <AvatarFallback className="bg-surface text-xs font-semibold text-ink-primary dark:bg-[#323337] dark:text-[#f4f6f9]">
                       {member.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 text-left">
-                    <p className="font-sans text-xs leading-tight font-semibold text-[#f4f6f9]">
+                    <p className="font-sans text-xs leading-tight font-semibold text-ink-primary dark:text-white">
                       {member.shortName}
                     </p>
-                    <p className="mt-0.5 flex items-center gap-1.5 font-sans text-xs leading-tight whitespace-nowrap text-[#bec0c5]">
+                    <p className="mt-0.5 flex items-center gap-1.5 font-sans text-xs leading-tight whitespace-nowrap text-ink-secondary dark:text-[#bec0c5]">
                       <span
                         className="size-1.5 shrink-0 rounded-full"
                         style={{ backgroundColor: item.dotColor }}
@@ -227,10 +227,6 @@ export function HeroAgentStage3D({
           })}
         </motion.div>
       </motion.div>
-
-      <p className="mt-4 font-sans text-xs font-medium tracking-wide text-[#9fa2a7]">
-        {CLOSING_CONTENT.clockCaption}
-      </p>
     </div>
   )
 }
