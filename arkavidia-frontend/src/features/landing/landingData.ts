@@ -71,6 +71,8 @@ export interface WeeklyCyclePhase {
   readonly technicalNote: string
   readonly demoPath: string
   readonly demoCta: string
+  readonly size: "wide" | "narrow"
+  readonly glow: "brand" | "violet" | "amber" | "cyan"
 }
 
 export interface EthicsGuardrail {
@@ -292,8 +294,9 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
   {
     id: "capture",
     step: "01",
-    title: "Tangkap",
-    shortSummary: "Ekstrak keputusan dari chat lewat konfirmasi tim.",
+    title: "Tangkap.",
+    shortSummary:
+      "Keputusan, alasan, dan alternatif yang ditolak diekstrak dari chat. Tim selalu mengonfirmasi dulu.",
     mechanismTitle: "Project Brain & Propose-Confirm",
     formulaTag: "M1 · Context Passport · M2",
     mechanismPlain:
@@ -302,12 +305,15 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
       "Disimpan pada graf bitemporal (valid_from / recorded_at) dengan tautan langsung ke pesan sumber M2.",
     demoPath: "/teams/team-pbo-01/brain",
     demoCta: "Lihat Project Brain",
+    size: "wide",
+    glow: "brand",
   },
   {
     id: "map",
     step: "02",
-    title: "Petakan",
-    shortSummary: "Sorot penguasaan tiap topik & silo pengetahuan.",
+    title: "Petakan.",
+    shortSummary:
+      "Lihat siapa paham bagian mana, dan silo mana yang berisiko.",
     mechanismTitle: "Knowledge Coverage & Bus Factor",
     formulaTag: "Bus Factor = min |S| : cov < 50%",
     mechanismPlain:
@@ -316,12 +322,15 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
       "Ambang penguasaan memakai probabilitas BKT P(L) >= 0.70 serta deteksi konsentrasi Gini.",
     demoPath: "/teams/team-pbo-01/understanding",
     demoCta: "Buka Peta Pemahaman",
+    size: "narrow",
+    glow: "violet",
   },
   {
     id: "check",
     step: "03",
-    title: "Uji Paham",
-    shortSummary: "Explain-back adaptif maksimal 5 menit per minggu.",
+    title: "Uji paham.",
+    shortSummary:
+      "Jelaskan ulang keputusan rekanmu lewat teks atau voice note. Kalau AI ragu, ia tidak menebak.",
     mechanismTitle: "Adaptive Explain-Back Check",
     formulaTag: "IRT 2PL · Conformal s > lambda",
     mechanismPlain:
@@ -329,13 +338,16 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
     technicalNote:
       "Pemilihan item memakai informasi Fisher I_j(theta) * w_j dan kontrol risiko konformal alpha = 0.10.",
     demoPath: "/teams/team-pbo-01/check",
-    demoCta: "Coba Explain-Back Check",
+    demoCta: "Coba Explain-back",
+    size: "narrow",
+    glow: "amber",
   },
   {
     id: "close",
     step: "04",
-    title: "Tutup Celah",
-    shortSummary: "Pairing 10 menit & briefing anggota baru.",
+    title: "Tutup celah.",
+    shortSummary:
+      "Sesi 10 menit \"jelaskan ke aku\" antar rekan, plus briefing interaktif untuk anggota yang tertinggal.",
     mechanismTitle: "Peer Pairing & Tutored Briefing",
     formulaTag: "Pairing 10 mnt · Socratic BKT",
     mechanismPlain:
@@ -344,6 +356,8 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
       "Rekomendasi pairing memakai optimasi submodular greedy dan pembaruan BKT dengan faktor pelupaan.",
     demoPath: "/teams/team-pbo-01/briefing",
     demoCta: "Lihat Tutored Briefing",
+    size: "wide",
+    glow: "cyan",
   },
 ]
 
