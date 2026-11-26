@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import "boopface"
 import type { BoopFace } from "boopface"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 import {
   AGENT_ROLE_META,
   skinSupportsEyeColor,
@@ -72,6 +72,15 @@ export function AgentStickerAvatar({
       ? appearance.eyeColor ?? undefined
       : undefined
 
+  // Synchronize `view` via imperative API + attribute because `BoopFace.prototype.view`
+  // is getter-only and React 19 custom element prop assignment throws on readonly getters.
+  useEffect(() => {
+    const face = faceRef.current
+    if (!face) return
+    face.setAttribute("view", appearance.view)
+    face.setView?.(appearance.view)
+  }, [appearance.view])
+
   useEffect(() => {
     const face = faceRef.current
     if (!face) return
@@ -141,7 +150,6 @@ export function AgentStickerAvatar({
       <boop-face
         ref={faceRef}
         size={faceSize}
-        view={appearance.view}
         color={appearance.color}
         skin={appearance.skin ?? "none"}
         eye-color={resolvedEyeColor}

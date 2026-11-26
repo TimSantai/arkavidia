@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 import {
   AGENT_ROLE_META,
   COLOR_SWATCHES,

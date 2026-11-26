@@ -10,7 +10,8 @@ export interface BoopFaceElementProps
   extends React.HTMLAttributes<BoopFace> {
   ref?: React.Ref<BoopFace>
   size?: number | string
-  view?: "2d" | "3d"
+  // Omit `view` from JSX props: BoopFace exposes a getter-only `.view` property,
+  // which causes React 19 property assignment to throw. Set via setView() / setAttribute().
   color?: string
   "eye-color"?: string
   "eye-style"?: "round" | "sharp"

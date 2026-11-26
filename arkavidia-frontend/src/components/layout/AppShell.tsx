@@ -28,7 +28,7 @@ import { getStoredDemoUser } from "@/features/auth/components/demoSession"
 import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
 import { bersamaApi } from "@/services/api"
 import type { Team } from "@/types/bersama"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 type RoomTone = "brand" | "violet" | "cyan"
 
@@ -148,7 +148,7 @@ export function AppShell() {
     isMobile = false
   ) => (
     <div className="space-y-1">
-      <p className="px-2.5 pb-1 text-xs font-medium tracking-wide text-ink-secondary">
+      <p className="px-2.5 pb-1 text-xs font-medium tracking-wide text-ink-tertiary">
         {title}
       </p>
       {items.map(({ to, label, badge, tone, icon: Icon }) => (
