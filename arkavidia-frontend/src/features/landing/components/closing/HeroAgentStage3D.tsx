@@ -93,21 +93,21 @@ export function HeroAgentStage3D({
           }}
           className="relative flex size-full items-center justify-center"
         >
-          {/* Layer -40px: Grounded deep shadow */}
+          {/* Layer -40px: Grounded deep cobalt shadow */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-1/2 size-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black/85 blur-[42px]"
+            className="pointer-events-none absolute top-1/2 left-1/2 size-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#000d33]/75 blur-[42px]"
             style={{ transform: "translateZ(-40px) translateY(28px)" }}
           />
 
-          {/* Layer -16px: Subtle two-temperature ambient aura behind Hero BoopFace */}
+          {/* Layer -16px: Luminous warm-cobalt ambient aura behind Hero BoopFace */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-55 blur-[56px] sm:size-72"
+            className="pointer-events-none absolute top-1/2 left-1/2 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[56px] sm:size-72"
             style={{
               transform: "translateZ(-16px)",
               background:
-                "radial-gradient(circle at 32% 35%, rgb(241 214 155 / 0.55), rgb(71 132 255 / 0.65) 55%, transparent 78%)",
+                "radial-gradient(circle at 32% 35%, rgb(252 233 194 / 0.52), rgb(110 160 255 / 0.65) 56%, transparent 78%)",
             }}
           />
 
@@ -201,19 +201,19 @@ export function HeroAgentStage3D({
                           ease: "easeInOut",
                         }
                   }
-                  className="flex items-center gap-2.5 rounded-2xl border border-white/12 bg-[#1d1e21]/88 px-2.5 py-2 shadow-[0_14px_30px_-10px_rgb(0_0_0/0.8)] backdrop-blur-md sm:px-3"
+                  className="flex items-center gap-2.5 rounded-2xl border border-white/18 bg-[#001652]/78 px-2.5 py-2 shadow-[0_14px_30px_-10px_rgb(0_12_48/0.65)] backdrop-blur-md sm:px-3"
                 >
-                  <Avatar size="sm" className="size-8 shrink-0 border border-white/15">
+                  <Avatar size="sm" className="size-8 shrink-0 border border-white/20">
                     <AvatarImage src={member.avatarSrc} alt={member.name} />
-                    <AvatarFallback className="bg-[#323337] text-xs font-semibold text-[#f4f6f9]">
+                    <AvatarFallback className="bg-[#0c3c9f] text-xs font-semibold text-white">
                       {member.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 text-left">
-                    <p className="font-sans text-xs leading-tight font-semibold text-[#f4f6f9]">
+                    <p className="font-sans text-xs leading-tight font-semibold text-white">
                       {member.shortName}
                     </p>
-                    <p className="mt-0.5 flex items-center gap-1.5 font-sans text-xs leading-tight whitespace-nowrap text-[#bec0c5]">
+                    <p className="mt-0.5 flex items-center gap-1.5 font-sans text-xs leading-tight whitespace-nowrap text-[#c6daff]">
                       <span
                         className="size-1.5 shrink-0 rounded-full"
                         style={{ backgroundColor: item.dotColor }}
@@ -228,7 +228,7 @@ export function HeroAgentStage3D({
         </motion.div>
       </motion.div>
 
-      <p className="mt-4 font-sans text-xs font-medium tracking-wide text-[#9fa2a7]">
+      <p className="mt-4 font-sans text-xs font-medium tracking-wide text-[#c6daff]/90">
         {CLOSING_CONTENT.clockCaption}
       </p>
     </div>

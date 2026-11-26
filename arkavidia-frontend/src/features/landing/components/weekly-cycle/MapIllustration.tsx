@@ -28,13 +28,13 @@ export function MapIllustration({
   return (
     <div
       aria-hidden="true"
-      className="inline-flex flex-col gap-2 rounded-2xl border border-white/10 bg-[#28292d]/90 p-3.5 select-none"
+      className="inline-flex flex-col gap-2 rounded-2xl border border-[#c6daff] bg-white p-3.5 shadow-card select-none dark:border-white/12 dark:bg-[#1e263b]"
     >
       <div className="flex items-center justify-between gap-4">
-        <span className="font-sans text-xs font-medium text-[#bec0c5]">
+        <span className="font-sans text-xs font-medium text-ink-secondary dark:text-[#bec0c5]">
           Coverage 4×3
         </span>
-        <span className="rounded-full bg-[#423000] px-2 py-0.5 font-sans text-xs font-semibold text-[#f1d69b]">
+        <span className="rounded-full bg-warning-subtle px-2 py-0.5 font-sans text-xs font-semibold text-text-warning dark:bg-[#423000] dark:text-[#f1d69b]">
           1 Silo
         </span>
       </div>

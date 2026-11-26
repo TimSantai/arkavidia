@@ -36,15 +36,19 @@ export function LandingFooterCta() {
     <footer
       ref={sectionRef}
       data-nav-theme="dark"
-      className="relative overflow-hidden bg-[#0c0d0f] pt-28 text-[#f4f6f9] sm:pt-36 lg:pt-40"
+      className="relative overflow-hidden border-t border-[#4784ff]/20 pt-28 text-[#f1f6ff] sm:pt-36 lg:pt-40"
+      style={{
+        background:
+          "radial-gradient(60% 70% at 18% 45%, rgb(71 132 255 / 0.26) 0%, transparent 70%), radial-gradient(45% 55% at 86% 24%, rgb(252 233 194 / 0.12) 0%, transparent 65%), linear-gradient(155deg, #001652 0%, #042a7b 52%, #0c3c9f 100%)",
+      }}
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden opacity-65"
+        className="pointer-events-none absolute inset-0 overflow-hidden opacity-55"
       >
         <MagnetLines
-          lineColor="#898b90"
-          accentColor="#6ea0ff"
+          lineColor="#6ea0ff"
+          accentColor="#fce9c2"
           spacing={22}
           lineWidth={1.5}
           lineHeight={13}
@@ -78,7 +82,7 @@ export function LandingFooterCta() {
               className="font-display text-[3rem] leading-[0.92] font-medium tracking-[-0.045em] text-balance sm:text-7xl lg:text-[5.25rem]"
               style={{
                 background:
-                  "linear-gradient(to right bottom, #ffffff 35%, #c6daff 72%, #fce9c2)",
+                  "linear-gradient(to right bottom, #ffffff 38%, #c6daff 74%, #fce9c2 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",
@@ -89,7 +93,7 @@ export function LandingFooterCta() {
 
             <motion.p
               {...fadeUp(0.16)}
-              className="mt-6 max-w-[440px] font-sans text-lg leading-relaxed text-[#9fa2a7] text-pretty"
+              className="mt-6 max-w-[440px] font-sans text-lg leading-relaxed text-[#c6daff] text-pretty"
             >
               {CLOSING_CONTENT.subtitle}
             </motion.p>
@@ -104,7 +108,7 @@ export function LandingFooterCta() {
                 onMouseLeave={() => setCtaHovered(false)}
                 onFocus={() => setCtaHovered(true)}
                 onBlur={() => setCtaHovered(false)}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#2d6ae7] px-7 font-sans text-sm font-medium text-[#f1f6ff] shadow-[inset_0_1px_0_rgb(255_255_255/0.25),0_0_32px_-6px_rgb(71_132_255/0.75)] transition-[background-color,box-shadow,transform] duration-150 hover:bg-[#4784ff] hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.32),0_0_40px_-4px_rgb(110_160_255/0.88)] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6ea0ff] sm:w-auto"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-7 font-sans text-sm font-semibold text-[#042a7b] shadow-[inset_0_1px_0_rgb(255_255_255/0.9),0_10px_32px_-6px_rgb(159_193_255/0.6)] transition-[background-color,box-shadow,transform] duration-150 hover:bg-[#f1f6ff] hover:shadow-[inset_0_1px_0_rgb(255_255_255/1),0_14px_38px_-4px_rgb(198_218_255/0.8)] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9fc1ff] sm:w-auto"
               >
                 <span>{CLOSING_CONTENT.primaryCta.label}</span>
                 <ArrowRight className="size-4" aria-hidden="true" />
@@ -115,7 +119,7 @@ export function LandingFooterCta() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Repositori BERSAMA di GitHub"
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-[#1d1e21] px-6 font-sans text-sm font-medium text-[#e9ebef] transition-[background-color,border-color,transform] duration-150 hover:border-white/25 hover:bg-[#28292d] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6ea0ff] sm:w-auto"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 font-sans text-sm font-medium text-white backdrop-blur-sm transition-[background-color,border-color,transform] duration-150 hover:border-white/35 hover:bg-white/18 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9fc1ff] sm:w-auto"
               >
                 <SiGithub size={16} color="currentColor" aria-hidden="true" />
                 <span>{CLOSING_CONTENT.secondaryCta.label}</span>
@@ -125,15 +129,15 @@ export function LandingFooterCta() {
         </div>
 
         {/* Single-row footer bar */}
-        <div className="mt-24 flex flex-col items-center justify-between gap-5 border-t border-white/[0.06] py-8 text-center font-sans text-[13px] sm:mt-32 sm:flex-row sm:text-left">
-          <p className="text-[#9fa2a7]">{CLOSING_CONTENT.copyright}</p>
+        <div className="mt-24 flex flex-col items-center justify-between gap-5 border-t border-white/12 py-8 text-center font-sans text-[13px] sm:mt-32 sm:flex-row sm:text-left">
+          <p className="text-[#c6daff]/85">{CLOSING_CONTENT.copyright}</p>
 
           <div className="flex items-center gap-5">
             {CLOSING_CONTENT.legal.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className="text-[#9fa2a7] transition-colors duration-150 hover:text-[#e9ebef] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6ea0ff]"
+                className="text-[#c6daff]/85 transition-colors duration-150 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9fc1ff]"
               >
                 {item.label}
               </a>
@@ -143,13 +147,13 @@ export function LandingFooterCta() {
               target="_blank"
               rel="noreferrer"
               aria-label="Repositori BERSAMA di GitHub"
-              className="text-[#9fa2a7] transition-colors duration-150 hover:text-[#e9ebef] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6ea0ff]"
+              className="text-[#c6daff]/85 transition-colors duration-150 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9fc1ff]"
             >
               <SiGithub size={18} color="currentColor" aria-hidden="true" />
             </a>
           </div>
 
-          <p className="inline-flex items-center gap-1.5 text-[#9fa2a7]">
+          <p className="inline-flex items-center gap-1.5 text-[#c6daff]/85">
             <span>{CLOSING_CONTENT.madeWithPrefix}</span>
             <PixelHeart className="shrink-0" />
             <span>{CLOSING_CONTENT.madeWithSuffix}</span>
