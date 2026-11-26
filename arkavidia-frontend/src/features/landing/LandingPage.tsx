@@ -10,7 +10,7 @@ import { AvatarStack } from "@/components/kibo-ui/avatar-stack"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { ComparisonSection } from "./components/ComparisonSection"
-import { EcosystemLogoMarquee } from "./components/EcosystemLogoMarquee"
+import { EcosystemOrbit } from "./components/EcosystemOrbit"
 import { EthicsSection } from "./components/EthicsSection"
 import { HeroBackdrop } from "./components/HeroBackdrop"
 import { HeroWorkspaceShowcase } from "./components/HeroWorkspaceShowcase"
@@ -56,7 +56,7 @@ export function LandingPage() {
 
       <main>
         {/* Full-width white hero so dawn glows extend cleanly without clipping */}
-        <section className="relative overflow-x-clip pt-12 pb-12 sm:pt-20 sm:pb-16 lg:pt-24">
+        <section className="relative overflow-x-clip pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32">
           <HeroBackdrop />
 
           <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
@@ -160,13 +160,11 @@ export function LandingPage() {
           </div>
         </section>
 
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <EcosystemLogoMarquee />
-          <ComparisonSection />
-          <WeeklyCycleSection />
-          <EthicsSection />
-          <LandingFooterCta />
-        </div>
+        <EcosystemOrbit />
+        <ComparisonSection />
+        <WeeklyCycleSection />
+        <EthicsSection />
+        <LandingFooterCta />
       </main>
     </div>
   )

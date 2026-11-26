@@ -20,6 +20,19 @@ export interface NavLinkItem {
   readonly label: string
 }
 
+export interface EcosystemNode {
+  readonly id: EcosystemBrandId
+  readonly name: string
+  readonly role: string
+  readonly ring: "outer" | "inner"
+  readonly status: "live" | "soon"
+}
+
+export interface PulseEvent {
+  readonly from: EcosystemBrandId
+  readonly text: string
+}
+
 export interface EmpiricalStat {
   readonly id: string
   readonly value: string
@@ -96,6 +109,29 @@ export const NAV_LINKS: readonly NavLinkItem[] = [
   { href: "#privasi", label: "Privasi" },
   { href: "#riset", label: "Riset" },
   { href: "#tim", label: "Tim" },
+]
+
+export const ECOSYSTEM_NODES: readonly EcosystemNode[] = [
+  // Outer ring: everyday student collaboration & AI tools
+  { id: "whatsapp", name: "WhatsApp", role: "Import riwayat chat grup", ring: "outer", status: "soon" },
+  { id: "github", name: "GitHub", role: "PR & commit jadi konteks keputusan", ring: "outer", status: "soon" },
+  { id: "notion", name: "Notion", role: "Catatan rapat jadi usulan keputusan", ring: "outer", status: "soon" },
+  { id: "chatgpt", name: "ChatGPT", role: "Model AI pilihan tim", ring: "outer", status: "live" },
+  { id: "claude", name: "Claude", role: "Model AI pilihan tim", ring: "outer", status: "live" },
+  { id: "gemini", name: "Gemini", role: "Model AI pilihan tim", ring: "outer", status: "live" },
+  // Inner ring: core infrastructure behind the scenes
+  { id: "supabase", name: "Supabase", role: "Auth & Row-Level Security", ring: "inner", status: "live" },
+  { id: "postgresql", name: "PostgreSQL", role: "Memori tim + pencarian hybrid", ring: "inner", status: "live" },
+  { id: "fastapi", name: "FastAPI", role: "Orkestrator agent", ring: "inner", status: "live" },
+]
+
+export const PULSE_EVENTS: readonly PulseEvent[] = [
+  { from: "whatsapp", text: "12 pesan grup diimpor" },
+  { from: "claude", text: "Kandidat DEC-15 diekstrak" },
+  { from: "github", text: "PR #18 ditautkan ke DEC-14" },
+  { from: "notion", text: "Catatan rapat jadi 2 usulan" },
+  { from: "gemini", text: "Ringkasan mingguan dibuat" },
+  { from: "chatgpt", text: "Pertanyaan explain-back disusun" },
 ]
 
 export const DEMO_TEAM_MEMBERS: readonly DemoTeamMember[] = [
