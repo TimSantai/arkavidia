@@ -39,10 +39,25 @@ export interface EmpiricalStat {
   readonly description: string
   readonly citation: string
   readonly methodNote: string
-  readonly barPercentA: number
-  readonly barPercentB: number
-  readonly barLabelA: string
-  readonly barLabelB: string
+}
+
+export interface DecisionRow {
+  readonly id: string
+  readonly title: string
+  readonly kc: string
+  readonly understood: number
+  readonly total: number
+  readonly aiAssisted?: boolean
+  readonly comments?: number
+  readonly date: string
+  readonly ownerId: string
+}
+
+export interface DecisionGroup {
+  readonly label: string
+  readonly count: number
+  readonly faded?: boolean
+  readonly rows: readonly DecisionRow[]
 }
 
 export interface WeeklyCyclePhase {
@@ -183,6 +198,69 @@ export const HEATMAP_MATRIX: readonly HeatmapMemberRow[] = [
   { memberId: "user-sari", scores: [0.58, 0.18, 0.41, 0.62] },
 ]
 
+export const DECISION_GROUPS: readonly DecisionGroup[] = [
+  {
+    label: "PERLU DIPAHAMI",
+    count: 3,
+    rows: [
+      {
+        id: "DEC-14",
+        title: "Autentikasi pakai JWT + refresh token",
+        kc: "KC-02 JWT",
+        understood: 1,
+        total: 4,
+        aiAssisted: true,
+        date: "12 Mar",
+        ownerId: "user-dimas",
+      },
+      {
+        id: "DEC-12",
+        title: "Antrean pasien pakai priority queue",
+        kc: "KC-03 Skema DB",
+        understood: 2,
+        total: 4,
+        date: "10 Mar",
+        ownerId: "user-budi",
+      },
+      {
+        id: "DEC-11",
+        title: "Validasi input dipindah ke service layer",
+        kc: "KC-04 REST",
+        understood: 2,
+        total: 4,
+        comments: 4,
+        date: "9 Mar",
+        ownerId: "user-sari",
+      },
+    ],
+  },
+  {
+    label: "SUDAH DIPAHAMI",
+    count: 6,
+    faded: true,
+    rows: [
+      {
+        id: "DEC-09",
+        title: "Arsitektur MVC untuk modul klinik",
+        kc: "KC-01 MVC",
+        understood: 4,
+        total: 4,
+        date: "5 Mar",
+        ownerId: "user-rani",
+      },
+      {
+        id: "DEC-07",
+        title: "Penamaan endpoint REST pakai kata benda jamak",
+        kc: "KC-04 REST",
+        understood: 3,
+        total: 4,
+        date: "3 Mar",
+        ownerId: "user-dimas",
+      },
+    ],
+  },
+]
+
 export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
   {
     id: "bastani",
@@ -191,10 +269,6 @@ export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
     citation: "Bastani et al., PNAS 2025",
     methodNote:
       "Studi eksperimental pada pembelajaran pemrograman menunjukkan ketergantungan pada jawaban instan AI menurunkan transfer pemahaman mandiri ketika bantuan dilepas.",
-    barPercentA: 83,
-    barPercentB: 100,
-    barLabelA: "Tanpa Guardrail",
-    barLabelB: "Kontrol Belajar",
   },
   {
     id: "anthropic",
@@ -203,10 +277,6 @@ export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
     citation: "Anthropic Research, Jan 2026",
     methodNote:
       "Developer yang hanya menyalin solusi LLM mencetak skor pemahaman konseptual lebih rendah dibanding yang melakukan penjelasan aktif.",
-    barPercentA: 50,
-    barPercentB: 67,
-    barLabelA: "AI Pasif",
-    barLabelB: "Aktif",
   },
   {
     id: "cscl",
@@ -215,10 +285,6 @@ export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
     citation: "Chen et al., IJCSCL 2024",
     methodNote:
       "Meta-analisis Computer-Supported Collaborative Learning menunjukkan alat kesadaran kelompok meningkatkan regulasi belajar dan koordinasi tim.",
-    barPercentA: 45,
-    barPercentB: 84,
-    barLabelA: "Chat Biasa",
-    barLabelB: "Group Awareness",
   },
 ]
 
