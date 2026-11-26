@@ -76,11 +76,6 @@ export function PersonalAgentPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    return () => {
-      document.body.style.overflow = previousOverflow
-    }
   }, [])
 
   useEffect(() => {
@@ -205,33 +200,25 @@ export function PersonalAgentPage() {
   return (
     <div
       className={cn(
-        "fixed flex flex-col bg-canvas",
-        isFullscreen
-          ? "inset-0 z-40"
-          : "inset-x-0 top-14 bottom-0 z-20 lg:left-64"
+        "relative flex flex-col h-[calc(100vh-3.5rem)] w-full min-w-0 bg-white dark:bg-surface overflow-hidden",
+        isFullscreen && "fixed inset-0 z-50 h-screen"
       )}
     >
-      {/* Top Context Bar: docked safely into AppShell's left/center h-14 header on desktop */}
-      <div
-        className={cn(
-          "flex shrink-0 flex-nowrap items-center justify-between gap-2 border-b border-line-subtle bg-surface px-4 py-2.5 sm:px-6",
-          !isFullscreen &&
-            "lg:fixed lg:top-0 lg:right-64 lg:left-64 lg:z-30 lg:h-14 lg:border-b-0 lg:bg-transparent lg:py-0"
-        )}
-      >
+      {/* Top Context Bar */}
+      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-line-subtle bg-surface-card px-4 py-2.5 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-2.5">
           <Lock
             className="size-4 shrink-0 text-ink-link"
             aria-hidden="true"
           />
-          <h1 className="truncate font-display text-xl font-semibold tracking-tight text-ink-primary">
+          <h1 className="truncate font-heading text-lg sm:text-xl font-medium tracking-tight text-ink-primary">
             Ruang{" "}
             <span className="font-display-oblique text-ink-link">
               Pribadi
             </span>
           </h1>
 
-          <span className="hidden shrink-0 items-center rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-semibold text-ink-link shadow-badge sm:inline-flex">
+          <span className="hidden shrink-0 items-center rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-semibold text-ink-link shadow-xs sm:inline-flex">
             M1 Private
           </span>
 
@@ -261,7 +248,7 @@ export function PersonalAgentPage() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-subtle bg-wash-brand py-0.5 pr-1 pl-1 shadow-badge">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-subtle bg-wash-brand py-0.5 pr-1 pl-1 shadow-xs">
             <AgentStickerAvatar
               role="private"
               state={agentAvatarState}
@@ -274,7 +261,7 @@ export function PersonalAgentPage() {
               size="xs"
               onClick={() => setCustomizerOpen(true)}
               aria-label="Kustomisasi stiker Personal Agent"
-              className="h-7 gap-1 rounded-full px-2 text-xs font-medium text-ink-link hover:bg-surface-top hover:text-ink-link"
+              className="h-7 gap-1 rounded-full px-2 text-xs font-medium text-ink-link hover:bg-white hover:text-ink-link"
             >
               <SlidersHorizontal className="size-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">Atur</span>
@@ -287,7 +274,7 @@ export function PersonalAgentPage() {
             onClick={() => setIsFullscreen((prev) => !prev)}
             aria-label={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
             title={isFullscreen ? "Keluar layar penuh (Esc)" : "Layar penuh"}
-            className="size-10 shrink-0 border-line-subtle bg-surface-top text-ink-secondary hover:text-ink-primary sm:size-8"
+            className="size-9 shrink-0 rounded-full border-line-subtle bg-surface text-ink-secondary hover:text-ink-primary"
           >
             {isFullscreen ? (
               <Minimize2 className="size-4" aria-hidden="true" />
@@ -299,8 +286,8 @@ export function PersonalAgentPage() {
       </div>
 
       {/* Scrollable AI Elements Conversation Stream */}
-      <Conversation className="min-h-0 flex-1 overflow-hidden bg-canvas [&>div]:h-full [&>div]:overflow-y-auto">
-        <ConversationContent className="mx-auto w-full max-w-5xl gap-4 px-4 pt-5 pb-44 sm:px-8 sm:pb-40">
+      <Conversation className="min-h-0 flex-1 overflow-hidden bg-surface-card [&>div]:h-full [&>div]:overflow-y-auto">
+        <ConversationContent className="w-full max-w-[1440px] gap-4 px-4 sm:px-6 lg:px-8 pt-5 pb-8">
           {messages.map((msg) => (
             <PrivateMessageItem
               key={msg.id}
@@ -320,7 +307,7 @@ export function PersonalAgentPage() {
                 size={36}
                 interactive={false}
               />
-              <div className="inline-flex items-center gap-2 rounded-2xl border border-brand-subtle bg-wash-brand px-3.5 py-2 text-xs shadow-card">
+              <div className="inline-flex items-center gap-2 rounded-2xl border border-brand-subtle bg-wash-brand px-3.5 py-2 text-xs shadow-xs">
                 <Loader size={14} className="text-ink-link" />
                 <Shimmer duration={1.4} className="text-xs font-medium">
                   Personal Agent menyusun di ruang M1...
@@ -329,19 +316,19 @@ export function PersonalAgentPage() {
             </div>
           )}
         </ConversationContent>
-        <ConversationScrollButton className="right-6 bottom-40 left-auto translate-x-0 border-line-subtle bg-surface-raised text-ink-primary shadow-raised sm:bottom-36" />
+        <ConversationScrollButton className="right-6 bottom-36 left-auto translate-x-0 border border-line-subtle bg-surface-card text-ink-primary shadow-md sm:bottom-32" />
       </Conversation>
 
-      {/* Floating Bottom Quick Preset Chips + PromptInput Composer */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-canvas via-canvas/90 to-transparent px-4 pt-8 pb-4 sm:px-8 sm:pb-5">
-        <div className="pointer-events-auto mx-auto w-full max-w-4xl space-y-2.5">
-          <div className="flex flex-wrap items-center gap-2">
+      {/* Docked Bottom Input Area */}
+      <div className="shrink-0 border-t border-line-subtle/50 bg-surface-card/95 dark:bg-surface/95 backdrop-blur-md px-4 pt-2.5 pb-4 sm:px-6 lg:px-8 sm:pb-5">
+        <div className="w-full max-w-[1440px] space-y-2.5">
+          <div className="flex flex-nowrap overflow-x-auto no-scrollbar items-center gap-2 pb-0.5">
             {PERSONAL_AGENT_SUGGESTIONS.map((chip) => (
               <button
                 key={chip.id}
                 type="button"
                 onClick={() => void handleSendText(chip.prompt)}
-                className="inline-flex min-h-8 max-w-full items-center truncate rounded-full border border-brand-subtle bg-surface-card/95 px-3 py-1 text-xs font-medium text-ink-secondary shadow-control backdrop-blur-sm transition-[background-color,border-color,color,transform] duration-150 hover:border-line-active hover:bg-wash-brand hover:text-ink-link active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="inline-flex shrink-0 min-h-8 max-w-full items-center truncate rounded-full border border-line-subtle bg-surface px-3 py-1 text-xs font-medium text-ink-secondary transition-[background-color,border-color,color,transform] duration-150 hover:border-line-active hover:bg-wash-brand hover:text-ink-link active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 <span className="truncate">{chip.label}</span>
               </button>
@@ -350,7 +337,7 @@ export function PersonalAgentPage() {
 
           <PromptInput
             onSubmit={({ text }) => void handleSendText(text || inputText)}
-            className="[&_[data-slot=input-group]]:rounded-2xl [&_[data-slot=input-group]]:border-brand-subtle [&_[data-slot=input-group]]:bg-surface-raised [&_[data-slot=input-group]]:shadow-raised"
+            className="[&_[data-slot=input-group]]:rounded-2xl [&_[data-slot=input-group]]:border-line-subtle [&_[data-slot=input-group]]:bg-surface"
           >
             <PromptInputBody>
               <PromptInputTextarea
@@ -362,7 +349,7 @@ export function PersonalAgentPage() {
             </PromptInputBody>
             <PromptInputFooter className="border-t border-line-subtle/60 px-3 py-1.5">
               <PromptInputTools className="gap-2">
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface py-0.5 pr-2.5 pl-1">
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface-card py-0.5 pr-2.5 pl-1">
                   <Avatar size="sm" className="size-5">
                     {activeAvatarSrc && (
                       <AvatarImage
@@ -388,7 +375,7 @@ export function PersonalAgentPage() {
               <PromptInputSubmit
                 status={isAgentThinking ? "submitted" : undefined}
                 disabled={!inputText.trim() || isAgentThinking}
-                className="bg-brand text-on-brand shadow-card hover:bg-brand-hover active:bg-brand-active disabled:opacity-40"
+                className="rounded-full bg-brand text-on-brand shadow-xs hover:bg-brand-hover active:bg-brand-active disabled:opacity-40"
               />
             </PromptInputFooter>
           </PromptInput>

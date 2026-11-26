@@ -11,6 +11,7 @@ export interface DecisionProgressRowProps {
   readonly teamId: string
 }
 
+// Q: "Bagaimana progres pemahaman tim dan statusku terhadap keputusan ini?"
 export function DecisionProgressRow({
   decision,
   kcs,
@@ -40,13 +41,16 @@ export function DecisionProgressRow({
   const strokeDashoffset = ringCircumference * (1 - progressRatio)
 
   return (
-    <div className="py-3.5 sm:py-4 flex items-center justify-between gap-3 border-t border-[#f1f2f4] dark:border-line-subtle/50 first:border-t-0 first:pt-1 last:pb-1">
-      {/* Kiri: Chip KC + Judul keputusan */}
-      <div className="flex items-center gap-2.5 min-w-0">
-        <span className="shrink-0 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium text-ink-secondary bg-[#f6f7f9] dark:bg-surface-top border border-[#eef0f3] dark:border-line-subtle">
+    <div className="py-3.5 sm:py-4 flex items-center justify-between gap-3 first:pt-1 last:pb-1">
+      {/* Kiri: Chip KC + Judul keputusan (line-clamp-2, no cut off mid-word) */}
+      <div className="flex items-center gap-2.5 min-w-0 flex-1 pr-2">
+        <span className="shrink-0 px-2.5 py-0.5 rounded-full text-xs font-medium text-ink-secondary bg-surface border border-line-subtle">
           {kcCode}
         </span>
-        <p className="text-sm sm:text-[15px] font-medium text-ink-primary truncate max-w-[220px] sm:max-w-[340px] md:max-w-[420px]">
+        <p
+          title={decision.title}
+          className="text-sm sm:text-[15px] font-medium text-ink-primary line-clamp-2 leading-snug min-w-0"
+        >
           {decision.title}
         </p>
       </div>
@@ -80,7 +84,7 @@ export function DecisionProgressRow({
                 cy="9"
                 r={ringRadius}
                 fill="none"
-                stroke="#1a51c4"
+                stroke="var(--bg-brand)"
                 strokeWidth="2"
                 strokeDasharray={ringCircumference}
                 strokeDashoffset={strokeDashoffset}
@@ -88,7 +92,7 @@ export function DecisionProgressRow({
               />
             </svg>
           </div>
-          <span className="text-xs font-mono tabular-nums text-ink-secondary font-medium">
+          <span className="text-xs tabular-nums text-ink-secondary font-medium">
             {decision.teamUnderstood}/{decision.teamTotal}
           </span>
         </div>

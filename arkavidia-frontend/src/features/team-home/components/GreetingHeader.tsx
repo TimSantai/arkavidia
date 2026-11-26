@@ -1,5 +1,5 @@
 import { Link } from "react-router"
-import { Plus, Sparkles } from "lucide-react"
+import { Bot, Plus } from "lucide-react"
 import { getGreetingTime } from "../teamHomeData"
 
 export interface GreetingHeaderProps {
@@ -38,20 +38,20 @@ export function GreetingHeader({
         </p>
       </div>
 
-      {/* Kanan: Tombol outline Tanya Agent + tombol bulat hitam + */}
+      {/* Kanan: Tombol outline Tanya Agent + tombol bulat aksi */}
       <div className="flex items-center gap-2 self-start sm:self-auto">
         <Link
           to={`/teams/${teamId}/private`}
-          className="inline-flex items-center gap-2 h-10 px-4 rounded-full border border-[#e4e6ea] bg-white text-sm font-medium text-ink-primary transition-[background-color,border-color,color] duration-150 hover:bg-[#f6f7f9] dark:border-line-subtle dark:bg-surface-raised dark:hover:bg-surface-top focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring select-none"
+          className="inline-flex items-center gap-2 h-10 px-4 rounded-full border border-line-default bg-surface-card text-sm font-medium text-ink-primary transition-[background-color,border-color,color] duration-150 hover:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring select-none shadow-control"
         >
-          <Sparkles className="size-4 text-ink-link shrink-0" aria-hidden="true" />
+          <Bot className="size-4 text-ink-link shrink-0" aria-hidden="true" />
           <span>Tanya Agent</span>
         </Link>
 
         <button
           type="button"
           aria-label="Aksi cepat"
-          className="size-10 rounded-full bg-[#1d1e21] text-white flex items-center justify-center transition-colors duration-150 hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring select-none"
+          className="size-10 rounded-full bg-brand text-on-brand flex items-center justify-center transition-colors duration-150 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring select-none shadow-primary"
         >
           <Plus className="size-4.5" aria-hidden="true" />
         </button>

@@ -41,6 +41,7 @@ function useAnimatedNumber(target: number, duration = 600): number {
   return shouldReduceMotion ? target : value
 }
 
+// Q: "Bagaimana kondisiku dan kontribusiku secara keseluruhan?"
 export function ProfilePanel({
   teamId,
   stats,
@@ -53,47 +54,47 @@ export function ProfilePanel({
 
   return (
     <aside aria-label="Panel Sorotan Pemahaman" className="flex flex-col gap-4">
-      {/* 1. Kartu Pastel Tinggi bergradien lembut #f1f6ff ke #ffffff */}
-      <div className="rounded-3xl bg-gradient-to-b from-[#f1f6ff] to-white dark:from-info-subtle/30 dark:to-surface border border-[#eef0f3] dark:border-line-subtle p-5">
+      {/* 1. Kartu Sorotan Pastel (Donut Pemahaman Individu) */}
+      <div className="rounded-3xl bg-wash-brand border border-brand-subtle p-5">
         <UnderstandingDonut understandings={understandings} />
       </div>
 
-      {/* 2. Satu Kartu Plain: 3 Angka Berjajar dengan Pemisah Vertikal */}
-      <div className="rounded-2xl bg-white dark:bg-surface border border-[#eef0f3] dark:border-line-subtle p-4">
-        <div className="grid grid-cols-3 divide-x divide-[#eef0f3] dark:divide-line-subtle/50 text-center">
+      {/* 2. Kartu Metrik Plain (Beberapa angka jujur dalam satu kartu) */}
+      <div className="rounded-3xl bg-surface-card border border-line-subtle py-4 px-3">
+        <div className="grid grid-cols-3 divide-x divide-line-subtle text-center">
           {/* Stat 1: Keputusan dikonfirmasi */}
-          <div className="px-1.5 flex flex-col items-center">
+          <div className="px-2 flex flex-col items-center">
             <span className="font-sans font-semibold text-2xl text-ink-primary tabular-nums leading-none">
               {animatedDecisions}
             </span>
             <span className="text-xs text-ink-tertiary mt-1.5 leading-snug line-clamp-2">
-              Keputusan
+              keputusan · semester ini
             </span>
           </div>
 
           {/* Stat 2: Explain-back lulus */}
-          <div className="px-1.5 flex flex-col items-center">
+          <div className="px-2 flex flex-col items-center">
             <span className="font-sans font-semibold text-2xl text-ink-primary tabular-nums leading-none">
               {animatedExplainBack}
             </span>
             <span className="text-xs text-ink-tertiary mt-1.5 leading-snug line-clamp-2">
-              EB Lulus
+              explain-back · lulus
             </span>
           </div>
 
           {/* Stat 3: Sesi pairing */}
-          <div className="px-1.5 flex flex-col items-center">
+          <div className="px-2 flex flex-col items-center">
             <span className="font-sans font-semibold text-2xl text-ink-primary tabular-nums leading-none">
               {animatedPairing}
             </span>
             <span className="text-xs text-ink-tertiary mt-1.5 leading-snug line-clamp-2">
-              Pairing
+              sesi pairing · selesai
             </span>
           </div>
         </div>
       </div>
 
-      {/* 3. Dua Tile Tinted Kecil: Coverage Tim & Bus Factor */}
+      {/* 3. Dua Tile Status Tinted: Coverage Tim & Bus Factor */}
       <TeamHealthTiles health={health} teamId={teamId} />
     </aside>
   )

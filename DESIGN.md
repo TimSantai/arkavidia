@@ -124,7 +124,7 @@ Warna ekspresif tambahan (`Violet` / `Cyan` / palet multi-warna) **dikhususkan h
 
 ---
 
-## 4. Single-Edge Shadows, Borders & Elevation
+## 4. Single-Edge Shadows, Borders, Elevation & Surface Ladder
 
 Jangan pernah menggabungkan `ring-1` dan `border` pada komponen yang sama. Gunakan batas hairline tunggal + satu token shadow dari daftar ini:
 
@@ -135,6 +135,28 @@ Jangan pernah menggabungkan `ring-1` dan `border` pada komponen yang sama. Gunak
 * `--shadow-badge`: Badge status dan pill penanda ruang.
 * `--shadow-sticker`: (Opsional / utility) Shadow lembut untuk elemen stiker mengambang.
 * **Dark Mode Ambient Borders:** Di `.dark`, kartu dan permukaan terangkat memakai highlight tepi atas tipis (`border-white/[0.08]`) atau wash border berwarna per ruang agar pemisahan layer tetap tegas tanpa shadow berat.
+
+### Surface & Radius Ladder
+
+Hierarki permukaan dibentuk terutama melalui **isian warna (fill)**, bukan tumpukan border dan shadow:
+
+| Jenis Permukaan | Light Mode | Dark Mode | Pemakaian |
+| :--- | :--- | :--- | :--- |
+| **Plain** | `bg-white border border-[#eef0f3]` (tanpa shadow) | `bg-surface border-line-subtle` | Daftar keputusan, kartu stat, tabel |
+| **Tinted** | `bg-[#f6f7f9]` (tanpa border) | `bg-surface` | Grup filter, panel aside, search bar |
+| **Pastel** | Isian pastel makna tetap (tanpa border/shadow) | Token `-subtle` | Kartu tugas mingguan, hero linimasa, sorotan |
+
+* **Radius Scale:**
+  * Kontainer luar / dialog / sheet: `rounded-3xl` (`24px` - `28px`)
+  * Kartu dalam / section: `rounded-2xl` (`16px`)
+  * Chip / Pill / Tombol: `rounded-full` (`9999px`)
+
+### Layout Primitives (`src/components/layout/page/`)
+* `<PageContainer width="default" | "wide" | "full">`: Mengatur padding responsif (`px-4 sm:px-6 lg:px-8 py-6 sm:py-8`) dan max-width standar (`default: 1200px`, `wide: 1440px`).
+* `<PageHeader title description badge actions />`: Header seragam dengan H1 Allo Variable (`>= 20px`), Geist subtitle, slot badge, dan actions.
+* `<PageSection title action badge />`: Pembungkus section konten dengan jarak vertikal seragam.
+* `<MainWithAside main aside asideWidth="320px" | "360px" | "400px" sticky />`: Master-detail 2-kolom responsif (aside sticky di desktop, turun/dialog di mobile).
+* `<CardGrid minWidth="260px" gap="4" />`: Grid kartu auto-fit responsif tanpa arbitrary pixel gaps.
 
 ---
 

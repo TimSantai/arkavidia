@@ -22,25 +22,26 @@ const KIND_THEMES: Record<
   }
 > = {
   "explain-back": {
-    fillClass: "bg-[#fef8ec] dark:bg-warning-subtle",
+    fillClass: "bg-warning-subtle",
     label: "Explain-back",
     illustration: studioMicrophoneImg,
-    accentTextClass: "text-[#755700] dark:text-text-warning",
+    accentTextClass: "text-text-warning",
   },
   pairing: {
-    fillClass: "bg-[#fff4f2] dark:bg-error-subtle",
+    fillClass: "bg-error-subtle",
     label: "Sesi Pairing",
     illustration: handshakeImg,
-    accentTextClass: "text-[#a22a27] dark:text-text-error",
+    accentTextClass: "text-text-error",
   },
   "confirm-decision": {
-    fillClass: "bg-[#f1f6ff] dark:bg-info-subtle",
+    fillClass: "bg-wash-brand",
     label: "Tinjau Keputusan",
     illustration: cardIndexDividersImg,
-    accentTextClass: "text-[#1a51c4] dark:text-text-info",
+    accentTextClass: "text-ink-link",
   },
 }
 
+// Q: "Apa satu hal yang harus aku kerjakan berikutnya untuk tugas tim?"
 export function WeeklyTaskCard({ task, kcs }: WeeklyTaskCardProps) {
   const kc = kcs.find((k) => k.id === task.kcId)
   const kcCode = kc ? kc.code : "KC"
@@ -50,11 +51,11 @@ export function WeeklyTaskCard({ task, kcs }: WeeklyTaskCardProps) {
     <article
       className={cn(
         "rounded-3xl p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden min-h-[220px]",
-        "transition-[transform,opacity] duration-150 ease-out",
+        "transition-colors duration-150 ease-out",
         theme.fillClass
       )}
     >
-      {/* 3D Illustration positioned top-right */}
+      {/* 3D Illustration positioned top-right (Fluent Emoji 3D lokal, lisensi MIT) */}
       <img
         src={theme.illustration}
         alt=""
@@ -62,17 +63,17 @@ export function WeeklyTaskCard({ task, kcs }: WeeklyTaskCardProps) {
         className="absolute top-4 right-4 size-[72px] sm:size-20 object-contain drop-shadow-[0_8px_16px_rgb(29_30_33/0.12)] pointer-events-none select-none"
       />
 
-      {/* Top row: kind label + KC chip */}
+      {/* Top row: kind label (sentence case) + KC chip */}
       <div className="flex items-center gap-2 pr-20">
         <span
           className={cn(
-            "text-xs font-semibold uppercase tracking-wider",
+            "text-xs font-semibold",
             theme.accentTextClass
           )}
         >
           {theme.label}
         </span>
-        <span className="bg-white/80 dark:bg-black/30 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-xs font-mono font-medium text-ink-secondary">
+        <span className="bg-white/80 dark:bg-black/30 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-xs font-medium text-ink-secondary">
           {kcCode}
         </span>
       </div>
@@ -88,12 +89,15 @@ export function WeeklyTaskCard({ task, kcs }: WeeklyTaskCardProps) {
           </span>
         </div>
 
-        <h3 className="font-sans font-semibold text-base sm:text-[17px] text-ink-primary mt-2 line-clamp-2 leading-snug">
+        <h3
+          title={task.title}
+          className="font-sans font-semibold text-base sm:text-[17px] text-ink-primary mt-2 line-clamp-2 leading-snug"
+        >
           {task.title}
         </h3>
       </div>
 
-      {/* Bottom: contextual deadline meta + text arrow link */}
+      {/* Bottom: contextual deadline meta + text arrow link with verb + object */}
       <div className="pt-3 border-t border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between gap-3">
         <span className="text-xs text-ink-tertiary font-sans font-medium">
           {task.meta}

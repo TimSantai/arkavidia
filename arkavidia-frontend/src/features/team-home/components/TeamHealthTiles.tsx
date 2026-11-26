@@ -7,22 +7,23 @@ export interface TeamHealthTilesProps {
   readonly teamId: string
 }
 
+// Q: "Apakah ada modul atau kapasitas tim yang berisiko?"
 export function TeamHealthTiles({ health, teamId }: TeamHealthTilesProps) {
   const coveragePercent = Math.round(health.coverage * 100)
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      {/* Tile 1: Coverage Tim */}
-      <div className="rounded-2xl bg-[#f6f7f9] dark:bg-surface p-4 flex flex-col justify-between">
+      {/* Tile 1: Coverage Tim (Tinted surface, no border) */}
+      <div className="rounded-2xl bg-surface p-4 flex flex-col justify-between">
         <div>
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-tertiary">
+          <span className="text-xs font-medium text-ink-secondary">
             Coverage tim
           </span>
           <p className="font-heading font-semibold text-2xl sm:text-[26px] text-ink-primary leading-tight tabular-nums mt-1">
             {coveragePercent}%
           </p>
-          <span className="text-[11px] text-ink-tertiary block mt-0.5">
-            agregat tim
+          <span className="text-xs text-ink-tertiary block mt-0.5">
+            kapasitas · agregat tim
           </span>
         </div>
 
@@ -38,17 +39,17 @@ export function TeamHealthTiles({ health, teamId }: TeamHealthTilesProps) {
         </Link>
       </div>
 
-      {/* Tile 2: Bus Factor */}
-      <div className="rounded-2xl bg-[#f6f7f9] dark:bg-surface p-4 flex flex-col justify-between">
+      {/* Tile 2: Bus Factor (Tinted surface, no border) */}
+      <div className="rounded-2xl bg-surface p-4 flex flex-col justify-between">
         <div>
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-tertiary">
+          <span className="text-xs font-medium text-ink-secondary">
             Bus factor
           </span>
           <p className="font-heading font-semibold text-2xl sm:text-[26px] text-ink-primary leading-tight tabular-nums mt-1">
             {health.busFactor}
           </p>
-          <span className="text-[11px] text-ink-tertiary block mt-0.5">
-            agregat tim
+          <span className="text-xs text-ink-tertiary block mt-0.5">
+            1 anggota · perlu pairing
           </span>
         </div>
 

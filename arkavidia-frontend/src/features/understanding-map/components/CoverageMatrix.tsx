@@ -26,7 +26,7 @@ export function CoverageMatrix({
   return (
     <div
       className={cn(
-        "rounded-xl border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150",
+        "rounded-2xl border border-line-subtle bg-surface-card overflow-hidden",
         className,
       )}
     >

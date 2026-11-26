@@ -53,7 +53,7 @@ export function UnderstandingDonut({ understandings }: UnderstandingDonutProps) 
         <h3 className="text-sm font-semibold text-ink-primary font-sans">
           Pemahamanmu
         </h3>
-        <span className="flex items-center gap-1 text-[11px] font-medium text-ink-tertiary bg-white/80 dark:bg-black/30 backdrop-blur-xs px-2.5 py-0.5 rounded-full select-none border border-black/[0.04] dark:border-white/[0.06]">
+        <span className="flex items-center gap-1 text-xs font-medium text-ink-tertiary bg-surface-card/80 dark:bg-black/30 backdrop-blur-xs px-2.5 py-0.5 rounded-full select-none border border-line-subtle/50">
           <Lock className="size-3 text-ink-tertiary shrink-0" aria-hidden="true" />
           <span>Hanya kamu</span>
         </span>
@@ -105,10 +105,10 @@ export function UnderstandingDonut({ understandings }: UnderstandingDonutProps) 
             // >= 0.8: hijau (#006f31 / bg-success)
             const segmentColor =
               kc.pL >= 0.8
-                ? "#006f31"
+                ? "var(--bg-success)"
                 : kc.pL >= 0.5
-                  ? "#1a51c4"
-                  : "#755700"
+                  ? "var(--bg-brand)"
+                  : "var(--bg-warning)"
 
             return (
               <motion.circle
@@ -139,24 +139,24 @@ export function UnderstandingDonut({ understandings }: UnderstandingDonutProps) 
           <span className="font-heading font-semibold text-2xl text-ink-primary tabular-nums tracking-tight">
             {displayedCount}/{totalCount}
           </span>
-          <span className="text-[11px] text-ink-tertiary font-sans font-medium">
+          <span className="text-xs text-ink-tertiary font-sans font-medium">
             KC dikuasai
           </span>
         </div>
       </div>
 
       {/* Legend Chips */}
-      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-ink-secondary pt-1 border-t border-black/[0.04] dark:border-white/[0.06]">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-ink-secondary pt-1 border-t border-line-subtle/50">
         <span className="inline-flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-[#006f31] shrink-0" aria-hidden="true" />
+          <span className="size-2 rounded-full bg-success shrink-0" aria-hidden="true" />
           <span>Paham</span>
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-[#1a51c4] shrink-0" aria-hidden="true" />
+          <span className="size-2 rounded-full bg-brand shrink-0" aria-hidden="true" />
           <span>Menengah</span>
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-[#755700] shrink-0" aria-hidden="true" />
+          <span className="size-2 rounded-full bg-warning shrink-0" aria-hidden="true" />
           <span>Perlu cek</span>
         </span>
       </div>

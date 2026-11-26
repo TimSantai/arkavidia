@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import { BarChart3, HelpCircle, PieChart, ShieldCheck } from "lucide-react"
+import { PageContainer, PageHeader } from "@/components/layout/page"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Pill, PillIndicator } from "@/components/kibo-ui/pill"
 import {
@@ -44,12 +45,12 @@ export function UnderstandingMapPage() {
 
   if (!metrics) {
     return (
-      <div className="space-y-6 pb-12" role="status" aria-label="Memuat peta pemahaman tim">
+      <PageContainer width="wide" className="space-y-6 sm:space-y-8">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {[1, 2, 3].map((slot) => (
             <div
               key={slot}
-              className="h-48 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card"
+              className="h-48 rounded-2xl border border-line-subtle bg-surface-card p-5"
             >
               <div className="h-3.5 w-32 rounded bg-muted" />
               <div className="mt-4 h-8 w-24 rounded bg-muted/80" />
@@ -57,8 +58,8 @@ export function UnderstandingMapPage() {
             </div>
           ))}
         </div>
-        <div className="h-64 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card" />
-      </div>
+        <div className="h-64 rounded-2xl border border-line-subtle bg-surface-card p-5" />
+      </PageContainer>
     )
   }
 
@@ -69,51 +70,50 @@ export function UnderstandingMapPage() {
   const siloExpert = siloKc?.experts[0]
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* 1. Header & Formative Ethics Pill */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-1">
-          <h1 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
+    <PageContainer width="wide" className="space-y-6 sm:space-y-8">
+      {/* 1. Standardized Unified Header */}
+      <PageHeader
+        title={
+          <>
             Peta <span className="font-display-oblique text-ink-link">Pemahaman</span> Tim
-          </h1>
-          <p className="text-sm text-ink-secondary">
-            Kesehatan konsep tim, deteksi silo pengetahuan, dan peluang sesi belajar bareng.
-          </p>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-2">
-          <Pill
-            variant="secondary"
-            className="border border-brand-subtle bg-wash-brand text-xs font-medium text-ink-link shadow-badge"
-          >
-            <PillIndicator variant="success" />
-            <span>Murni formatif · Bukan nilai kuliah</span>
-          </Pill>
-          <Popover>
-            <PopoverTrigger asChild>
-              <button
-                type="button"
-                aria-label="Detail privasi M3 dan etika formatif"
-                className="inline-flex size-7 items-center justify-center rounded-full border border-line-subtle bg-surface-card text-ink-secondary shadow-control transition-[background-color,color] duration-150 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-ring"
-              >
-                <HelpCircle className="size-3.5" aria-hidden="true" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="w-80">
-              <PopoverHeader>
-                <PopoverTitle>Privasi M3 & Etika Formatif</PopoverTitle>
-                <PopoverDescription>
-                  Skor probabilitas P(L) hanya ditampilkan eksak untuk akunmu ({activeUser.name}).
-                  Rekan tim ditampilkan dengan framing kesiapan positif tanpa peringkat atau nilai huruf.
-                </PopoverDescription>
-              </PopoverHeader>
-            </PopoverContent>
-          </Popover>
-        </div>
-      </div>
+          </>
+        }
+        description="Kesehatan konsep tim, deteksi silo pengetahuan, dan peluang sesi belajar bareng."
+        badge={
+          <div className="flex items-center gap-2">
+            <Pill
+              variant="secondary"
+              className="border border-brand-subtle bg-wash-brand text-xs font-medium text-ink-link"
+            >
+              <PillIndicator variant="success" />
+              <span>Murni formatif · Bukan nilai kuliah</span>
+            </Pill>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Detail privasi M3 dan etika formatif"
+                  className="inline-flex size-7 items-center justify-center rounded-full border border-line-subtle bg-surface-card text-ink-secondary transition-[background-color,color] duration-150 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-ring"
+                >
+                  <HelpCircle className="size-3.5" aria-hidden="true" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-80">
+                <PopoverHeader>
+                  <PopoverTitle>Privasi M3 & Etika Formatif</PopoverTitle>
+                  <PopoverDescription>
+                    Skor probabilitas P(L) hanya ditampilkan eksak untuk akunmu ({activeUser.name}).
+                    Rekan tim ditampilkan dengan framing kesiapan positif tanpa peringkat atau nilai huruf.
+                  </PopoverDescription>
+                </PopoverHeader>
+              </PopoverContent>
+            </Popover>
+          </div>
+        }
+      />
 
       {/* Compact Privacy Strip */}
-      <div className="flex items-center gap-3 rounded-xl border border-brand-subtle bg-wash-brand px-4 py-2.5 text-xs text-ink-primary shadow-card">
+      <div className="flex items-center gap-3 rounded-2xl border border-brand-subtle bg-wash-brand px-4 py-3 text-xs text-ink-primary">
         <ShieldCheck className="size-4 shrink-0 text-ink-link" aria-hidden="true" />
         <p className="text-ink-secondary">
           Skor angka <strong className="text-ink-primary">P(L)</strong> bersifat privat untuk{" "}
@@ -123,7 +123,7 @@ export function UnderstandingMapPage() {
         </p>
       </div>
 
-      {/* 2. Top KPI Row (3 Kartu Metrik) */}
+      {/* 2. Top KPI Row (3 Plain Surface Cards) */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* Metric 1: Knowledge Bus Factor Gauge */}
         <BusFactorGauge
@@ -134,12 +134,12 @@ export function UnderstandingMapPage() {
         />
 
         {/* Metric 2: Coverage Keseluruhan Tim */}
-        <Card className="relative overflow-hidden border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150">
+        <Card className="relative overflow-hidden rounded-3xl border border-line-subtle bg-surface-card transition-[border-color] duration-150 shadow-none">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-semibold tracking-wide text-ink-secondary uppercase">
-                  Coverage Tim
+                <span className="text-xs font-medium text-ink-secondary">
+                  Coverage tim
                 </span>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -212,7 +212,7 @@ export function UnderstandingMapPage() {
               </div>
             </div>
 
-            <p className="rounded-lg bg-surface p-2.5 text-xs leading-relaxed text-ink-secondary">
+            <p className="rounded-xl bg-surface p-2.5 text-xs leading-relaxed text-ink-secondary">
               Sesi Explain-Back pada <strong className="text-ink-primary">KC-02</strong> menaikkan
               coverage ke 62%.
             </p>
@@ -220,11 +220,11 @@ export function UnderstandingMapPage() {
         </Card>
 
         {/* Metric 3: Konsentrasi Pengetahuan (Indeks Gini) */}
-        <Card className="relative overflow-hidden border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150">
+        <Card className="relative overflow-hidden rounded-3xl border border-line-subtle bg-surface-card transition-[border-color] duration-150 shadow-none">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-semibold tracking-wide text-ink-secondary uppercase">
+                <span className="text-xs font-medium text-ink-secondary">
                   Indeks Gini
                 </span>
                 <Popover>
@@ -315,6 +315,6 @@ export function UnderstandingMapPage() {
         siloKcTitle={siloKc?.kc.name}
         siloExpertName={siloExpert?.name.split(" ")[0]}
       />
-    </div>
+    </PageContainer>
   )
 }

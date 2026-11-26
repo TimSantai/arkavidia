@@ -54,7 +54,7 @@ export function AgentCustomizerDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[88vh] overflow-y-auto border border-line-subtle bg-surface-raised ring-0 shadow-raised sm:max-w-2xl">
+      <DialogContent className="max-h-[88vh] overflow-y-auto rounded-3xl border border-line-subtle bg-surface-raised p-6 ring-0 shadow-raised sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle className="font-display text-xl font-semibold text-ink-primary">
             Kustomisasi Stiker AI Agent

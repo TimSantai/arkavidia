@@ -27,7 +27,7 @@ export function PressedButton({
 
   const baseClasses = cn(
     "inline-flex items-center justify-center rounded-full font-medium cursor-pointer select-none",
-    "border border-[#e4e6ea] bg-white text-ink-primary hover:bg-[#f6f7f9] dark:border-line-subtle dark:bg-surface dark:hover:bg-surface-top",
+    "border border-line-default bg-surface-card text-ink-primary hover:bg-surface shadow-control",
     "transition-[background-color,border-color,color] duration-150 ease-out",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
     "disabled:pointer-events-none disabled:opacity-50",
