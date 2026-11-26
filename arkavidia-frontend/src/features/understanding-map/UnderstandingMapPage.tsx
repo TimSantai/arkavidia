@@ -247,7 +247,7 @@ export function UnderstandingMapPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-semibold text-text-success">
+              <span className="inline-flex items-center gap-1 rounded-full border border-success/20 bg-success-subtle px-2.5 py-0.5 text-xs font-semibold text-text-success">
                 <PieChart className="size-3.5" aria-hidden="true" />
                 Seimbang
               </span>

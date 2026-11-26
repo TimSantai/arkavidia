@@ -65,8 +65,8 @@ export function BusFactorGauge({
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold",
               isVulnerable
-                ? "bg-warning-subtle text-text-warning"
-                : "bg-success-subtle text-text-success",
+                ? "border border-warning/20 bg-warning-subtle text-text-warning"
+                : "border border-success/20 bg-success-subtle text-text-success",
             )}
           >
             {isVulnerable ? (
