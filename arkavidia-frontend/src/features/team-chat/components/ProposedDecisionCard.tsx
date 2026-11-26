@@ -2,11 +2,12 @@ import { useState } from "react"
 import { Link } from "react-router"
 import {
   ArrowUpRight,
-  Bot,
   CheckCircle2,
   ChevronDown,
   GitPullRequestDraft,
+  HelpCircle,
 } from "lucide-react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,6 +15,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { SEED_USERS } from "@/mocks/seedData"
 import type { MemoryItem } from "@/types/bersama"
@@ -53,60 +62,85 @@ export function ProposedDecisionCard({
   return (
     <div
       className={cn(
-        "w-full rounded-2xl border transition-[border-color,box-shadow,background-color] duration-150",
+        "w-full rounded-2xl border bg-surface-card p-4 transition-[border-color,box-shadow,background-color] duration-150",
         isConfirmed
-          ? "border-line-subtle bg-surface p-3.5 shadow-surface"
-          : "border-line-active/70 bg-surface-raised p-4 shadow-raised"
+          ? "border-line-subtle shadow-card"
+          : "border-brand-subtle shadow-raised"
       )}
     >
       {/* Top Meta Row */}
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="inline-flex items-center gap-1 rounded-md border border-line-subtle bg-canvas px-2 py-0.5 font-mono text-[11px] font-semibold text-ink-primary">
-            <GitPullRequestDraft className="size-3 text-ink-link" />
+        <div className="flex flex-wrap items-center gap-2">
+          <AgentStickerAvatar
+            role="team"
+            state={isConfirmed ? "success" : "warning"}
+            size={32}
+            interactive={false}
+            label={isConfirmed ? "Keputusan terkonfirmasi" : "Menunggu konfirmasi tim"}
+          />
+
+          <span className="inline-flex items-center gap-1 rounded-md border border-brand-subtle bg-wash-brand px-2 py-0.5 text-xs font-semibold tabular-nums text-ink-link">
+            <GitPullRequestDraft className="size-3.5" aria-hidden="true" />
             {item.code}
           </span>
 
           {isConfirmed ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-0.5 font-mono text-[10px] font-semibold text-text-success">
-              <CheckCircle2 className="size-3" />
-              CONFIRMED · M2
+            <span className="inline-flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-semibold text-text-success">
+              <CheckCircle2 className="size-3.5" aria-hidden="true" />
+              M2 Terkonfirmasi
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2.5 py-0.5 font-mono text-[10px] font-semibold text-text-warning">
-              MENUNGGU KONFIRMASI
+            <span className="inline-flex items-center rounded-full bg-warning-subtle px-2.5 py-0.5 text-xs font-semibold text-text-warning">
+              Menunggu Konfirmasi
             </span>
           )}
 
-          {item.aiAssisted && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-canvas px-2 py-0.5 font-mono text-[10px] font-medium text-ink-secondary">
-              <Bot className="size-2.5 text-text-warning" aria-hidden="true" />
-              Dibantu AI
-            </span>
-          )}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-xs"
+                aria-label="Detail asal keputusan"
+                className="rounded-full border-line-subtle bg-surface-top text-ink-secondary hover:text-ink-primary"
+              >
+                <HelpCircle className="size-3.5" aria-hidden="true" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-72">
+              <PopoverHeader>
+                <PopoverTitle>Jejak Keputusan {item.code}</PopoverTitle>
+                <PopoverDescription>
+                  {item.provenance}
+                  {item.aiAssisted ? " · Diekstrak dengan bantuan Team Agent." : ""}
+                </PopoverDescription>
+              </PopoverHeader>
+            </PopoverContent>
+          </Popover>
         </div>
 
-        {/* PIC Avatar Chip */}
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-canvas py-0.5 pr-2.5 pl-1">
+        {/* Human PIC Portrait Chip */}
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface-top py-0.5 pr-2.5 pl-1 shadow-badge">
           <Avatar size="sm" className="size-5">
-            {avatarSrc && <AvatarImage src={avatarSrc} alt={assignee.name} />}
-            <AvatarFallback className="text-[9px] font-semibold">
+            {avatarSrc && (
+              <AvatarImage
+                src={avatarSrc}
+                alt={assignee.name}
+                className="object-cover"
+              />
+            )}
+            <AvatarFallback className="text-xs font-semibold">
               {assignee.initials}
             </AvatarFallback>
           </Avatar>
-          <span className="text-[11px] font-medium text-ink-secondary">
+          <span className="text-xs font-medium text-ink-secondary">
             PIC: {assignee.name.split(" ")[0]}
           </span>
         </div>
       </div>
 
-      {/* Crisp Title */}
-      <h4
-        className={cn(
-          "mt-2.5 font-heading font-semibold text-ink-primary",
-          isConfirmed ? "text-sm" : "text-[15px]"
-        )}
-      >
+      {/* Card Title (Geist font-sans >= 15px) */}
+      <h4 className="mt-2.5 font-sans text-base font-semibold text-ink-primary">
         {item.content.title}
       </h4>
 
@@ -115,10 +149,10 @@ export function ProposedDecisionCard({
         <CollapsibleTrigger asChild>
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-ink-secondary transition-colors hover:text-ink-primary"
+            className="inline-flex items-center gap-1.5 rounded-md py-0.5 text-xs font-medium text-ink-secondary transition-colors hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             <span>
-              {detailsOpen ? "Sembunyikan alasan" : "Detail alasan"}
+              {detailsOpen ? "Tutup alasan" : "Lihat alasan"}
               {rejectedCount > 0 ? ` · ${rejectedCount} alternatif ditolak` : ""}
             </span>
             <ChevronDown
@@ -126,11 +160,12 @@ export function ProposedDecisionCard({
                 "size-3.5 transition-transform duration-150",
                 detailsOpen && "rotate-180"
               )}
+              aria-hidden="true"
             />
           </button>
         </CollapsibleTrigger>
 
-        <CollapsibleContent className="mt-2 space-y-2 rounded-xl bg-canvas/70 px-3.5 py-2.5 text-xs">
+        <CollapsibleContent className="mt-2 space-y-2 rounded-xl border border-line-subtle bg-surface px-3.5 py-2.5 text-xs">
           <p className="leading-relaxed text-ink-secondary">
             <span className="font-semibold text-ink-primary">Alasan: </span>
             {item.content.rationale}
@@ -138,13 +173,13 @@ export function ProposedDecisionCard({
 
           {rejectedCount > 0 && (
             <div className="flex flex-wrap items-center gap-1.5 pt-1">
-              <span className="text-[11px] font-medium text-ink-tertiary">
+              <span className="text-xs font-medium text-ink-tertiary">
                 Ditolak:
               </span>
               {item.content.rejectedAlternatives.map((alt) => (
                 <span
                   key={alt}
-                  className="rounded-md bg-surface px-2 py-0.5 text-[11px] text-ink-tertiary line-through"
+                  className="rounded-md border border-line-subtle bg-surface-card px-2 py-0.5 text-xs text-ink-tertiary line-through"
                 >
                   {alt}
                 </span>
@@ -155,30 +190,31 @@ export function ProposedDecisionCard({
       </Collapsible>
 
       {/* Action Footer */}
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-line-subtle pt-2.5">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-line-subtle pt-3">
         {isConfirmed ? (
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-text-success">
-            <CheckCircle2 className="size-3.5" />
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-success">
+            <CheckCircle2 className="size-3.5" aria-hidden="true" />
             Tercatat di Project Brain M2
           </span>
         ) : (
           <Button
+            type="button"
             size="sm"
             disabled={confirming}
             onClick={() => void handleConfirmClick()}
-            className="gap-1.5 bg-brand text-on-brand hover:bg-brand-hover active:bg-brand-active"
+            className="gap-1.5 bg-brand text-on-brand shadow-primary hover:bg-brand-hover active:bg-brand-active"
           >
-            <CheckCircle2 className="size-3.5" />
+            <CheckCircle2 className="size-3.5" aria-hidden="true" />
             <span>{confirming ? "Menyimpan..." : "Konfirmasi ke Brain"}</span>
           </Button>
         )}
 
         <Link
           to={`/teams/${teamId}/brain`}
-          className="inline-flex items-center gap-1 text-xs font-medium text-ink-link hover:underline"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-ink-link hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <span>Project Brain</span>
-          <ArrowUpRight className="size-3.5" />
+          <ArrowUpRight className="size-3.5" aria-hidden="true" />
         </Link>
       </div>
     </div>

@@ -1,190 +1,155 @@
-# BERSAMA — Design System & UI Guidelines (`DESIGN.md`)
+# BERSAMA: Design System & UI Guidelines (`DESIGN.md`)
 
-> **Tagline:** *Satu tim, semua paham.*  
-> **Aesthetic Direction:** Quiet, Tactile, Product-Forward Workspace (Hybrid Campsite + team-brain.com + Linear Precision)  
-> **Theme Mode:** Dual-Mode (**Default: Light Mode**, Toggleable to Dark Mode via `.dark`)  
-> **Color Foundation:** Ramps Studio OKLCH Analogous Palette (`#3d7dff`, WCAG AA $\ge 4.5:1$)  
-> **Typography:** `Allo` (Display & Headings) + `Geist Variable` (Body, Subtext & UI) + `Geist Mono Variable` (Technical Metadata)  
-> **Component Stack:** `shadcn/ui` + `@kibo-ui/*` + `@ai-elements/*` + `@icons-pack/react-simple-icons` + `react-icons` + Custom BERSAMA Primitives
+> **Tagline:** *Satu tim, semua paham.*
+> **Aesthetic Direction:** Quiet, Tactile, Product-Forward Workspace (Hybrid Campsite + Linear Precision + Expressive Agent Stickers)
+> **Theme Mode:** Dual-Mode (**Default: Light Mode**, Toggleable to Dark Mode via `.dark`)
+> **Color Foundation:** Ramps Studio OKLCH Analogous Palette (`#3d7dff`, WCAG AA >= 4.5:1)
+> **Typography (2 Voices Only):** `Allo` Variable (>= 20px Display/Hero/H1/H2/KPI) + `Geist Variable` (>= 12px UI/Body/Metadata)
+> **Component Stack:** `shadcn/ui` + `@kibo-ui/*` + `@ai-elements/*` + `boopface` (`<AgentStickerAvatar />`) + `@icons-pack/react-simple-icons` + `react-icons` + Custom BERSAMA Primitives
 
 ---
 
 ## 1. Filosofi Desain
 
-BERSAMA adalah ruang kerja pembelajaran kolaboratif mahasiswa (*One team, everyone understands*). Desain antarmuka harus terasa **tenang, hangat, terstruktur, dan jujur**, bukan seperti dashboard analitik yang bising atau IDE dingin.
+BERSAMA adalah ruang kerja pembelajaran kolaboratif mahasiswa (*One team, everyone understands*). Antarmuka harus terasa **tenang, hangat, taktil, dan jujur**, bukan dashboard analitik yang bising atau IDE dingin.
 
-1. **Quiet Chat, Expressive Data:** Ruang diskusi (Ruang Tim, Ruang Pribadi, dan Project Brain) dipertahankan **hampir monokrom dengan aksen Primary Blue** agar mahasiswa fokus pada argumen dan keputusan. Aksen kromatik kaya (**Violet** & **Cyan**) dialokasikan khusus untuk **Peta Pemahaman Tim** dan **Knowledge Bus Factor**.
-2. **Tactile & Layered:** Permukaan dipisahkan melalui hierarki kanvas $\rightarrow$ surface $\rightarrow$ raised surface. Di Light Mode, `bg-surface` dan `bg-surface-raised` bernilai sama (`#f4f6f9`), sehingga elemen melayang (*dropdown, popover, tooltip, floating modal*) **wajib** memakai `shadow-raised` agar tetap terbaca terangkat.
-3. **Zero-Friction Privacy Signalling:** Perbedaan **M1 (Personal Memory)** dan **M2 (Team Memory / Project Brain)** harus jelas secara struktural melalui ikon kunci, batas hairline, dan badge monospace (`M1 PRIVATE` vs `M2 TEAM`), bukan lewat warna neon yang agresif.
-4. **WCAG AA Compliance:** Semua pasangan foreground/background berasal langsung dari kurva OKLCH Ramps Studio. **Jangan pernah** mengganti warna pasangan token secara manual agar rasio kontras $\ge 4.5:1$ tetap terjaga di Light maupun Dark Mode.
-5. **Product-Forward & Visual-First (Show, Don't Tell):** Utamakan mockup workspace nyata lebar penuh, foto profil anggota realistis, diagram/heatmap visual, dan slider interaktif alih-alih dinding teks. Biarkan produk berbicara terlebih dahulu sebelum salinan penjelasan singkat.
+1. **4-Tier Chromatic Surface Ladder:** Kedalaman permukaan dibentuk melalui empat tingkat terang-gelap yang jelas (`well` -> `canvas` -> `surface` -> `surface-card` / `surface-top` / `surface-raised`) ditambah bayangan satu sisi (*single-edge shadows*) dan batas hairline tunggal, bukan tumpukan `ring-1` + `border` ganda.
+2. **Room-Coded Chromatic Depth:**
+   * **S2 Ruang Tim & Aksi Utama:** Cobalt (`--wash-brand`, `#1a51c4` / `#4784ff`).
+   * **S3 Ruang Pribadi (M1) & Klaster Memori:** Cozy Violet (`--wash-violet`, `#7f51db` / `#9669f8`).
+   * **S4 Project Brain, S6 Peta Pemahaman, S7 Tutored Briefing:** Fresh Cyan (`--wash-cyan`, `#006588` / `#0098ca`).
+3. **2-Voice Typography Discipline:** Hanya gunakan `Allo` Variable (untuk display, hero, H1, H2, dan angka KPI utama `>= 20px`) dan `Geist Variable` (untuk seluruh body, kontrol UI, badge, timestamp, kode KC/DEC, dan metadata teknis dengan lantai ukuran `>= 12px`). **Dilarang** memakai `Geist Mono` atau `font-mono` di UI chrome.
+4. **Anti-Bloat & Visual-First (Show, Don't Tell):** Utamakan visual workspace nyata, heatmap/gauge interaktif, dan kartu ringkas. Detail teknis sekunder (sitasi sumber, pasal UU PDP, kunci bitemporal DB) disimpan di balik tombol ikon `?` (`<Popover>`) agar kartu tetap bersih dan tenang.
+5. **Human Portraits vs. Agent Stickers:** Anggota tim manusia selalu memakai foto potret realistis (`USER_AVATAR_MAP` via `<Avatar>`). Entitas AI (`Team Agent`, `Personal Agent`, `Socratic Tutor`) selalu memakai `<AgentStickerAvatar />` berbasis `boopface` di dalam kontainer stiker die-cut berbingkai putih taktil (`--shadow-sticker`).
+6. **WCAG AA Compliance:** Semua pasangan teks dan latar wajib memenuhi rasio kontras `>= 4.5:1` (`>= 3.0:1` untuk teks display besar) di Light maupun Dark Mode. Pada permukaan Dark Mode terangkat (`--bg-surface-raised: #3d3f44`), gunakan `--text-secondary: #bec0c5` (5.79:1), bukan `#9fa2a7` (4.11:1).
 
 ---
 
-## 2. Color System (Ramps Studio — OKLCH Verbatim)
+## 2. Color System (Ramps Studio OKLCH + 4-Tier Surface Ladder)
 
-Sumber: `https://www.ramps.studio/?b=3d7dff&m=full&s=analogous&c=AA`  
-*(Catatan teknis: Input `#3d7dff` dipetakan ke kurva lightness OKLCH sehingga langkah terdekat adalah `primary-500` `#4784ff`. Gunakan nilai hex ramp di bawah secara eksak.)*
+Sumber dasar: `https://www.ramps.studio/?b=3d7dff&m=full&s=analogous&c=AA`
 
-### 2.1 Raw Palette Ramps (50–950)
+### 2.1 Raw Palette Ramps (50-950)
 
 | Ramp | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **primary** | `#f1f6ff` | `#e1ecff` | `#c6daff` | `#9fc1ff` | `#6ea0ff` | `#4784ff` | `#2d6ae7` | `#1a51c4` | `#0c3c9f` | `#042a7b` | `#001652` |
-| **accent** | `#f6f4ff` | `#ece8ff` | `#dbd2ff` | `#c4b3ff` | `#aa8aff` | `#9669f8` | `#7f51db` | `#673ab9` | `#502895` | `#3b1873` | `#25054f` |
-| **accent-2** | `#ebf8ff` | `#d4f0ff` | `#aae2ff` | `#73cdf8` | `#3dafe0` | `#0098ca` | `#007fa9` | `#006588` | `#004e6a` | `#00394e` | `#002230` |
+| **primary (Cobalt)** | `#f1f6ff` | `#e1ecff` | `#c6daff` | `#9fc1ff` | `#6ea0ff` | `#4784ff` | `#2d6ae7` | `#1a51c4` | `#0c3c9f` | `#042a7b` | `#001652` |
+| **accent (Violet)** | `#f6f4ff` | `#ece8ff` | `#dbd2ff` | `#c4b3ff` | `#aa8aff` | `#9669f8` | `#7f51db` | `#673ab9` | `#502895` | `#3b1873` | `#25054f` |
+| **accent-2 (Cyan)** | `#ebf8ff` | `#d4f0ff` | `#aae2ff` | `#73cdf8` | `#3dafe0` | `#0098ca` | `#007fa9` | `#006588` | `#004e6a` | `#00394e` | `#002230` |
 | **neutral** | `#f4f6f9` | `#e9ebef` | `#d7d9dd` | `#bec0c5` | `#9fa2a7` | `#898b90` | `#717479` | `#5a5c60` | `#45474b` | `#323337` | `#1d1e21` |
 | **success** | `#e1ffe6` | `#caf9d3` | `#a6edb5` | `#79d990` | `#44be69` | `#16a64f` | `#008b3f` | `#006f31` | `#005624` | `#003f19` | `#00260c` |
 | **warning** | `#fff5e0` | `#fce9c2` | `#f1d69b` | `#e0bb6c` | `#c59b37` | `#af8400` | `#926e00` | `#755700` | `#5b4300` | `#423000` | `#281c00` |
 | **error** | `#fff3f1` | `#ffe4e0` | `#ffcbc4` | `#ffa59a` | `#f77469` | `#e05950` | `#c3413a` | `#a22a27` | `#821918` | `#630b0c` | `#410002` |
 | **info** | `#eef7ff` | `#dbeeff` | `#b8deff` | `#85c8ff` | `#3baaf9` | `#0192e3` | `#007abe` | `#006199` | `#004b78` | `#003659` | `#002037` |
 
-### 2.2 Semantic Tokens (Light & Dark Mapping)
+### 2.2 4-Tier Surface Ladder
 
-Gunakan token semantik di bawah ini (melalui CSS custom properties atau utility Tailwind di `src/index.css`) alih-alih angka ramp mentah:
+| Tier | Semantic Token | Light Hex | Dark Hex | Tailwind Utility | Peran |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Tier 1 (Recessed)** | `--bg-well` | `#e9ebef` | `#141518` | `bg-well` | Relung sidebar, kolom tersembunyi, track kontrol |
+| **Tier 2 (Canvas)** | `--bg-canvas` | `#eef0f4` | `#1d1e21` | `bg-canvas` / `bg-background` | Latar halaman utama workspace |
+| **Tier 3 (Surface)** | `--bg-surface` | `#f4f6f9` | `#28292d` | `bg-surface` | Panel navigasi, header, area pendukung |
+| **Tier 4A (Card/Top)** | `--bg-surface-card` / `--bg-surface-top` | `#ffffff` | `#323337` | `bg-surface-card` / `bg-surface-top` / `bg-card` | Kartu konten, tombol outline terangkat, composer |
+| **Tier 4B (Raised)** | `--bg-surface-raised` | `#ffffff` | `#3d3f44` | `bg-surface-raised` / `bg-popover` | Popover, dropdown, dialog, floating bar (`shadow-raised`) |
+| **Muted / Inverse** | `--bg-muted` / `--bg-inverse` | `#d7d9dd` / `#323337` | `#5a5c60` / `#e9ebef` | `bg-muted` / `bg-inverse` | Hover kontrol sekunder, badge netral, tooltip kontras tinggi |
 
-#### Surfaces & Neutrals
+### 2.3 Room-Coded Chromatic Washes & Borders
+
+| Room / Domain | Wash Token | Light Value | Dark Value | Border Accent | Tailwind Utility |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **S2 Ruang Tim & Utama (Cobalt)** | `--wash-brand` | `rgb(26 81 196 / 0.08)` | `rgb(71 132 255 / 0.14)` | `#c6daff` / `rgb(71 132 255 / 0.34)` | `bg-wash-brand` |
+| **S3 Ruang Pribadi M1 (Violet)** | `--wash-violet` | `rgb(127 81 219 / 0.09)` | `rgb(150 105 248 / 0.15)` | `#dbd2ff` / `rgb(150 105 248 / 0.36)` | `bg-wash-violet` |
+| **S4/S6/S7 Brain & Tutor (Cyan)** | `--wash-cyan` | `rgb(0 101 136 / 0.08)` | `rgb(0 152 202 / 0.15)` | `#aae2ff` / `rgb(0 152 202 / 0.36)` | `bg-wash-cyan` |
+
+### 2.4 Brand, Accent & Feedback Tokens
+
 | Semantic Token | Light Hex | Dark Hex | Tailwind Utility | Peran |
 | :--- | :--- | :--- | :--- | :--- |
-| `--bg-canvas` | `#e9ebef` | `#1d1e21` | `bg-canvas` / `bg-background` | Latar belakang halaman utama |
-| `--bg-surface` | `#f4f6f9` | `#323337` | `bg-surface` / `bg-card` | Card, sidebar, panel pesan |
-| `--bg-surface-raised` | `#f4f6f9` | `#45474b` | `bg-surface-raised` / `bg-popover` | Dropdown, popover, dialog *(gunakan `shadow-raised` di Light Mode)* |
-| `--bg-muted` | `#d7d9dd` | `#5a5c60` | `bg-muted` / `bg-secondary` | Hover baris tabel, tombol sekunder, chip netral |
-| `--bg-inverse` | `#323337` | `#e9ebef` | `bg-inverse` | Tooltip & toast kontras tinggi |
-
-#### Brand, Accent & Graph Colors
-| Semantic Token | Light Hex | Dark Hex | Tailwind Utility | Peran di BERSAMA |
-| :--- | :--- | :--- | :--- | :--- |
-| `--bg-brand` | `#1a51c4` | `#4784ff` | `bg-brand` / `bg-primary` | CTA utama, konfirmasi memori M2, nav aktif |
+| `--bg-brand` | `#1a51c4` | `#4784ff` | `bg-brand` / `bg-primary` | CTA utama, konfirmasi memori M2, aksen Ruang Tim |
 | `--bg-brand-hover` | `#0c3c9f` | `#6ea0ff` | `hover:bg-brand-hover` | Hover tombol utama |
-| `--bg-brand-active` | `#042a7b` | `#9fc1ff` | `active:bg-brand-active` | Active/pressed state tombol utama |
-| `--bg-accent` | `#7f51db` | `#9669f8` | `bg-accent-violet` | **Khusus Grafik/Peta Pemahaman:** Node KC & overlay BKT |
-| `--bg-accent-hover` | `#673ab9` | `#aa8aff` | `hover:bg-accent-violet-hover` | Hover elemen grafik Violet |
-| `--bg-accent-active` | `#502895` | `#c4b3ff` | `active:bg-accent-violet-active` | Active elemen grafik Violet |
-| `--bg-tertiary` | `#006588` | `#0098ca` | `bg-tertiary` | **Khusus Grafik/Peta Pemahaman:** Jalur pairing & coverage |
-| `--bg-tertiary-hover` | `#004e6a` | `#3dafe0` | `hover:bg-tertiary-hover` | Hover elemen grafik Cyan |
+| `--bg-brand-active` | `#042a7b` | `#9fc1ff` | `active:bg-brand-active` | Active/pressed state |
+| `--bg-accent` | `#7f51db` | `#9669f8` | `bg-accent-violet` | Ruang Pribadi M1, node KC, overlay BKT |
+| `--bg-tertiary` | `#006588` | `#0098ca` | `bg-tertiary` | Project Brain, Peta Pemahaman, Tutored Briefing, pairing |
+| `--bg-success` / `-subtle` | `#006f31` / `#caf9d3` | `#16a64f` / `#003f19` | `bg-success` / `bg-success-subtle` | Paham ($P(L) >= \tau$), Decision Confirmed |
+| `--bg-warning` / `-subtle` | `#af8400` / `#fce9c2` | `#c59b37` / `#423000` | `bg-warning` / `bg-warning-subtle` | Dibantu AI, Silo Alert, Conformal Abstention |
+| `--bg-error` / `-subtle` | `#c3413a` / `#ffe4e0` | `#e05950` / `#630b0c` | `bg-error` / `bg-error-subtle` | Konflik keputusan, blokir IFC, PII sebelum masking |
+| `--bg-info` / `-subtle` | `#006199` / `#dbeeff` | `#0192e3` / `#003659` | `bg-info` / `bg-info-subtle` | Delta digest, tip briefing |
 
-#### Feedback & Status Surfaces
-| Semantic Token | Light Hex | Dark Hex | Tailwind Utility | Peran di BERSAMA |
+### 2.5 Text & Foreground Pairs (WCAG AA >= 4.5:1 Verified)
+
+| Semantic Token | Light Hex | Dark Hex | Verifikasi Kontras | Catatan Pemakaian |
 | :--- | :--- | :--- | :--- | :--- |
-| `--bg-success` | `#006f31` | `#16a64f` | `bg-success` | Badge paham ($P(L) \ge \tau$) & Decision Confirmed |
-| `--bg-success-subtle` | `#caf9d3` | `#003f19` | `bg-success-subtle` | Banner konfirmasi sukses |
-| `--bg-warning` | `#af8400` | `#c59b37` | `bg-warning` | Badge *"Dibantu AI"*, Silo Alert, Conformal Abstention |
-| `--bg-warning-subtle` | `#fce9c2` | `#423000` | `bg-warning-subtle` | Banner peringatan Bus Factor / batas waktu |
-| `--bg-error` | `#c3413a` | `#e05950` | `bg-error` / `bg-destructive` | Aksi destruktif, konflik keputusan, blokir IFC |
-| `--bg-error-subtle` | `#ffe4e0` | `#630b0c` | `bg-error-subtle` | Banner error / temuan PII sensitif sebelum masking |
-| `--bg-info` | `#006199` | `#0192e3` | `bg-info` | Badge informasi / Tutored Briefing prompt |
-| `--bg-info-subtle` | `#dbeeff` | `#003659` | `bg-info-subtle` | Banner delta digest & tips |
-
-#### Text & Foreground Pairs (Terjamin WCAG AA $\ge 4.5:1$)
-| Semantic Token | Light Hex | Dark Hex | Contrast (L / D) | Paired Against |
-| :--- | :--- | :--- | :---: | :--- |
-| `--text-primary` | `#323337` | `#e9ebef` | `10.57` / `13.96` | `bg-canvas`, `bg-surface` |
-| `--text-secondary` | `#45474b` | `#bec0c5` | `7.80` / `9.16` | `bg-canvas`, `bg-surface` |
-| `--text-tertiary` | `#5a5c60` | `#9fa2a7` | `5.61` / `6.51` | `bg-canvas` *(Gunakan ini untuk teks sekunder/caption yang harus terbaca, BUKAN `--text-disabled`)* |
-| `--text-disabled` | `#9fa2a7` | `#717479` | `2.15` / `3.55` | Hanya untuk kontrol non-aktif (*disabled*) |
-| `--text-link` | `#1a51c4` | `#6ea0ff` | `5.83` / `6.46` | `bg-canvas` |
-| `--text-on-brand` | `#f1f6ff` | `#001652` | `6.42` / `4.86` | `bg-brand` |
-| `--text-on-accent` | `#f6f4ff` | `#25054f` | `4.71` / `4.68` | `bg-accent` |
-| `--text-on-tertiary` | `#ebf8ff` | `#002230` | `6.03` / `4.99` | `bg-tertiary` |
-| `--text-on-success` | `#e1ffe6` | `#00260c` | `5.92` / `5.15` | `bg-success` |
-| `--text-on-warning` | `#281c00` | `#281c00` | `4.87` / `6.46` | `bg-warning` *(Gelap di kedua mode!)* |
-| `--text-on-error` | `#fff3f1` | `#410002` | `4.67` / `4.66` | `bg-error` |
-| `--text-on-info` | `#eef7ff` | `#002037` | `6.12` / `4.93` | `bg-info` |
-| `--text-success` | `#006f31` | `#44be69` | `5.30` / `7.00` | `bg-canvas` |
-| `--text-warning` | `#755700` | `#c59b37` | `5.64` / `6.44` | `bg-canvas` |
-| `--text-error` | `#a22a27` | `#f77469` | `6.07` / `6.08` | `bg-canvas` |
-| `--text-info` | `#006199` | `#3baaf9` | `5.55` / `6.59` | `bg-canvas` |
-| `--text-inverse` | `#f4f6f9` | `#323337` | `11.65` / `10.57` | `bg-inverse` |
-
-#### Borders & Focus Ring
-| Semantic Token | Light Hex | Dark Hex | Peran |
-| :--- | :--- | :--- | :--- |
-| `--border-subtle` | `#d7d9dd` | `#45474b` | Garis pemisah antar baris / kartu standar |
-| `--border-default` | `#bec0c5` | `#5a5c60` | Outline input form & kontrol interaktif |
-| `--border-strong` | `#9fa2a7` | `#717479` | Batas kartu berprioritas tinggi |
-| `--border-active` | `#2d6ae7` | `#4784ff` | Tab terpilih, item aktif |
-| `--border-error` | `#e05950` | `#e05950` | Outline input tidak valid / konflik |
-| `--ring-focus` | `#4784ff` | `#6ea0ff` | Focus ring keyboard (`focus-visible`) |
+| `--text-primary` | `#323337` | `#e9ebef` | `12.62` (on `#fff`) / `8.83` (on `#3d3f44`) | Teks utama di semua tier |
+| `--text-secondary` | `#45474b` | `#bec0c5` | `9.31` (on `#fff`) / `5.79` (on `#3d3f44`) | **Wajib** dipakai di atas `#3d3f44` (`--bg-surface-raised`) untuk teks pendukung |
+| `--text-tertiary` | `#5a5c60` | `#9fa2a7` | `6.70` (on `#fff`) / `4.93` (on `#323337`) | Caption pada canvas/surface/card; jangan dipakai di atas `#3d3f44` |
+| `--text-disabled` | `#9fa2a7` | `#717479` | N/A | Khusus kontrol `disabled` |
+| `--text-link` | `#1a51c4` | `#9fc1ff` | `6.96` (on `#fff`) / `5.79` (on `#3d3f44`) | Tautan & teks interaktif Cobalt |
+| `--text-accent-violet` | `#673ab9` | `#c4b3ff` | `6.39` (on `#eef0f4`) / `5.64` (on `#3d3f44`) | Teks/label Violet Ruang Pribadi (lulus AA di canvas & raised) |
+| `--text-cyan` | `#006588` | `#73cdf8` | `6.53` (on `#fff`) / `5.93` (on `#3d3f44`) | Teks/label Cyan Project Brain & Tutor |
+| `--text-on-brand` | `#f1f6ff` | `#001652` | `6.42` / `4.86` | Teks di atas `bg-brand` |
+| `--text-on-accent` | `#f6f4ff` | `#25054f` | `4.71` / `4.68` | Teks di atas `bg-accent-violet` |
+| `--text-on-tertiary` | `#ebf8ff` | `#002230` | `6.03` / `4.99` | Teks di atas `bg-tertiary` |
+| `--text-on-warning` | `#281c00` | `#281c00` | `4.87` / `6.46` | Gelap di kedua mode |
 
 ---
 
-## 3. Aturan Penggunaan Warna di Domain BERSAMA
+## 3. Tipografi 2-Voice (`Allo` >= 20px + `Geist Variable` >= 12px)
 
-1. **Ruang Tim & Ruang Pribadi (Chat):**
-   * Gunakan warna netral (`bg-canvas`, `bg-surface`, `border-line-subtle`) sebagai dominan.
-   * **Ruang Pribadi (M1):** Dibedakan dengan permukaan `bg-surface` + header strip/badge monospace `M1 PRIVATE` dan ikon gembok (`text-ink-tertiary`), **bukan** warna latar mencolok.
-   * **Context Passport Preview:** Gunakan `bg-warning-subtle` / `border-error` hanya untuk menyorot entitas PII yang berhasil disamarkan sebelum dikirim ke M2.
-   * **Aksi Konfirmasi (`Propose -> Confirm`):** Gunakan `bg-brand` (`text-on-brand`).
-2. **Project Brain (Decision Record):**
-   * Item `proposed`: Badge outline `border-line-strong` + label monospace.
-   * Item `confirmed`: Indikator `text-success` / `bg-success-subtle`.
-   * Item `conflicts_with`: Highlight `bg-error-subtle` + `text-error`.
-   * Item bertanda *"dibantu AI"*: Pill `bg-warning-subtle` + `text-warning`.
-3. **Peta Pemahaman Tim & Bus Factor (Visualisasi):**
-   * Area **satu-satunya** tempat **Violet (`bg-accent-violet`)** dan **Cyan (`bg-tertiary`)** dipakai secara ekspresif (bersama `chart-1..5`) untuk membedakan klaster Knowledge Component (KC), kontribusi anggota, dan grafik coverage submodular.
+* **Display & Hero Voice (`--font-heading`):** `'Allo', 'Geist Variable', -apple-system, BlinkMacSystemFont, sans-serif` (via `allo-font`).
+  * **Batas ukuran wajib `>= 20px`:** hanya dipakai untuk Display, Hero, H1, H2, dan angka KPI utama (`.kpi-hero`).
+  * **Optical Sizing & Roundness:** Terapkan `font-optical-sizing: auto` dan `font-variation-settings: "opsz" 32, "ROND" 75` melalui class `.font-display` dan `.kpi-hero` (yang juga menyertakan `font-variant-numeric: tabular-nums`).
+  * **Focal Oblique Accent:** Gunakan `.font-display-oblique` (`font-style: italic`) hanya untuk 1-2 kata penekanan di hero/display dengan file `Allo-*Oblique.woff2` bawaan `allo-font`.
+* **UI, Body & Metadata Voice (`--font-sans`):** `'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` (via `@fontsource-variable/geist`).
+  * **Lantai ukuran `>= 12px`:** Dilarang menggunakan `text-[10px]` atau `text-[11px]`. Ukuran minimum di seluruh aplikasi adalah `text-xs` (`12px`).
+  * Dipakai untuk seluruh teks tubuh, navigasi, tombol, badge (`M1 PRIVATE`, `M2 TEAM`, `DEC-14`, `KC-01`), timestamp, rumus, dan shortcut.
+  * **Mobile Input Rule:** Semua `<input>` dan `<textarea>` di UI mobile wajib menggunakan `text-base sm:text-sm` (`16px` di layar kecil) untuk mencegah auto-zoom iOS Safari.
+* **NO Geist Mono:** `@fontsource-variable/geist-mono` dan class `font-mono` dilarang keras di UI chrome.
 
----
-
-## 4. Tipografi & Skala (Allo + Geist Variable + Geist Mono — Hybrid Campsite + Linear)
-
-* **Display & Heading Font (`--font-heading`):** `'Allo', 'Geist Variable', -apple-system, BlinkMacSystemFont, sans-serif` (via `allo-font`) — khusus judul display, hero, heading halaman, dan judul kartu.
-* **Primary UI, Body & Subtext Font (`--font-sans`):** `'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` (via `@fontsource-variable/geist`) — digunakan untuk seluruh paragraf, subtext, eyebrow, caption, label navigasi, dan tombol agar terbaca menyatu dan bersih.
-* **Monospace Metadata Font (`--font-mono`):** `'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace` (via `@fontsource-variable/geist-mono`) — digunakan **khusus** untuk metadata teknis: ID keputusan (`DEC-14`), kode KC (`KC-01`), versi bitemporal (`as_of`), angka probabilitas ($P(L)=0.82$), tag `M1`/`M2`, URL path, rumus, dan keyboard shortcut (`⌘K`). **Jangan** memakai `font-mono` untuk subtext prosa atau eyebrow biasa.
-* **Prinsip Bobot:** Ikuti disiplin Linear/Campsite — hindari penggunaan `font-bold` (`700`) berlebihan. Gunakan **400 (Regular)** untuk teks tubuh, **500 (Medium)** untuk label UI & subheading, dan **600 (Semibold)** untuk judul utama & tombol aksi.
-
-| Role | Font Token | Size | Weight | Line Height | Letter Spacing | Pemakaian |
-| :--- | :--- | :--- | :---: | :---: | :---: | :--- |
-| `display` | `font-heading` | `36px`–`56px` | `600` | `1.08`–`1.15` | `-0.03em` | Hero / onboarding judul utama |
-| `h1` | `font-heading` | `28px` (`1.75rem`) | `600` | `1.22` | `-0.022em` | Judul halaman workspace |
-| `h2` | `font-heading` | `20px`–`30px` | `600` | `1.30` | `-0.018em` | Judul panel / section card |
-| `h3` | `font-heading` | `16px` (`1rem`) | `500`–`600` | `1.40` | `-0.011em` | Judul kartu keputusan / modul |
-| `body` | `font-sans` | `14px`–`16px` | `400` | `1.55` | `-0.008em` | Pesan chat, deskripsi alasan, esai |
-| `ui-label` | `font-sans` | `12px`–`13px` | `500` | `1.35` | `0em` | Item sidebar, tab, eyebrow, tombol |
-| `caption` | `font-sans` | `11px`–`12px` | `400`–`500` | `1.35` | `0em` | Subtext anggota, timestamp, helper |
-| `mono-tag` | `font-mono` | `10px`–`12px` | `500`–`600` | `1.20` | `+0.02em` | Decision ID, kode KC, status tag, rumus, shortcut |
+| Role | Font Class | Size Floor | Weight | Line Height | Pemakaian |
+| :--- | :--- | :--- | :---: | :---: | :--- |
+| `display` | `.font-display` | `32px` - `56px` | `600` | `1.08` - `1.14` | Hero landing, judul utama onboarding |
+| `kpi-hero` | `.kpi-hero` | `24px` - `40px` | `600` | `1.10` | Angka metrik utama (`tabular-nums`) |
+| `h1` | `.font-display` | `24px` - `30px` | `600` | `1.20` | Judul halaman workspace |
+| `h2` | `.font-display` | `20px` - `24px` | `600` | `1.28` | Judul section & panel utama |
+| `h3` / `card-title` | `font-sans` | `15px` - `18px` | `600` | `1.35` | Judul kartu, sub-bagian, dialog |
+| `body` | `font-sans` | `14px` - `15px` | `400` | `1.55` | Chat, alasan keputusan, deskripsi |
+| `ui-label` / `badge` | `font-sans` | `12px` - `13px` | `500` | `1.35` | Nav item, tombol, badge `M1`/`M2`/`DEC`, timestamp |
 
 ---
 
-## 5. Layout, Spacing, Radius & Elevasi (Tactile Rules)
+## 4. Single-Edge Shadows, Borders & Elevation
 
-* **Grid Dasar:** Kelipatan `4px` (`gap-2` = 8px, `gap-3` = 12px, `gap-4` = 16px, `p-4` / `p-5` pada card).
-* **Border Radius:**
-  * Kontrol kompak & tombol: `8px` (`rounded-lg`, `--radius-md`)
-  * Card & panel workspace: `12px` (`rounded-xl`, `--radius-lg`)
-  * Status badge, tag KC, avatar group: `9999px` (`rounded-full`)
-* **Borders & Elevation:**
-  * Kartu standar di atas `bg-canvas`: `bg-surface border border-line-subtle` + `shadow-surface`.
-  * Permukaan melayang (`DropdownMenu`, `Popover`, `Tooltip`, `CommandDialog`): `bg-surface-raised border border-line-subtle shadow-raised` *(wajib menggunakan `shadow-raised` karena nilai hex `#f4f6f9` di Light Mode sama dengan `bg-surface`)*.
-* **Motion:** Cepat dan tenang (`150ms cubic-bezier(0.2, 0.8, 0.2, 1)`), hindari animasi memantul berlebihan.
+Jangan pernah menggabungkan `ring-1` dan `border` pada komponen yang sama. Gunakan batas hairline tunggal + satu token shadow dari daftar ini:
+
+* `--shadow-control`: Tombol `outline` terangkat di atas `--bg-surface-top`, segmen kontrol, input pill.
+* `--shadow-card` (alias kompatibel `--shadow-surface`): Kartu konten (`<Card>`), panel sidebar, bubble terstruktur.
+* `--shadow-raised`: Elemen melayang (`<Popover>`, `<DropdownMenu>`, `<Dialog>`, floating composer, tooltip).
+* `--shadow-primary`: Tombol CTA Cobalt (`bg-brand`) dengan glow tepi bawah halus.
+* `--shadow-badge`: Badge status dan pill penanda ruang.
+* `--shadow-sticker`: Kontainer stiker `<AgentStickerAvatar />` berbingkai putih taktil (`2.5px` white border + drop shadow lembut).
+* **Dark Mode Ambient Borders:** Di `.dark`, kartu dan permukaan terangkat memakai highlight tepi atas tipis (`border-white/[0.08]`) atau wash border berwarna per ruang agar pemisahan layer tetap tegas tanpa shadow berat.
 
 ---
 
-## 6. Strategi & Katalog Komponen
+## 5. Anti-Bloat, Visual-First & Popover `?` Pattern
 
-### 6.1 Base Primitives (`shadcn/ui` + `@kibo-ui/*`)
-Selalu cek dan pasang komponen dari `@kibo-ui/*` terlebih dahulu sebelum membuat komponen baru:
-* **Kolaborasi & Identitas:** `@kibo-ui/avatar-stack` *(terpasang)* (anggota tim & pemilik pemahaman KC), `@kibo-ui/pill` *(terpasang)*, `@kibo-ui/status` *(terpasang)* (status konfirmasi & sinkronisasi), `@kibo-ui/cursor` *(terpasang)* (indikator kolaborasi ruang aktif).
-* **Manajemen Keputusan & Proyek:** `@kibo-ui/list`, `@kibo-ui/table`, `@kibo-ui/gantt` *(terpasang)*, `@kibo-ui/tags` *(terpasang)* (label KC), `@kibo-ui/tree` (struktur dependensi modul).
-* **Input & Evaluasi:** `@kibo-ui/choicebox` (pemilihan opsi Explain-back / onboarding), `@kibo-ui/dropzone` (import log chat/WhatsApp), `@kibo-ui/code-block` & `@kibo-ui/snippet` (cuplikan kode di Project Brain), `@kibo-ui/comparison` *(terpasang)* (slider visual Before/After).
-* **Utilitas:** `@kibo-ui/theme-switcher` *(terpasang)* (Light/Dark toggle), `@kibo-ui/announcement` *(terpasang)*, `@kibo-ui/dialog-stack`.
+1. **Maksimum informasi inti di permukaan:** Kartu keputusan, node pemahaman, dan kartu briefing menampilkan judul, status visual, pemilik/avatar, dan satu ringkasan inti.
+2. **Pola `?` Popover (`<Popover>`):** Metadata teknis sekunder (referensi pasal UU PDP, ID pesan rujukan mentah, hash/versi bitemporal database, rumus BKT/IRT) **wajib** disembunyikan di balik tombol `<button>` ikon `?` (`HelpCircle`) atau `Info` yang membuka `<PopoverContent>` ketika diklik/fokus.
+3. **Human Portraits vs. Agent Stickers:**
+   * Manusia (Rani, Dimas, Budi, Sari) -> `<Avatar>` dengan foto potret `USER_AVATAR_MAP`.
+   * AI Agent (`team`, `private`, `tutor`) -> `<AgentStickerAvatar role="..." state="..." />` (`boopface` web component di dalam die-cut sticker badge).
 
-### 6.2 Komponen AI (`@ai-elements/*` — Penerus Komponen AI Kibo UI)
-Komponen AI dari pencipta Kibo UI kini dikelola resmi di registry **AI Elements** (`npx shadcn@latest add @ai-elements/<name>`):
-* `@ai-elements/conversation` & `@ai-elements/message`: Alur percakapan Team Agent dan Personal Agent.
-* `@ai-elements/prompt-input`: Composer chat dengan indikator ruang (`Team` vs `Private`) serta lampiran konteks.
-* `@ai-elements/reasoning` & `@ai-elements/sources`: Menampilkan rujukan pesan sumber (*citations*) dan alasan penarikan kesimpulan dari Project Brain.
+---
 
-### 6.3 Komponen Kustom BERSAMA *(Dibuat Mandiri Jika Tidak Ada di Registry)*
-Jika suatu komponen tidak tersedia di `@kibo-ui` maupun `@ai-elements`, bangun komponen kustom di `src/components/bersama/` dengan aturan:
-1. Wajib membungkus primitif `Card` / `Button` / `Dialog` dari `src/components/ui/` agar mewarisi token WCAG AA.
-2. Komponen kustom yang dipetakan untuk BERSAMA:
-   * **Knowledge Coverage Matrix & Bus Factor Gauge:** Heatmap penguasaan per `(anggota, KC)` memakai palet `chart-1..5` (`brand`, `accent-violet`, `tertiary`).
-   * **Context Passport PII Diff Drawer:** Tampilan berdampingan sebelum/sesudah penyamaran PII (highlighting pakai `bg-warning-subtle` / `bg-error-subtle`).
-   * **Explain-Back Check Modal:** Timer ringan 5 menit, input teks / voice note waveform, serta tampilan status *Conformal Abstention* (*"Diteruskan ke penulis keputusan untuk peer explanation"*).
+## 6. Never-Ship Governance Gate (WAJIB DIPERIKSA SEBELUM MERGE)
 
-### 6.4 Ikonografi & Logo Brand
-* **UI Icons:** Gunakan `lucide-react` secara konsisten untuk seluruh ikon kontrol, navigasi, dan status.
-* **Official Brand Logos:** Wajib mengambil logo resmi pihak ketiga dari `@icons-pack/react-simple-icons` (plus `react-icons/ri` untuk `RiOpenaiFill` karena penghapusan slug OpenAI di Simple Icons) — **dilarang** menggambar SVG ikon brand generik manual.
-  * Brand monokrom gelap (`OpenAI`, `Notion`, `GitHub`) wajib memakai `color="currentColor"` (mewarisi `text-ink-primary`) agar tetap kontras di Dark Mode.
-  * Brand berwarna (`Claude`, `Gemini`, `WhatsApp`, `PostgreSQL`, `Supabase`, `FastAPI`) gunakan `color="default"` dengan warna resmi masing-masing brand.
+Setiap PR atau perubahan frontend BERSAMA **diblokir** jika melanggar salah satu aturan berikut:
+
+1. **ZERO `Geist Mono` / `font-mono`:** Tidak ada `@fontsource-variable/geist-mono` dan tidak ada utility `font-mono` di UI chrome.
+2. **ZERO `Allo` < 20px:** Class `font-heading`, `font-display`, atau `kpi-hero` tidak boleh dipasangkan dengan ukuran di bawah `20px` (`text-xl`).
+3. **ZERO Text < 12px:** Tidak ada `text-[10px]`, `text-[11px]`, atau ukuran font `< 12px` di mana pun.
+4. **ZERO `transition-all`:** Selalu sebutkan properti transisi secara eksplisit (mis. `transition-[background-color,border-color,color,transform,box-shadow]`).
+5. **ZERO `Sparkles` Icon & Decorative Emojis:** Dilarang memakai ikon `Sparkles` dari `lucide-react` dan dilarang menaruh emoji dekoratif di label/judul/badge UI.
+6. **ZERO UI Em-Dashes (`—`):** Di teks antarmuka pengguna (label, tombol, subtitle, placeholder, toast, empty state), gunakan titik dua `:`, koma `,`, atau middot `·`.
+7. **ZERO Clickable `<div>` / `<span>`:** Seluruh elemen interaktif wajib memakai `<button>`, `<a href>`, `<Link>`, atau `<NavLink>` dengan `focus-visible` ring yang jelas.
+8. **WCAG AA >= 4.5:1 & `prefers-reduced-motion`:** Semua pasangan warna lulus `contrast-check.py` dan seluruh animasi (termasuk `boopface`) menghormati `prefers-reduced-motion: reduce`.

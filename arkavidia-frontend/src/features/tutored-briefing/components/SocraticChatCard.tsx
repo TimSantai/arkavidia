@@ -2,21 +2,21 @@ import { useState } from "react"
 import {
   AlertTriangle,
   ArrowRight,
-  Bot,
   CheckCircle2,
   HelpCircle,
   Lightbulb,
   MessageSquare,
   Send,
 } from "lucide-react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
+import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
 import { cn } from "@/lib/utils"
 import type { BriefingStep } from "@/types/bersama"
-import avatarSari from "@/features/landing/assets/avatar-sari.jpg"
 
 interface SocraticChatCardProps {
   readonly step: BriefingStep
@@ -44,6 +44,15 @@ export function SocraticChatCard({
     isCompleted ? "success" : "idle",
   )
 
+  const tutorState =
+    feedbackState === "success"
+      ? "success"
+      : feedbackState === "nudge"
+        ? "nudge"
+        : showHint
+          ? "speaking"
+          : "idle"
+
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     const trimmed = answer.trim()
@@ -51,18 +60,14 @@ export function SocraticChatCard({
 
     setLastSubmittedAnswer(trimmed)
 
-    // Socratic responsive evaluation
     if (trimmed.length < 15) {
-      // Follow-up nudge: not failed, but encourages deeper reflection
       setFeedbackState("nudge")
     } else {
-      // Adequate answer: praise and complete step
       setFeedbackState("success")
       onStepComplete(step.id, trimmed)
     }
   }
 
-  // Quick Demo Simulator
   const handleFillDemoAnswer = () => {
     if (step.order === 1) {
       setAnswer(
@@ -82,17 +87,17 @@ export function SocraticChatCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out",
+        "overflow-hidden border-cyan-subtle bg-surface-card py-0 shadow-card transition-[border-color,box-shadow] duration-150 ease-out",
         className,
       )}
     >
-      <CardHeader className="border-b border-line-subtle bg-canvas/30 p-5 pb-4">
+      <CardHeader className="border-b border-line-subtle bg-wash-cyan/50 p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="rounded-md bg-brand/10 px-2 py-0.5 font-mono text-xs font-semibold text-brand dark:bg-brand/20">
-              LANGKAH 0{step.order} / 0{totalSteps}
+            <span className="rounded-md bg-tertiary px-2.5 py-0.5 text-xs font-semibold text-on-tertiary tabular-nums">
+              Langkah {step.order}/{totalSteps}
             </span>
-            <span className="font-mono text-xs text-ink-tertiary">
+            <span className="text-xs font-semibold text-ink-cyan">
               {step.decisionCode}
             </span>
           </div>
@@ -100,60 +105,59 @@ export function SocraticChatCard({
           {isCompleted ? (
             <Badge
               variant="outline"
-              className="gap-1 border-success/40 bg-success-subtle font-mono text-xs font-medium text-text-success"
+              className="gap-1.5 border-success/40 bg-success-subtle text-xs font-medium text-text-success"
             >
-              <CheckCircle2 className="size-3.5" />
-              Selesai Dipahami
+              <CheckCircle2 className="size-3.5" aria-hidden="true" />
+              <span>Dipahami</span>
             </Badge>
           ) : (
-            <span className="rounded-full bg-muted px-2.5 py-0.5 font-mono text-[11px] text-ink-tertiary">
-              Sesi Tanya Jawab Socratic
+            <span className="rounded-full border border-cyan-subtle bg-surface-card px-2.5 py-0.5 text-xs font-medium text-ink-secondary">
+              Dialog Socratic
             </span>
           )}
         </div>
 
-        <CardTitle className="font-heading pt-2 text-base font-semibold text-ink-primary sm:text-lg">
-          Onboarding Reflektif: {step.decisionCode}
+        <CardTitle className="font-sans pt-2 text-lg font-semibold text-ink-primary">
+          Refleksi {step.decisionCode}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-4 p-5">
         {/* 1. Tutor Socratic Prompt Bubble */}
-        <div className="flex items-start gap-3 rounded-xl border border-line-subtle bg-canvas/40 p-4">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand text-on-brand shadow-xs">
-            <Bot className="size-5" />
-          </div>
+        <div className="flex items-start gap-3.5 rounded-xl border border-cyan-subtle bg-wash-cyan/45 p-4">
+          <AgentStickerAvatar
+            role="tutor"
+            state={tutorState}
+            size={44}
+            label="Socratic Tutor"
+          />
 
-          <div className="space-y-2 flex-1">
-            <div className="flex items-center justify-between">
-              <span className="font-heading text-xs font-semibold text-ink-primary">
-                Tutor AI (Mentor Socratic)
+          <div className="flex-1 space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs font-semibold text-ink-primary">
+                Socratic Tutor
               </span>
-              <span className="font-mono text-[10px] text-ink-tertiary">Pemandu Onboarding</span>
+              <span className="text-xs text-ink-cyan">Mentor AI</span>
             </div>
 
-            <p className="text-xs leading-relaxed text-ink-primary sm:text-sm">
+            <p className="text-sm leading-relaxed text-ink-primary">
               {step.tutorPrompt}
             </p>
 
-            {/* Hint Toggle Button */}
-            <div className="pt-1">
-              <button
-                type="button"
-                onClick={() => setShowHint((prev) => !prev)}
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-brand hover:underline"
-              >
-                <Lightbulb className="size-3.5" />
-                {showHint ? "Sembunyikan Petunjuk" : "Tampilkan Petunjuk (Hint)"}
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setShowHint((prev) => !prev)}
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-cyan hover:underline"
+            >
+              <Lightbulb className="size-3.5" aria-hidden="true" />
+              <span>{showHint ? "Tutup Petunjuk" : "Lihat Petunjuk"}</span>
+            </button>
 
-            {/* Collapsible Hint Card (bg-info-subtle text-text-info) */}
             {showHint && (
               <div className="rounded-lg border border-info/30 bg-info-subtle p-3 text-xs leading-relaxed text-text-info animate-in fade-in-50 duration-150">
-                <div className="flex items-center gap-1.5 font-semibold pb-0.5">
-                  <HelpCircle className="size-3.5 shrink-0" />
-                  <span>Petunjuk Diskusi:</span>
+                <div className="flex items-center gap-1.5 pb-0.5 font-semibold">
+                  <HelpCircle className="size-3.5 shrink-0" aria-hidden="true" />
+                  <span>Petunjuk:</span>
                 </div>
                 <p>{step.hint}</p>
               </div>
@@ -161,83 +165,88 @@ export function SocraticChatCard({
           </div>
         </div>
 
-        {/* 2. User Response History (if already submitted) */}
+        {/* 2. Student Response Bubble */}
         {lastSubmittedAnswer && (
           <div className="flex items-start gap-3 rounded-xl border border-line-subtle bg-surface p-4">
-            <Avatar className="size-9 border border-line-subtle shadow-xs">
-              <AvatarImage src={avatarSari} alt="Sari Wulandari" className="object-cover" />
+            <Avatar className="size-9 border border-line-subtle shadow-badge">
+              <AvatarImage
+                src={USER_AVATAR_MAP["user-sari"]}
+                alt="Sari Wulandari"
+                className="object-cover"
+              />
               <AvatarFallback className="text-xs font-semibold">SW</AvatarFallback>
             </Avatar>
 
-            <div className="space-y-1 flex-1">
-              <div className="flex items-center justify-between">
-                <span className="font-heading text-xs font-semibold text-ink-primary">
-                  Sari Wulandari (Kamu)
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-semibold text-ink-primary">
+                  Sari Wulandari
                 </span>
-                <span className="font-mono text-[10px] text-ink-tertiary">Baru saja</span>
+                <span className="text-xs text-ink-tertiary">Baru saja</span>
               </div>
-              <p className="text-xs leading-relaxed text-ink-secondary">
+              <p className="text-sm leading-relaxed text-ink-secondary">
                 "{lastSubmittedAnswer}"
               </p>
             </div>
           </div>
         )}
 
-        {/* 3. Follow-Up Nudge (Short Answer Response) */}
+        {/* 3. Follow-Up Nudge */}
         {feedbackState === "nudge" && (
-          <div className="flex items-start gap-3 rounded-xl border border-warning/40 bg-warning-subtle/40 p-4 animate-in fade-in-50 duration-200">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-warning-subtle text-text-warning">
-              <Lightbulb className="size-4" aria-hidden="true" />
-            </div>
+          <div className="flex items-start gap-3.5 rounded-xl border border-warning/40 bg-warning-subtle/40 p-4 animate-in fade-in-50 duration-200">
+            <AgentStickerAvatar
+              role="tutor"
+              state="nudge"
+              size={40}
+              label="Tutor AI mengajak berpikir lebih dalam"
+            />
 
             <div className="space-y-1">
-              <p className="font-heading text-xs font-semibold text-ink-primary">
-                Tutor AI: Pertanyaan Lanjutan (Follow-Up Nudge)
+              <p className="text-xs font-semibold text-ink-primary">
+                Perdalam Sedikit Lagi
               </p>
               <p className="text-xs leading-relaxed text-ink-secondary">
-                Jawabanmu menarik, namun masih terlalu singkat! Coba pikirkan lebih dalam:{" "}
-                <strong className="text-ink-primary">{step.hint}</strong>. Menurutmu, bagaimana
-                pilihan arsitektur ini mempermudah pembagian tugas antara 4 anggota?
+                Coba kaitkan dengan <strong className="text-ink-primary">{step.hint}</strong> dan
+                dampaknya ke kolaborasi 4 anggota tim.
               </p>
             </div>
           </div>
         )}
 
-        {/* 4. Praise & Synthesis (Adequate Answer Response) */}
+        {/* 4. Praise & Synthesis */}
         {feedbackState === "success" && (
-          <div className="flex items-start gap-3 rounded-xl border border-success/40 bg-success-subtle/30 p-4 animate-in fade-in-50 duration-200">
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-success text-on-success">
-              <CheckCircle2 className="size-4" />
-            </div>
+          <div className="flex items-start gap-3.5 rounded-xl border border-success/40 bg-success-subtle/35 p-4 animate-in fade-in-50 duration-200">
+            <AgentStickerAvatar
+              role="tutor"
+              state="success"
+              size={40}
+              label="Tutor AI mengonfirmasi pemahaman"
+            />
 
-            <div className="space-y-1.5 flex-1">
-              <div className="flex items-center justify-between">
-                <p className="font-heading text-xs font-semibold text-ink-primary">
-                  Tutor AI: Pemikiran yang Tepat!
+            <div className="flex-1 space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-xs font-semibold text-ink-primary">
+                  Pemahaman Tepat
                 </p>
                 <Badge
                   variant="outline"
-                  className="border-success/40 bg-success-subtle font-mono text-[10px] text-text-success"
+                  className="border-success/40 bg-success-subtle text-xs font-medium text-text-success"
                 >
                   Konsep Dikuasai
                 </Badge>
               </div>
               <p className="text-xs leading-relaxed text-ink-secondary">
-                Tepat sekali! Inti arsitektural keputusannya adalah:{" "}
-                <strong className="text-ink-primary">{step.expectedConcept}</strong>. Sekarang
-                Personal Agent kamu telah menyinkronkan konteks ini.
+                Inti keputusan: <strong className="text-ink-primary">{step.expectedConcept}</strong>.
+                Konteks ini otomatis masuk ke Personal Agent kamu.
               </p>
 
               {hasNextStep && (
-                <div className="pt-2">
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={onNextStep}
-                    className="bg-brand text-on-brand hover:bg-brand-hover text-xs font-medium shadow-sm"
-                  >
-                    Lanjut ke Konsep Berikutnya ({step.order === 1 ? "DEC-02 JWT" : "Selesai"})
-                    <ArrowRight className="size-3.5 ml-1" />
+                <div className="pt-1">
+                  <Button type="button" size="sm" onClick={onNextStep}>
+                    <span>
+                      Lanjut {step.order === 1 ? "DEC-02 JWT" : "Berikutnya"}
+                    </span>
+                    <ArrowRight className="size-3.5" aria-hidden="true" />
                   </Button>
                 </div>
               )}
@@ -245,71 +254,52 @@ export function SocraticChatCard({
           </div>
         )}
 
-        {/* 5. Input Area (Active when not yet completed or iterating on nudge) */}
+        {/* 5. Input Form */}
         {feedbackState !== "success" && (
-          <form onSubmit={handleSubmit} className="space-y-3 pt-2">
+          <form onSubmit={handleSubmit} className="space-y-3 pt-1">
             <div className="space-y-1.5">
               <label
                 htmlFor="socratic-answer-input"
                 className="flex items-center gap-1.5 text-xs font-medium text-ink-secondary"
               >
-                <MessageSquare className="size-3.5 text-brand" />
-                Refleksikan alasan keputusan menurut sudut pandangmu:
+                <MessageSquare className="size-3.5 text-ink-cyan" aria-hidden="true" />
+                <span>Jawabanmu</span>
               </label>
 
               <Textarea
                 id="socratic-answer-input"
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
-                placeholder="Tulis alasan mengapa kelompok memilih arsitektur ini berdasarkan petunjuk di atas..."
-                className="min-h-[100px] border-line-subtle bg-surface text-sm leading-relaxed text-ink-primary shadow-xs"
+                placeholder="Tulis alasan keputusan arsitektur ini menurut pemahamanmu..."
+                className="min-h-[100px] border-line-default bg-surface-card text-base leading-relaxed text-ink-primary sm:text-sm"
               />
-
-              <div className="flex items-center justify-between text-[11px] text-ink-tertiary">
-                <span>Minimal ~15 karakter untuk membentuk argumen yang solid.</span>
-                <span className="font-mono tabular-nums">{answer.length} karakter</span>
-              </div>
             </div>
 
-            {/* Quick Demo Simulator Buttons */}
-            <div className="rounded-lg border border-dashed border-line-subtle bg-canvas/30 p-2.5">
-              <div className="flex items-center justify-between pb-1 text-[11px] text-ink-tertiary">
-                <span className="font-semibold text-ink-secondary">Bantuan Cepat Skenario Demo:</span>
-                <span>Uji 2 respon Socratic</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={handleFillDemoAnswer}
-                  className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-success/30 bg-success-subtle/40 px-2.5 py-1 text-[11px] font-medium text-text-success transition-colors duration-150 hover:bg-success-subtle active:scale-[0.98]"
-                >
-                  <CheckCircle2 className="size-3 shrink-0" aria-hidden="true" />
-                  <span>Isi Jawaban Reflektif (Lulus)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={handleFillShortAnswer}
-                  className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-warning/30 bg-warning-subtle/40 px-2.5 py-1 text-[11px] font-medium text-text-warning transition-colors duration-150 hover:bg-warning-subtle active:scale-[0.98]"
-                >
-                  <AlertTriangle className="size-3 shrink-0" aria-hidden="true" />
-                  <span>Isi Jawaban Singkat (Picu Nudge)</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Submit Action */}
-            <div className="flex items-center justify-between border-t border-line-subtle pt-3">
-              <span className="text-[11px] text-ink-tertiary">
-                Bebas menjawab dengan pemahamanmu sendiri tanpa takut salah.
-              </span>
-
-              <Button
-                type="submit"
-                disabled={!answer.trim()}
-                className="bg-brand text-on-brand hover:bg-brand-hover active:bg-brand-active shadow-sm font-medium text-xs"
+            {/* Quick Simulation Chips */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-medium text-ink-tertiary">Simulasi:</span>
+              <button
+                type="button"
+                onClick={handleFillDemoAnswer}
+                className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-success/35 bg-success-subtle/50 px-3 py-1 text-xs font-medium text-text-success transition-[background-color,transform] duration-150 hover:bg-success-subtle active:scale-[0.98]"
               >
-                <Send className="size-3.5 mr-1.5" />
-                Kirim Jawaban
+                <CheckCircle2 className="size-3.5 shrink-0" aria-hidden="true" />
+                <span>Jawaban Reflektif (Lulus)</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleFillShortAnswer}
+                className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-warning/35 bg-warning-subtle/50 px-3 py-1 text-xs font-medium text-text-warning transition-[background-color,transform] duration-150 hover:bg-warning-subtle active:scale-[0.98]"
+              >
+                <AlertTriangle className="size-3.5 shrink-0" aria-hidden="true" />
+                <span>Jawaban Singkat (Nudge)</span>
+              </button>
+            </div>
+
+            <div className="flex items-center justify-end border-t border-line-subtle pt-3">
+              <Button type="submit" disabled={!answer.trim()}>
+                <Send className="size-3.5" aria-hidden="true" />
+                <span>Kirim Jawaban</span>
               </Button>
             </div>
           </form>

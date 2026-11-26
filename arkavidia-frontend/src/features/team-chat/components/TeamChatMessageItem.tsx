@@ -1,4 +1,4 @@
-import { Bot, Quote } from "lucide-react"
+import { Quote } from "lucide-react"
 import {
   InlineCitation,
   InlineCitationCard,
@@ -7,8 +7,10 @@ import {
   InlineCitationSource,
 } from "@/components/ai-elements/inline-citation"
 import { Message, MessageContent } from "@/components/ai-elements/message"
-import { HoverCardTrigger } from "@/components/ui/hover-card"
+import type { AgentSemanticState } from "@/components/bersama/agentConfig"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { HoverCardTrigger } from "@/components/ui/hover-card"
 import { cn } from "@/lib/utils"
 import { SEED_USERS } from "@/mocks/seedData"
 import type { ChatMessage, MemoryItem } from "@/types/bersama"
@@ -40,6 +42,16 @@ function formatMessageTime(iso: string): string {
   }
 }
 
+function resolveTeamAgentState(
+  message: ChatMessage,
+  proposedItem?: MemoryItem
+): AgentSemanticState {
+  if (message.policyBlocked) return "blocked"
+  if (proposedItem?.status === "proposed") return "warning"
+  if (proposedItem?.status === "confirmed") return "success"
+  return "idle"
+}
+
 export function TeamChatMessageItem({
   message,
   activeUserId,
@@ -54,6 +66,7 @@ export function TeamChatMessageItem({
   const author = SEED_USERS.find((u) => u.id === message.authorId)
   const avatarSrc = USER_AVATAR_MAP[message.authorId]
   const roleLabel = USER_ROLE_LABEL[message.authorId]
+  const agentState = resolveTeamAgentState(message, proposedItem)
   const initials =
     author?.initials ??
     message.authorName
@@ -68,7 +81,7 @@ export function TeamChatMessageItem({
       id={`chat-msg-${message.id}`}
       className={cn(
         "rounded-2xl p-2 transition-[background-color,box-shadow] duration-300",
-        isHighlighted && "bg-brand/8 ring-2 ring-brand"
+        isHighlighted && "bg-wash-brand ring-2 ring-brand"
       )}
     >
       <Message
@@ -81,15 +94,22 @@ export function TeamChatMessageItem({
             isCurrentUser && "flex-row-reverse"
           )}
         >
-          {/* Avatar */}
+          {/* Avatar: Die-cut Agent Sticker vs Real Student Portrait */}
           {isAgent ? (
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-line-subtle bg-brand text-on-brand shadow-surface">
-              <Bot className="size-4" />
-            </div>
+            <AgentStickerAvatar
+              role="team"
+              state={agentState}
+              size={36}
+              interactive
+            />
           ) : (
-            <Avatar className="size-8 shrink-0">
+            <Avatar className="size-9 shrink-0">
               {avatarSrc && (
-                <AvatarImage src={avatarSrc} alt={message.authorName} />
+                <AvatarImage
+                  src={avatarSrc}
+                  alt={message.authorName}
+                  className="object-cover"
+                />
               )}
               <AvatarFallback className="border border-line-subtle bg-surface text-xs font-semibold text-ink-primary">
                 {initials}
@@ -116,18 +136,18 @@ export function TeamChatMessageItem({
               </span>
 
               {isAgent ? (
-                <span className="rounded-full bg-info-subtle px-2 py-0.5 font-mono text-[10px] font-semibold text-text-info">
-                  TEAM AGENT · M2 ONLY
+                <span className="rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-semibold text-ink-link">
+                  Team Agent · M2
                 </span>
               ) : (
                 roleLabel && (
-                  <span className="rounded-full border border-line-subtle bg-canvas px-2 py-0.5 text-[10px] font-medium text-ink-tertiary">
+                  <span className="rounded-full border border-line-subtle bg-surface-top px-2.5 py-0.5 text-xs font-medium text-ink-secondary">
                     {roleLabel}
                   </span>
                 )
               )}
 
-              <span className="font-mono text-[10px] tabular-nums text-ink-tertiary">
+              <span className="text-xs tabular-nums text-ink-tertiary">
                 {formatMessageTime(message.createdAt)}
               </span>
             </div>
@@ -137,9 +157,10 @@ export function TeamChatMessageItem({
               className={cn(
                 "rounded-2xl px-4 py-3 text-sm leading-relaxed",
                 isCurrentUser
-                  ? "ml-auto w-fit max-w-full rounded-tr-sm bg-brand text-on-brand group-[.is-user]:bg-brand group-[.is-user]:text-on-brand"
+                  ? "ml-auto w-fit max-w-full rounded-tr-sm bg-brand text-on-brand shadow-primary group-[.is-user]:bg-brand group-[.is-user]:text-on-brand"
                   : cn(
-                      "rounded-tl-sm border border-line-subtle bg-surface text-ink-primary shadow-surface",
+                      "rounded-tl-sm border bg-surface-card text-ink-primary shadow-card",
+                      isAgent ? "border-brand-subtle" : "border-line-subtle",
                       (message.citations?.length ?? 0) > 0
                         ? "w-full"
                         : "w-fit max-w-full"
@@ -150,8 +171,8 @@ export function TeamChatMessageItem({
 
               {/* Inline Citations Chips (Hover preview + Click to highlight source message) */}
               {message.citations && message.citations.length > 0 && (
-                <div className="mt-2 flex flex-wrap items-center gap-1.5 border-t border-line-subtle pt-2">
-                  <span className="font-mono text-[10px] text-ink-tertiary">
+                <div className="mt-2.5 flex flex-wrap items-center gap-1.5 border-t border-line-subtle pt-2.5">
+                  <span className="text-xs font-medium text-ink-tertiary">
                     Sitasi M2:
                   </span>
                   {message.citations.map((cit) => (
@@ -161,16 +182,16 @@ export function TeamChatMessageItem({
                           <button
                             type="button"
                             onClick={() => onJumpToMessage(cit.sourceMessageId)}
-                            className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-canvas px-2.5 py-0.5 font-mono text-[11px] font-medium text-ink-link transition-colors hover:border-line-active hover:bg-brand/5"
+                            className="inline-flex items-center gap-1 rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-medium text-ink-link transition-[background-color,border-color] duration-150 hover:border-line-active hover:bg-brand/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                           >
-                            <Quote className="size-2.5" />
+                            <Quote className="size-3" aria-hidden="true" />
                             <span>{cit.label}</span>
                           </button>
                         </HoverCardTrigger>
-                        <InlineCitationCardBody className="w-72 rounded-xl border border-line-subtle bg-surface-raised p-3 shadow-raised">
+                        <InlineCitationCardBody className="w-72 rounded-xl border border-line-subtle bg-surface-raised p-3 ring-0 shadow-raised">
                           <InlineCitationSource
                             title={cit.label}
-                            description="Klik chip untuk menyorot pesan asli di percakapan."
+                            description="Klik untuk menyorot pesan sumber."
                           />
                           <InlineCitationQuote className="mt-2 text-xs">
                             &ldquo;{cit.excerpt}&rdquo;

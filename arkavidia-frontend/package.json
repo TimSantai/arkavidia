@@ -20,6 +20,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "ai": "^7.0.181",
     "allo-font": "^1.0.3",
+    "boopface": "^0.9.0",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",
     "cn": "^0.5.2",

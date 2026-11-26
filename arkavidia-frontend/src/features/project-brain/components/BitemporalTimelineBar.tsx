@@ -1,6 +1,14 @@
 import { Link } from "react-router"
-import { Calendar, Clock, History, MessageSquare, RotateCcw } from "lucide-react"
+import { Calendar, Clock, HelpCircle, History, MessageSquare, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 
 interface TimelinePreset {
@@ -72,61 +80,78 @@ export function BitemporalTimelineBar({
     <header className="space-y-4">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1">
-          <span className="font-mono text-[11px] font-medium tracking-wider text-ink-tertiary uppercase">
-            M2 TEAM · TEMPORAL KNOWLEDGE GRAPH
-          </span>
-          <h1 className="font-heading text-2xl font-semibold tracking-tight text-ink-primary sm:text-[28px]">
-            Project Brain
+          <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-primary sm:text-3xl">
+            Project <span className="font-display-oblique text-ink-cyan">Brain</span>
           </h1>
           <p className="text-sm text-ink-secondary">
-            Rekam keputusan arsitektur tim, alasan penolakan alternatif, dan riwayat evolusi bitemporal.
+            Rekam keputusan arsitektur tim, alasan, dan riwayat per waktu.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
           <div
             aria-label="Ringkasan status keputusan"
-            className="flex flex-wrap items-center gap-1.5 rounded-xl border border-line-subtle bg-surface px-2.5 py-1.5 shadow-surface"
+            className="flex flex-wrap items-center gap-1.5 rounded-xl border border-line-subtle bg-surface-card px-2.5 py-1.5 shadow-card"
           >
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-success-subtle px-2 py-0.5 font-mono text-[11px] font-medium tabular-nums text-text-success">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-medium tabular-nums text-text-success">
               <span>{counts.confirmed}</span>
               <span>Confirmed</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-info-subtle px-2 py-0.5 font-mono text-[11px] font-medium tabular-nums text-text-info">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-info-subtle px-2.5 py-0.5 text-xs font-medium tabular-nums text-text-info">
               <span>{counts.proposed}</span>
               <span>Proposed</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 font-mono text-[11px] font-medium tabular-nums text-ink-tertiary">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium tabular-nums text-ink-secondary">
               <span>{counts.superseded}</span>
               <span>Superseded</span>
             </span>
           </div>
 
-          <Button variant="outline" size="sm" asChild className="border-line-default bg-surface">
+          <Button variant="outline" size="sm" asChild>
             <Link to={`/teams/${teamId}/chat`} className="gap-1.5">
-              <MessageSquare className="size-3.5 text-ink-link" />
+              <MessageSquare className="size-3.5 text-ink-cyan" />
               <span>Buka Ruang Tim</span>
             </Link>
           </Button>
         </div>
       </div>
 
-      {/* Bitemporal Time-Travel Selector */}
+      {/* Fresh Cyan Bitemporal Time-Travel Bar */}
       <section
         aria-label="Time-travel bitemporal"
-        className="rounded-xl border border-line-subtle bg-surface p-3.5 shadow-surface"
+        className="rounded-xl border border-cyan-subtle bg-wash-cyan p-3.5 shadow-card"
       >
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-secondary">
-              <History className="size-3.5 text-ink-link" />
-              <span>Time-Travel (as_of)</span>
-            </span>
+            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-cyan">
+              <History className="size-4 shrink-0" aria-hidden="true" />
+              <span>Linimasa</span>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label="Penjelasan time-travel bitemporal"
+                    className="inline-flex size-5 items-center justify-center rounded-full text-ink-cyan transition-[background-color,color] duration-150 hover:bg-surface-card/70 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring"
+                  >
+                    <HelpCircle className="size-3.5" aria-hidden="true" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-72">
+                  <PopoverHeader>
+                    <PopoverTitle>Time-Travel Bitemporal</PopoverTitle>
+                    <PopoverDescription>
+                      Memutar kondisi memori M2 pada titik waktu tertentu berdasarkan rentang
+                      berlaku (valid_from / valid_to) dan waktu pencatatan (recorded_at / as_of).
+                    </PopoverDescription>
+                  </PopoverHeader>
+                </PopoverContent>
+              </Popover>
+            </div>
 
             <div
               role="group"
               aria-label="Preset linimasa Project Brain"
-              className="inline-flex flex-wrap items-center gap-1 rounded-lg border border-line-subtle bg-canvas p-1"
+              className="inline-flex flex-wrap items-center gap-1 rounded-lg border border-line-subtle bg-surface-card p-1 shadow-control"
             >
               {TIMELINE_PRESETS.map((preset) => {
                 const isActive = preset.asOf === asOf
@@ -137,9 +162,9 @@ export function BitemporalTimelineBar({
                     aria-pressed={isActive}
                     onClick={() => onChangeAsOf(preset.asOf)}
                     className={cn(
-                      "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors duration-150",
+                      "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-[background-color,color,box-shadow] duration-150",
                       isActive
-                        ? "bg-brand text-on-brand shadow-surface"
+                        ? "bg-tertiary text-on-tertiary shadow-badge"
                         : "text-ink-secondary hover:bg-surface hover:text-ink-primary"
                     )}
                   >
@@ -147,7 +172,7 @@ export function BitemporalTimelineBar({
                       <span
                         className={cn(
                           "size-1.5 rounded-full",
-                          isActive ? "bg-on-brand" : "bg-success"
+                          isActive ? "bg-on-tertiary" : "bg-success"
                         )}
                       />
                     )}
@@ -158,25 +183,25 @@ export function BitemporalTimelineBar({
             </div>
           </div>
 
-          <label className="flex items-center gap-2 text-xs text-ink-secondary">
-            <Calendar className="size-3.5 shrink-0 text-ink-tertiary" />
+          <label className="flex items-center gap-2 text-xs font-medium text-ink-secondary">
+            <Calendar className="size-3.5 shrink-0 text-ink-cyan" aria-hidden="true" />
             <span className="whitespace-nowrap">Tanggal kustom:</span>
             <input
               type="date"
               aria-label="Pilih tanggal snapshot Project Brain"
               value={customDateValue}
               onChange={(event) => handleDateInputChange(event.target.value)}
-              className="h-8 rounded-lg border border-line-default bg-canvas px-2.5 font-mono text-xs text-ink-primary outline-none transition-colors focus-visible:border-line-active focus-visible:ring-2 focus-visible:ring-ring/40"
+              className="h-8 rounded-lg border border-line-default bg-surface-card px-2.5 text-base tabular-nums text-ink-primary outline-none transition-[border-color,box-shadow] duration-150 focus-visible:border-line-active focus-visible:ring-2 focus-visible:ring-ring/40 sm:text-sm"
             />
           </label>
         </div>
 
         {asOf && (
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-line-active/30 bg-info-subtle px-3 py-2 text-xs text-text-info">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-cyan-subtle bg-surface-card px-3 py-2 text-xs text-ink-primary shadow-control">
             <div className="flex items-center gap-2">
-              <Clock className="size-3.5 shrink-0" />
+              <Clock className="size-3.5 shrink-0 text-ink-cyan" aria-hidden="true" />
               <span className="font-medium">
-                Melihat snapshot Project Brain per {formatSnapshotDate(asOf)}
+                Snapshot per {formatSnapshotDate(asOf)}
               </span>
             </div>
             <Button
@@ -184,7 +209,6 @@ export function BitemporalTimelineBar({
               variant="outline"
               size="xs"
               onClick={() => onChangeAsOf(undefined)}
-              className="border-line-active/40 bg-surface text-ink-primary hover:bg-surface-raised"
             >
               <RotateCcw className="size-3" />
               <span>Kembali ke Live</span>

@@ -29,27 +29,32 @@ export function EcosystemLogoMarquee() {
     : ECOSYSTEM_BRANDS
 
   return (
-    <section aria-label="Ekosistem dan arsitektur pendukung BERSAMA" className="py-10 sm:py-12">
+    <section
+      aria-label="Ekosistem dan arsitektur pendukung BERSAMA"
+      className="py-10 sm:py-12"
+    >
       <div className="flex flex-wrap items-center justify-center gap-2.5 text-center">
-        <p className="font-sans text-xs font-medium text-ink-tertiary">
-          Terintegrasi dengan alur kerja &amp; infrastruktur AI tim mahasiswa
+        <p className="font-sans text-xs font-medium text-ink-secondary">
+          Terhubung dengan alur kerja &amp; infrastruktur AI tim mahasiswa
         </p>
         {!prefersReducedMotion && (
           <button
             type="button"
             onClick={() => setIsPaused((prev) => !prev)}
-            aria-label={isPaused ? "Lanjutkan animasi ekosistem" : "Jeda animasi ekosistem"}
+            aria-label={
+              isPaused ? "Lanjutkan animasi ekosistem" : "Jeda animasi ekosistem"
+            }
             aria-pressed={isPaused}
-            className="inline-flex min-h-7 items-center gap-1 rounded-full border border-line-subtle bg-surface px-2.5 py-0.5 font-mono text-[10px] font-medium text-ink-secondary transition-colors duration-150 hover:border-line-default hover:text-ink-primary active:scale-[0.97]"
+            className="inline-flex min-h-7 items-center gap-1.5 rounded-full border border-line-subtle bg-surface-card px-2.5 py-0.5 font-sans text-xs font-medium text-ink-secondary shadow-control transition-[border-color,color] duration-150 hover:border-line-default hover:text-ink-primary active:scale-[0.97]"
           >
             {isPaused ? (
               <>
-                <Play className="size-2.5" aria-hidden="true" />
+                <Play className="size-3" aria-hidden="true" />
                 <span>Putar</span>
               </>
             ) : (
               <>
-                <Pause className="size-2.5" aria-hidden="true" />
+                <Pause className="size-3" aria-hidden="true" />
                 <span>Jeda</span>
               </>
             )}
@@ -90,12 +95,18 @@ export function EcosystemLogoMarquee() {
           {repeatedBrands.map((brand, idx) => (
             <div
               key={`${brand.id}-${idx}`}
-              className="flex shrink-0 items-center gap-2.5 rounded-full border border-line-subtle bg-surface px-4 py-2 text-ink-primary shadow-surface"
+              className="flex shrink-0 items-center gap-2.5 rounded-full border border-line-subtle bg-surface-card px-4 py-2 text-ink-primary shadow-card"
             >
-              <BrandLogo brandId={brand.id} size={16} className="text-ink-primary" />
-              <span className="font-sans text-xs font-medium whitespace-nowrap">{brand.name}</span>
-              <span className="hidden font-sans text-[11px] text-ink-tertiary sm:inline">
-                • {brand.role}
+              <BrandLogo
+                brandId={brand.id}
+                size={16}
+                className="text-ink-primary"
+              />
+              <span className="font-sans text-xs font-medium whitespace-nowrap">
+                {brand.name}
+              </span>
+              <span className="hidden font-sans text-xs text-ink-tertiary sm:inline">
+                · {brand.role}
               </span>
             </div>
           ))}

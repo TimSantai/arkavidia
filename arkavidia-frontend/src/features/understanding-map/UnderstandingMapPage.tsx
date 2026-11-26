@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router"
-import { BarChart3, Info, PieChart, ShieldCheck } from "lucide-react"
+import { BarChart3, HelpCircle, PieChart, ShieldCheck } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Pill, PillIndicator } from "@/components/kibo-ui/pill"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { getStoredDemoUser } from "@/features/auth/components/demoSession"
 import { bersamaApi } from "@/services/api"
 import { SEED_USERS } from "@/mocks/seedData"
@@ -16,13 +24,12 @@ export function UnderstandingMapPage() {
   const { teamId = "team-pbo-01" } = useParams()
   const [metrics, setMetrics] = useState<TeamUnderstandingMetrics | null>(null)
   const [team, setTeam] = useState<Team | null>(null)
-  const [selectedKcId, setSelectedKcId] = useState<string | null>("kc-jwt") // Default to silo KC for immediate team awareness
+  const [selectedKcId, setSelectedKcId] = useState<string | null>("kc-jwt")
   const activeUser = getStoredDemoUser()
 
   useEffect(() => {
     void bersamaApi.getTeamUnderstanding(teamId).then((data) => {
       setMetrics(data)
-      // If there is a silo KC, auto-select it for actionable attention
       const silo = data.coverageByKc.find((c) => c.isSilo)
       if (silo) {
         setSelectedKcId(silo.kc.id)
@@ -42,7 +49,7 @@ export function UnderstandingMapPage() {
           {[1, 2, 3].map((slot) => (
             <div
               key={slot}
-              className="h-48 rounded-xl border border-line-subtle bg-surface p-5 shadow-surface"
+              className="h-48 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card"
             >
               <div className="h-3.5 w-32 rounded bg-muted" />
               <div className="mt-4 h-8 w-24 rounded bg-muted/80" />
@@ -50,7 +57,7 @@ export function UnderstandingMapPage() {
             </div>
           ))}
         </div>
-        <div className="h-64 rounded-xl border border-line-subtle bg-surface p-5 shadow-surface" />
+        <div className="h-64 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card" />
       </div>
     )
   }
@@ -64,54 +71,56 @@ export function UnderstandingMapPage() {
   return (
     <div className="space-y-6 pb-12">
       {/* 1. Header & Formative Ethics Pill */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs font-semibold uppercase tracking-wider text-accent-violet">
-              TRACK B · FITUR F6 · PETA PEMAHAMAN TIM
-            </span>
-          </div>
-          <h1 className="font-heading text-2xl font-semibold text-ink-primary sm:text-3xl">
-            Peta Pemahaman Tim
+          <h1 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
+            Peta <span className="font-display-oblique text-ink-cyan">Pemahaman</span> Tim
           </h1>
-          <p className="max-w-2xl text-xs leading-relaxed text-ink-secondary sm:text-sm">
-            Pantau kesehatan pemahaman konsep per Knowledge Component (KC), ketahanan tim terhadap
-            risiko knowledge loss, dan desentralisasi silo pengetahuan secara jujur dan kolaboratif.
+          <p className="text-sm text-ink-secondary">
+            Kesehatan konsep tim, deteksi silo pengetahuan, dan peluang sesi belajar bareng.
           </p>
         </div>
 
-        {/* Ethics Pill (CONTEXT.md §8.1 & §8.4) */}
-        <div className="shrink-0 pt-1">
+        <div className="flex shrink-0 items-center gap-2">
           <Pill
             variant="secondary"
-            className="border border-line-subtle bg-surface shadow-surface text-ink-secondary font-mono text-[11px]"
+            className="border border-cyan-subtle bg-wash-cyan text-xs font-medium text-ink-cyan shadow-badge"
           >
             <PillIndicator variant="success" />
             <span>Murni formatif · Bukan nilai kuliah</span>
           </Pill>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                aria-label="Detail privasi M3 dan etika formatif"
+                className="inline-flex size-7 items-center justify-center rounded-full border border-line-subtle bg-surface-card text-ink-secondary shadow-control transition-[background-color,color] duration-150 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-ring"
+              >
+                <HelpCircle className="size-3.5" aria-hidden="true" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-80">
+              <PopoverHeader>
+                <PopoverTitle>Privasi M3 & Etika Formatif</PopoverTitle>
+                <PopoverDescription>
+                  Skor probabilitas P(L) hanya ditampilkan eksak untuk akunmu ({activeUser.name}).
+                  Rekan tim ditampilkan dengan framing kesiapan positif tanpa peringkat atau nilai huruf.
+                </PopoverDescription>
+              </PopoverHeader>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
 
-      {/* Ethics & Privacy Notice Banner */}
-      <div className="flex items-start gap-3 rounded-xl border border-line-subtle bg-surface p-4 shadow-surface">
-        <div className="rounded-lg bg-info-subtle p-2 text-text-info">
-          <ShieldCheck className="size-4 shrink-0" />
-        </div>
-        <div className="space-y-0.5 text-xs text-ink-secondary">
-          <p className="font-semibold text-ink-primary">
-            Privasi M3 & Etika Formatif Terjamin (CONTEXT.md §8.1 & §8.4)
-          </p>
-          <p className="leading-relaxed">
-            Metrik ini murni formatif untuk kolaborasi tim dan tidak pernah dipakai untuk nilai mata
-            kuliah. Skor probabilitas penguasaan individu{" "}
-            <span className="font-mono font-semibold text-brand">P(L)</span> hanya ditampilkan
-            secara eksak untuk akunmu (<strong>{activeUser.name}</strong>). Untuk rekan tim lain,
-            sistem menampilkan framing kesiapan positif (
-            <span className="font-medium text-text-success">Bisa Membantu</span> atau{" "}
-            <span className="font-medium text-ink-tertiary">Terbuka Sesi Bareng</span>) tanpa
-            perankingan, nilai huruf, atau pelabelan evaluatif.
-          </p>
-        </div>
+      {/* Compact Privacy Strip */}
+      <div className="flex items-center gap-3 rounded-xl border border-cyan-subtle bg-wash-cyan px-4 py-2.5 text-xs text-ink-primary shadow-card">
+        <ShieldCheck className="size-4 shrink-0 text-ink-cyan" aria-hidden="true" />
+        <p className="text-ink-secondary">
+          Skor angka <strong className="text-ink-primary">P(L)</strong> bersifat privat untuk{" "}
+          <strong className="text-ink-primary">{activeUser.name}</strong>. Rekan lain tampil sebagai{" "}
+          <span className="font-medium text-text-success">Bisa Membantu</span> atau{" "}
+          <span className="font-medium text-ink-primary">Sesi Bareng</span>.
+        </p>
       </div>
 
       {/* 2. Top KPI Row (3 Kartu Metrik) */}
@@ -124,34 +133,54 @@ export function UnderstandingMapPage() {
           siloExpertName={siloExpert?.name.split(" ")[0] ?? "Dimas"}
         />
 
-        {/* Metric 2: Coverage Keseluruhan Tim (Expressive Data Exception: Violet + Cyan + Brand) */}
-        <Card className="relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out">
+        {/* Metric 2: Coverage Keseluruhan Tim */}
+        <Card className="relative overflow-hidden border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150">
           <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs font-medium tracking-wide text-ink-tertiary">
-                COVERAGE TIM KESELURUHAN
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-accent-violet/10 px-2.5 py-0.5 text-xs font-semibold text-accent-violet dark:bg-accent-violet/20">
-                <BarChart3 className="size-3.5" />
-                Ambang τ = 0.70
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-semibold tracking-wide text-ink-secondary uppercase">
+                  Coverage Tim
+                </span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label="Cara hitung Coverage Tim"
+                      className="inline-flex size-5 items-center justify-center rounded-full text-ink-tertiary transition-[background-color,color] duration-150 hover:bg-muted/60 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-ring"
+                    >
+                      <HelpCircle className="size-3.5" aria-hidden="true" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="w-72">
+                    <PopoverHeader>
+                      <PopoverTitle>Bayesian Knowledge Tracing</PopoverTitle>
+                      <PopoverDescription>
+                        Dihitung dari BKT dengan forgetting rate terhadap ambang penguasaan mandiri τ = 0.70.
+                      </PopoverDescription>
+                    </PopoverHeader>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <span className="inline-flex items-center gap-1 rounded-full border border-cyan-subtle bg-wash-cyan px-2.5 py-0.5 text-xs font-semibold text-ink-cyan">
+                <BarChart3 className="size-3.5" aria-hidden="true" />
+                Ambang 0.70
               </span>
             </div>
             <CardTitle className="flex items-baseline gap-2 pt-1">
-              <span className="font-heading text-4xl font-semibold font-mono tabular-nums text-ink-primary">
+              <span className="kpi-hero text-4xl font-semibold text-ink-primary">
                 {metrics.overallCoveragePercent}%
               </span>
-              <span className="font-mono text-sm text-ink-tertiary tabular-nums">
-                kapasitas tercapai
+              <span className="text-sm font-normal text-ink-secondary tabular-nums">
+                kapasitas
               </span>
             </CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-3 pt-1">
-            {/* Expressive Layered Progress Bar using Violet & Cyan & Brand tokens */}
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] font-mono text-ink-tertiary">
-                <span>Distribusi Penguasaan (8/16 slot)</span>
-                <span className="tabular-nums">50% Target Tim</span>
+              <div className="flex items-center justify-between text-xs text-ink-secondary">
+                <span>Distribusi (8/16 slot)</span>
+                <span className="font-medium tabular-nums">50% tim</span>
               </div>
               <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
                 <div
@@ -162,7 +191,7 @@ export function UnderstandingMapPage() {
                 <div
                   className="bg-accent-violet transition-[width] duration-300 ease-out"
                   style={{ width: "12.5%" }}
-                  title="KC-02 JWT (1/4 anggota paham - Silo)"
+                  title="KC-02 JWT (1/4 anggota paham)"
                 />
                 <div
                   className="bg-tertiary transition-[width] duration-300 ease-out"
@@ -170,60 +199,74 @@ export function UnderstandingMapPage() {
                   title="KC-03 DB (2/4 anggota paham)"
                 />
               </div>
-              <div className="flex items-center justify-between text-[10px] text-ink-tertiary">
-                <span className="flex items-center gap-1">
+              <div className="flex items-center justify-between text-xs text-ink-secondary">
+                <span className="flex items-center gap-1.5">
                   <span className="size-2 rounded-full bg-brand" /> MVC
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="size-2 rounded-full bg-accent-violet" /> JWT (Silo)
+                <span className="flex items-center gap-1.5">
+                  <span className="size-2 rounded-full bg-accent-violet" /> JWT
                 </span>
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1.5">
                   <span className="size-2 rounded-full bg-tertiary" /> DB & REST
                 </span>
               </div>
             </div>
 
-            <p className="rounded-lg bg-canvas/40 p-2.5 text-xs leading-relaxed text-ink-secondary">
-              Sebanyak <strong className="text-ink-primary">8 dari 16 kapasitas pemahaman</strong>{" "}
-              tim telah melampaui ambang batas penguasaan mandiri. Menjadwalkan peer explain-back
-              pada KC-02 akan menaikkan coverage menjadi 62%.
+            <p className="rounded-lg bg-surface p-2.5 text-xs leading-relaxed text-ink-secondary">
+              Sesi Explain-Back pada <strong className="text-ink-primary">KC-02</strong> menaikkan
+              coverage ke 62%.
             </p>
-
-            <div className="flex items-center gap-1.5 pt-1 text-[11px] text-ink-tertiary">
-              <Info className="size-3.5 shrink-0" />
-              <span>Dihitung dari Bayesian Knowledge Tracing (BKT) dengan forgetting rate.</span>
-            </div>
           </CardContent>
         </Card>
 
         {/* Metric 3: Konsentrasi Pengetahuan (Indeks Gini) */}
-        <Card className="relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out">
+        <Card className="relative overflow-hidden border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150">
           <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs font-medium tracking-wide text-ink-tertiary">
-                INDEKS GINI (KONSENTRASI)
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-ink-secondary">
-                <PieChart className="size-3.5" />
-                Distribusi Seimbang
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-semibold tracking-wide text-ink-secondary uppercase">
+                  Indeks Gini
+                </span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label="Penjelasan Indeks Gini"
+                      className="inline-flex size-5 items-center justify-center rounded-full text-ink-tertiary transition-[background-color,color] duration-150 hover:bg-muted/60 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-ring"
+                    >
+                      <HelpCircle className="size-3.5" aria-hidden="true" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="w-72">
+                    <PopoverHeader>
+                      <PopoverTitle>Konsentrasi Pengetahuan</PopoverTitle>
+                      <PopoverDescription>
+                        Koefisien Gini dihitung dari distribusi P(L) seluruh anggota per KC. 0.00 berarti merata sempurna, 1.00 terpusat pada satu orang.
+                      </PopoverDescription>
+                    </PopoverHeader>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <span className="inline-flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-semibold text-text-success">
+                <PieChart className="size-3.5" aria-hidden="true" />
+                Seimbang
               </span>
             </div>
             <CardTitle className="flex items-baseline gap-2 pt-1">
-              <span className="font-heading text-4xl font-semibold font-mono tabular-nums text-ink-primary">
+              <span className="kpi-hero text-4xl font-semibold text-ink-primary">
                 {metrics.giniCoefficient}
               </span>
-              <span className="font-mono text-xs text-ink-tertiary">
-                (0.00 = merata · 1.00 = terpusat)
+              <span className="text-sm font-normal text-ink-secondary tabular-nums">
+                dari 1.00
               </span>
             </CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-3 pt-1">
-            {/* Gini Spectrum Track */}
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] font-mono text-ink-tertiary">
+              <div className="flex items-center justify-between text-xs text-ink-secondary">
                 <span>Skala Konsentrasi</span>
-                <span className="tabular-nums font-semibold text-ink-secondary">
+                <span className="font-semibold tabular-nums text-ink-primary">
                   G = {metrics.giniCoefficient}
                 </span>
               </div>
@@ -237,23 +280,16 @@ export function UnderstandingMapPage() {
                   style={{ left: `${Math.min(100, metrics.giniCoefficient * 100)}%` }}
                 />
               </div>
-              <div className="flex justify-between text-[10px] font-mono text-ink-tertiary">
-                <span>0.00 (Ideal)</span>
+              <div className="flex justify-between text-xs tabular-nums text-ink-tertiary">
+                <span>0.00</span>
                 <span>0.50</span>
-                <span>1.00 (Silo Ekstrem)</span>
+                <span>1.00</span>
               </div>
             </div>
 
-            <p className="rounded-lg bg-canvas/40 p-2.5 text-xs leading-relaxed text-ink-secondary">
-              Nilai <strong className="font-mono text-ink-primary">{metrics.giniCoefficient}</strong>{" "}
-              menunjukkan penguasaan kode antar anggota masih relatif tersebar wajar, namun perlu
-              diwaspadai konsentrasi tajam pada modul autentikasi JWT.
+            <p className="rounded-lg bg-surface p-2.5 text-xs leading-relaxed text-ink-secondary">
+              Sebaran pemahaman cukup merata, namun modul <strong className="text-ink-primary">JWT</strong> masih terkonsentrasi.
             </p>
-
-            <div className="flex items-center gap-1.5 pt-1 text-[11px] text-ink-tertiary">
-              <Info className="size-3.5 shrink-0" />
-              <span>Koefisien Gini dihitung atas distribusi nilai P(L) seluruh anggota per KC.</span>
-            </div>
           </CardContent>
         </Card>
       </div>
@@ -271,7 +307,7 @@ export function UnderstandingMapPage() {
       {/* 4. Selected KC Detail Card */}
       {selectedSummary && <KcDetailCard summary={selectedSummary} teamId={teamId} />}
 
-      {/* 5. Silo Alert & Pairing Flow (Fitur F7 — Issue S5b) */}
+      {/* 5. Silo Alert & Pairing Flow */}
       <SiloPairingPanel
         suggestions={metrics.pairingSuggestions}
         teamId={teamId}

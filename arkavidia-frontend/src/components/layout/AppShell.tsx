@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Link, NavLink, Outlet, useParams } from "react-router"
+import { Link, NavLink, Outlet, useLocation, useParams } from "react-router"
 import {
   Activity,
   BookOpen,
@@ -9,9 +9,16 @@ import {
   Lock,
   Menu,
   MessageSquare,
+  SlidersHorizontal,
   X,
 } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
+import {
+  AGENT_ROLE_META,
+  type AgentRole,
+} from "@/components/bersama/agentConfig"
+import { AgentCustomizerDialog } from "@/components/bersama/AgentCustomizerDialog"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { AvatarStack } from "@/components/kibo-ui/avatar-stack"
 import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher"
 import { useTheme } from "@/components/theme/useTheme"
@@ -21,23 +28,50 @@ import { getStoredDemoUser } from "@/features/auth/components/demoSession"
 import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
 import { bersamaApi } from "@/services/api"
 import type { Team } from "@/types/bersama"
+import { cn } from "cn"
+
+type RoomTone = "brand" | "violet" | "cyan"
 
 interface NavItem {
   readonly to: string
   readonly label: string
   readonly badge?: string
+  readonly tone: RoomTone
   readonly icon: typeof MessageSquare
+}
+
+const ACTIVE_TONE_CLASSES: Readonly<Record<RoomTone, string>> = {
+  brand: "bg-brand text-on-brand shadow-primary",
+  violet: "bg-accent-violet text-on-accent shadow-card",
+  cyan: "bg-tertiary text-on-tertiary shadow-card",
+}
+
+function resolveActiveAgentRole(pathname: string): AgentRole {
+  if (pathname.includes("/private")) return "private"
+  if (
+    pathname.includes("/brain") ||
+    pathname.includes("/understanding") ||
+    pathname.includes("/check") ||
+    pathname.includes("/briefing")
+  ) {
+    return "tutor"
+  }
+  return "team"
 }
 
 export function AppShell() {
   const { teamId = "team-pbo-01" } = useParams()
+  const { pathname } = useLocation()
   const { theme, setTheme } = useTheme()
   const [team, setTeam] = useState<Team | undefined>(undefined)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [customizerOpen, setCustomizerOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const closeButtonRef = useRef<HTMLButtonElement | null>(null)
   const activeUser = getStoredDemoUser()
   const activeAvatarSrc = USER_AVATAR_MAP[activeUser.id]
+  const activeAgentRole = resolveActiveAgentRole(pathname)
+  const activeAgentMeta = AGENT_ROLE_META[activeAgentRole]
 
   const closeMobileMenu = useCallback(() => {
     setMobileMenuOpen(false)
@@ -65,35 +99,71 @@ export function AppShell() {
   }, [mobileMenuOpen, closeMobileMenu])
 
   const workspaceLinks: readonly NavItem[] = [
-    { to: `/teams/${teamId}/chat`, label: "Ruang Tim", badge: "M2", icon: MessageSquare },
-    { to: `/teams/${teamId}/private`, label: "Ruang Pribadi", badge: "M1", icon: Lock },
-    { to: `/teams/${teamId}/brain`, label: "Project Brain", icon: Brain },
+    {
+      to: `/teams/${teamId}/chat`,
+      label: "Ruang Tim",
+      badge: "M2",
+      tone: "brand",
+      icon: MessageSquare,
+    },
+    {
+      to: `/teams/${teamId}/private`,
+      label: "Ruang Pribadi",
+      badge: "M1",
+      tone: "violet",
+      icon: Lock,
+    },
+    {
+      to: `/teams/${teamId}/brain`,
+      label: "Project Brain",
+      tone: "cyan",
+      icon: Brain,
+    },
   ]
 
   const learningLinks: readonly NavItem[] = [
-    { to: `/teams/${teamId}/understanding`, label: "Peta Pemahaman", icon: Activity },
-    { to: `/teams/${teamId}/check`, label: "Explain-Back Check", icon: ClipboardCheck },
-    { to: `/teams/${teamId}/briefing`, label: "Tutored Briefing", icon: GraduationCap },
+    {
+      to: `/teams/${teamId}/understanding`,
+      label: "Peta Pemahaman",
+      tone: "cyan",
+      icon: Activity,
+    },
+    {
+      to: `/teams/${teamId}/check`,
+      label: "Explain-Back Check",
+      tone: "cyan",
+      icon: ClipboardCheck,
+    },
+    {
+      to: `/teams/${teamId}/briefing`,
+      label: "Tutored Briefing",
+      tone: "cyan",
+      icon: GraduationCap,
+    },
   ]
 
-  const renderLinkGroup = (title: string, items: readonly NavItem[], isMobile = false) => (
+  const renderLinkGroup = (
+    title: string,
+    items: readonly NavItem[],
+    isMobile = false
+  ) => (
     <div className="space-y-1">
-      <p className="px-2.5 pb-1 text-[11px] font-medium tracking-wide text-ink-tertiary">
+      <p className="px-2.5 pb-1 text-xs font-medium tracking-wide text-ink-secondary">
         {title}
       </p>
-      {items.map(({ to, label, badge, icon: Icon }) => (
+      {items.map(({ to, label, badge, tone, icon: Icon }) => (
         <NavLink
           key={to}
           to={to}
           onClick={isMobile ? closeMobileMenu : undefined}
           className={({ isActive }) =>
-            `group relative flex items-center justify-between rounded-lg px-2.5 text-[13px] font-medium transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.98] ${
-              isMobile ? "min-h-11 py-2.5" : "min-h-9 py-2"
-            } ${
+            cn(
+              "group relative flex items-center justify-between rounded-lg px-2.5 text-[13px] font-medium transition-[background-color,color,transform,box-shadow] duration-150 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+              isMobile ? "min-h-11 py-2.5" : "min-h-9 py-2",
               isActive
-                ? "bg-brand text-on-brand shadow-surface"
-                : "text-ink-secondary hover:bg-muted hover:text-ink-primary"
-            }`
+                ? ACTIVE_TONE_CLASSES[tone]
+                : "text-ink-secondary hover:bg-surface-top hover:text-ink-primary"
+            )
           }
         >
           {({ isActive }) => (
@@ -104,11 +174,12 @@ export function AppShell() {
               </span>
               {badge && (
                 <span
-                  className={`rounded-full px-1.5 py-0.5 font-mono text-[10px] ${
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-xs font-semibold",
                     isActive
-                      ? "bg-on-brand/15 text-on-brand"
-                      : "border border-line-subtle bg-canvas text-ink-tertiary"
-                  }`}
+                      ? "bg-white/20 text-current"
+                      : "border border-line-subtle bg-surface-top text-ink-secondary"
+                  )}
                 >
                   {badge}
                 </span>
@@ -120,60 +191,114 @@ export function AppShell() {
     </div>
   )
 
+  const renderAgentCompanionWidget = (isMobile = false) => (
+    <div className="rounded-xl border border-line-subtle bg-surface-card p-2.5 shadow-card">
+      <div className="flex items-center gap-2.5">
+        <AgentStickerAvatar
+          role={activeAgentRole}
+          size={42}
+          interactive={!isMobile}
+        />
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-xs font-semibold text-ink-primary">
+            {activeAgentMeta.label}
+          </p>
+          <p className="truncate text-xs text-ink-secondary">
+            {activeAgentMeta.roomLabel}
+          </p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon-sm"
+          aria-label="Kustomisasi stiker AI agent"
+          title="Kustomisasi stiker AI agent"
+          onClick={() => {
+            if (isMobile) closeMobileMenu()
+            setCustomizerOpen(true)
+          }}
+        >
+          <SlidersHorizontal className="size-3.5" aria-hidden="true" />
+        </Button>
+      </div>
+    </div>
+  )
+
   return (
     <div className="flex min-h-screen bg-canvas text-ink-primary">
-      {/* Desktop Sidebar */}
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-line-subtle bg-surface lg:flex">
-        <div className="flex h-14 items-center justify-between border-b border-line-subtle px-4">
-          <Link to="/" className="flex items-center gap-2 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
-            <span className="flex size-7 items-center justify-center rounded-lg bg-brand font-heading text-xs font-semibold text-on-brand">
+      {/* Desktop Sidebar (lg:w-64 preserved for full-bleed chat layouts) */}
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-line-subtle bg-well lg:flex">
+        <div className="flex h-14 items-center justify-between border-b border-line-subtle bg-surface/80 px-4">
+          <Link
+            to="/"
+            className="flex items-center gap-2 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            <span className="flex size-7 items-center justify-center rounded-lg bg-brand text-sm font-semibold text-on-brand shadow-primary">
               B
             </span>
-            <span className="font-heading text-sm font-semibold tracking-tight">BERSAMA</span>
+            <span className="text-sm font-semibold tracking-tight text-ink-primary">
+              BERSAMA
+            </span>
           </Link>
           <Link
             to="/teams"
-            className="rounded-md px-2 py-1 font-mono text-[11px] text-ink-tertiary transition-colors duration-150 hover:bg-muted hover:text-ink-primary"
+            className="rounded-md px-2 py-1 text-xs font-medium text-ink-secondary transition-[background-color,color] duration-150 hover:bg-surface-top hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             Ganti Tim
           </Link>
         </div>
 
-        <div className="border-b border-line-subtle px-4 py-3">
-          <p className="font-mono text-[11px] text-ink-tertiary">{team?.courseCode ?? "PROYEK"}</p>
+        <div className="border-b border-line-subtle bg-surface/50 px-4 py-3">
+          <p className="text-xs font-medium text-ink-tertiary">
+            {team?.courseCode ?? "PROYEK"}
+          </p>
           <p className="truncate text-sm font-semibold text-ink-primary">
             {team?.name ?? "Memuat tim..."}
           </p>
         </div>
 
-        <nav aria-label="Navigasi workspace utama" className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
+        <nav
+          aria-label="Navigasi workspace utama"
+          className="flex-1 space-y-5 overflow-y-auto px-3 py-4"
+        >
           {renderLinkGroup("Kolaborasi & Memori", workspaceLinks)}
           {renderLinkGroup("Pemahaman & Tutor", learningLinks)}
         </nav>
 
-        <div className="border-t border-line-subtle p-3">
+        <div className="space-y-2.5 border-t border-line-subtle bg-surface/50 p-3">
+          {renderAgentCompanionWidget(false)}
+
           <Link
             to="/teams"
             title="Ganti persona atau tim"
-            className="flex items-center justify-between gap-2.5 rounded-lg border border-transparent bg-canvas px-2.5 py-2 transition-[border-color,background-color] duration-150 hover:border-line-default"
+            className="flex items-center justify-between gap-2.5 rounded-xl border border-line-subtle bg-surface-card px-2.5 py-2 shadow-card transition-[border-color,background-color] duration-150 hover:border-line-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            <div className="flex min-w-0 items-center gap-2">
+            <div className="flex min-w-0 items-center gap-2.5">
               <Avatar size="sm" className="size-7 shrink-0">
                 {activeAvatarSrc && (
-                  <AvatarImage src={activeAvatarSrc} alt={activeUser.name} className="object-cover" />
+                  <AvatarImage
+                    src={activeAvatarSrc}
+                    alt={activeUser.name}
+                    className="object-cover"
+                  />
                 )}
-                <AvatarFallback className="bg-surface font-mono text-[10px] font-semibold text-ink-primary">
+                <AvatarFallback className="bg-surface text-xs font-semibold text-ink-primary">
                   {activeUser.initials}
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="truncate text-xs font-medium text-ink-primary">{activeUser.name}</p>
-                <p className="truncate font-mono text-[10px] text-ink-tertiary">
-                  {activeUser.role.toUpperCase()}
+                <p className="truncate text-xs font-semibold text-ink-primary">
+                  {activeUser.name}
+                </p>
+                <p className="truncate text-xs text-ink-secondary">
+                  {activeUser.role}
                 </p>
               </div>
             </div>
-            <BookOpen className="size-3.5 shrink-0 text-ink-tertiary" aria-hidden="true" />
+            <BookOpen
+              className="size-3.5 shrink-0 text-ink-tertiary"
+              aria-hidden="true"
+            />
           </Link>
         </div>
       </aside>
@@ -181,7 +306,12 @@ export function AppShell() {
       {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 flex lg:hidden" role="dialog" aria-modal="true" aria-label="Menu navigasi workspace">
+          <div
+            className="fixed inset-0 z-50 flex lg:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu navigasi workspace"
+          >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -203,10 +333,12 @@ export function AppShell() {
                   onClick={closeMobileMenu}
                   className="flex items-center gap-2"
                 >
-                  <span className="flex size-7 items-center justify-center rounded-lg bg-brand font-heading text-xs font-semibold text-on-brand">
+                  <span className="flex size-7 items-center justify-center rounded-lg bg-brand text-sm font-semibold text-on-brand shadow-primary">
                     B
                   </span>
-                  <span className="font-heading text-sm font-semibold">BERSAMA</span>
+                  <span className="text-sm font-semibold text-ink-primary">
+                    BERSAMA
+                  </span>
                 </Link>
                 <Button
                   ref={closeButtonRef}
@@ -221,7 +353,9 @@ export function AppShell() {
 
               <div className="flex items-center justify-between gap-2 border-b border-line-subtle px-4 py-3">
                 <div className="min-w-0">
-                  <p className="font-mono text-[11px] text-ink-tertiary">{team?.courseCode ?? "PROYEK"}</p>
+                  <p className="text-xs font-medium text-ink-secondary">
+                    {team?.courseCode ?? "PROYEK"}
+                  </p>
                   <p className="truncate text-sm font-semibold text-ink-primary">
                     {team?.name ?? "Memuat tim..."}
                   </p>
@@ -229,35 +363,46 @@ export function AppShell() {
                 <Link
                   to="/teams"
                   onClick={closeMobileMenu}
-                  className="inline-flex min-h-9 shrink-0 items-center rounded-md border border-line-subtle bg-canvas px-2.5 font-mono text-[11px] text-ink-secondary hover:text-ink-primary"
+                  className="inline-flex min-h-9 shrink-0 items-center rounded-lg border border-line-default bg-surface-top px-2.5 text-xs font-medium text-ink-primary shadow-control hover:bg-surface"
                 >
                   Ganti
                 </Link>
               </div>
 
-              <nav aria-label="Navigasi workspace mobile" className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
+              <nav
+                aria-label="Navigasi workspace mobile"
+                className="flex-1 space-y-5 overflow-y-auto px-3 py-4"
+              >
                 {renderLinkGroup("Kolaborasi & Memori", workspaceLinks, true)}
                 {renderLinkGroup("Pemahaman & Tutor", learningLinks, true)}
               </nav>
 
-              <div className="border-t border-line-subtle p-3">
+              <div className="space-y-2.5 border-t border-line-subtle p-3">
+                {renderAgentCompanionWidget(true)}
+
                 <Link
                   to="/teams"
                   onClick={closeMobileMenu}
-                  className="flex min-h-11 items-center gap-2.5 rounded-lg bg-canvas px-2.5 py-2"
+                  className="flex min-h-11 items-center gap-2.5 rounded-xl border border-line-subtle bg-surface-card px-2.5 py-2 shadow-card"
                 >
                   <Avatar size="sm" className="size-7 shrink-0">
                     {activeAvatarSrc && (
-                      <AvatarImage src={activeAvatarSrc} alt={activeUser.name} className="object-cover" />
+                      <AvatarImage
+                        src={activeAvatarSrc}
+                        alt={activeUser.name}
+                        className="object-cover"
+                      />
                     )}
-                    <AvatarFallback className="bg-surface font-mono text-[10px] font-semibold text-ink-primary">
+                    <AvatarFallback className="bg-surface text-xs font-semibold text-ink-primary">
                       {activeUser.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-medium text-ink-primary">{activeUser.name}</p>
-                    <p className="truncate font-mono text-[10px] text-ink-tertiary">
-                      {activeUser.role.toUpperCase()}
+                    <p className="truncate text-xs font-semibold text-ink-primary">
+                      {activeUser.name}
+                    </p>
+                    <p className="truncate text-xs text-ink-secondary">
+                      {activeUser.role}
                     </p>
                   </div>
                 </Link>
@@ -294,9 +439,13 @@ export function AppShell() {
                   return (
                     <Avatar key={member.id} title={member.name}>
                       {avatarSrc && (
-                        <AvatarImage src={avatarSrc} alt={member.name} className="object-cover" />
+                        <AvatarImage
+                          src={avatarSrc}
+                          alt={member.name}
+                          className="object-cover"
+                        />
                       )}
-                      <AvatarFallback className="bg-muted font-mono text-[10px] font-medium text-ink-primary">
+                      <AvatarFallback className="bg-muted text-xs font-medium text-ink-primary">
                         {member.initials}
                       </AvatarFallback>
                     </Avatar>
@@ -312,6 +461,13 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
+
+      <AgentCustomizerDialog
+        key={activeAgentRole}
+        open={customizerOpen}
+        onOpenChange={setCustomizerOpen}
+        initialRole={activeAgentRole}
+      />
     </div>
   )
 }

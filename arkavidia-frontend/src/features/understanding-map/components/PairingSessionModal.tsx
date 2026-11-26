@@ -10,7 +10,6 @@ import {
   RotateCcw,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -20,20 +19,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
 import { bersamaApi } from "@/services/api"
 import { cn } from "@/lib/utils"
 import type { MemoryItem, PairingSuggestion } from "@/types/bersama"
-import avatarRani from "@/features/landing/assets/avatar-rani.jpg"
-import avatarDimas from "@/features/landing/assets/avatar-dimas.jpg"
-import avatarBudi from "@/features/landing/assets/avatar-budi.jpg"
-import avatarSari from "@/features/landing/assets/avatar-sari.jpg"
-
-const USER_AVATARS: Record<string, string> = {
-  "user-rani": avatarRani,
-  "user-dimas": avatarDimas,
-  "user-budi": avatarBudi,
-  "user-sari": avatarSari,
-}
 
 const TOTAL_SESSION_SECONDS = 600 // 10 minutes (10:00)
 
@@ -66,7 +55,6 @@ function PairingSessionModalBody({
     2: false,
   })
 
-  // Fetch Project Brain grounded decision asynchronously
   useEffect(() => {
     let isCancelled = false
 
@@ -91,7 +79,6 @@ function PairingSessionModalBody({
     }
   }, [suggestion.kcId, teamId])
 
-  // Accurate Countdown Timer with clearInterval cleanup
   useEffect(() => {
     if (!isRunning || timeLeft <= 0) return
 
@@ -130,13 +117,12 @@ function PairingSessionModalBody({
     void navigate(`/teams/${teamId}/check`)
   }
 
-  // Fallbacks if no decision recorded yet in Project Brain
   const summaryText =
     decisionItem?.content.summary ??
     "Modul autentikasi login menggunakan JWT dengan masa berlaku akses singkat dan refresh token."
   const rationaleText =
     decisionItem?.content.rationale ??
-    "API akan dikonsumsi klien web serta aplikasi antrean mobile tanpa shared server-side session store."
+    "API dikonsumsi klien web serta aplikasi mobile tanpa shared server-side session store."
   const rejectedText =
     decisionItem?.content.rejectedAlternatives.length
       ? decisionItem.content.rejectedAlternatives.join(", ")
@@ -149,13 +135,13 @@ function PairingSessionModalBody({
       badge: decisionItem?.code ?? "DEC-02",
     },
     {
-      title: "2. Kenapa memilih pendekatan ini?",
+      title: "2. Kenapa pendekatan ini dipilih?",
       detail: rationaleText,
-      badge: "Alasan Arsitektural",
+      badge: "Alasan",
     },
     {
       title: "3. Kenapa alternatif lain ditolak?",
-      detail: `Alternatif yang ditolak: ${rejectedText}`,
+      detail: `Ditolak: ${rejectedText}`,
       badge: "Trade-off",
     },
   ]
@@ -164,38 +150,34 @@ function PairingSessionModalBody({
 
   return (
     <>
-      <DialogHeader className="border-b border-line-subtle bg-canvas/30 p-5 pb-4">
-        <div className="flex items-center justify-between gap-2">
-          <Badge
-            variant="outline"
-            className="border-accent-violet/30 bg-accent-violet/10 font-mono text-[11px] text-accent-violet dark:bg-accent-violet/20"
-          >
-            <Clock className="size-3 mr-1" aria-hidden="true" />
+      <DialogHeader className="border-b border-line-subtle bg-wash-cyan p-5 pb-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 pr-6">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-subtle bg-surface-card px-2.5 py-0.5 text-xs font-medium text-ink-cyan shadow-badge">
+            <Clock className="size-3.5" aria-hidden="true" />
             Sesi 10 Menit · Jelaskan ke Aku
-          </Badge>
+          </span>
 
-          <span className="font-mono text-xs text-text-success font-semibold">
+          <span className="text-xs font-semibold tabular-nums text-text-success">
             Proyeksi: {suggestion.projectedCoverageBefore} → {suggestion.projectedCoverageAfter}
           </span>
         </div>
 
-        <DialogTitle className="font-heading pt-1 text-xl font-semibold text-ink-primary">
+        <DialogTitle className="font-display pt-1 text-xl font-semibold text-ink-primary">
           Sesi Pemahaman: {suggestion.kcName}
         </DialogTitle>
         <DialogDescription className="text-xs text-ink-secondary">
-          Diskusi santai terstruktur antara anggota untuk mendesentralisasi knowledge silo sebelum
-          menguji pemahaman mandiri di Explain-Back Check.
+          Diskusi terstruktur untuk meratakan pemahaman sebelum Explain-Back Check.
         </DialogDescription>
       </DialogHeader>
 
       <div className="space-y-5 p-5">
         {/* Pair Collaboration Header */}
-        <div className="flex items-center justify-between rounded-xl border border-line-subtle bg-canvas/40 p-3.5">
+        <div className="flex items-center justify-between rounded-xl border border-line-subtle bg-surface p-3.5">
           {/* Mentor */}
           <div className="flex items-center gap-3">
             <Avatar className="size-10 border-2 border-success/50">
               <AvatarImage
-                src={USER_AVATARS[suggestion.mentor.id]}
+                src={USER_AVATAR_MAP[suggestion.mentor.id]}
                 alt={suggestion.mentor.name}
                 className="object-cover"
               />
@@ -204,31 +186,31 @@ function PairingSessionModalBody({
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-heading text-xs font-semibold text-ink-primary">
+              <p className="font-sans text-sm font-semibold text-ink-primary">
                 {suggestion.mentor.name}
               </p>
-              <p className="text-[11px] font-medium text-text-success">
-                Rekan yang Menjelaskan (Mentor)
+              <p className="text-xs font-medium text-text-success">
+                Mentor
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col items-center">
-            <ArrowRight className="size-4 text-ink-tertiary" />
-            <span className="font-mono text-[10px] text-ink-tertiary">10 menit</span>
+          <div className="flex flex-col items-center gap-0.5">
+            <ArrowRight className="size-4 text-ink-cyan" aria-hidden="true" />
+            <span className="text-xs text-ink-secondary">10 menit</span>
           </div>
 
           {/* Learner */}
           <div className="flex items-center gap-3 text-right">
             <div>
-              <p className="font-heading text-xs font-semibold text-ink-primary">
+              <p className="font-sans text-sm font-semibold text-ink-primary">
                 {suggestion.learner.name}
               </p>
-              <p className="text-[11px] text-ink-tertiary">Rekan yang Belajar (Learner)</p>
+              <p className="text-xs text-ink-secondary">Belajar Bareng</p>
             </div>
             <Avatar className="size-10 border-2 border-line-subtle">
               <AvatarImage
-                src={USER_AVATARS[suggestion.learner.id]}
+                src={USER_AVATAR_MAP[suggestion.learner.id]}
                 alt={suggestion.learner.name}
                 className="object-cover"
               />
@@ -240,48 +222,47 @@ function PairingSessionModalBody({
         </div>
 
         {/* Countdown Timer Block */}
-        <div className="rounded-xl border border-line-subtle bg-surface p-4 shadow-surface">
+        <div className="rounded-xl border border-line-subtle bg-surface-card p-4 shadow-card">
           <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
             <div className="flex items-center gap-3">
               <div
                 className={cn(
-                  "flex size-11 items-center justify-center rounded-full transition-colors",
+                  "flex size-11 items-center justify-center rounded-full transition-[background-color,color] duration-150",
                   isRunning
-                    ? "bg-brand/10 text-brand dark:bg-brand/20"
-                    : "bg-muted text-ink-tertiary",
+                    ? "bg-wash-cyan text-ink-cyan"
+                    : "bg-muted text-ink-secondary",
                 )}
               >
-                <Clock className="size-5" />
+                <Clock className="size-5" aria-hidden="true" />
               </div>
               <div>
-                <span className="font-mono text-[11px] tracking-wide text-ink-tertiary uppercase">
-                  WAKTU TERSISA SESI
+                <span className="text-xs font-medium tracking-wide text-ink-secondary uppercase">
+                  Waktu Tersisa
                 </span>
-                <div className="font-heading font-mono text-3xl font-semibold tabular-nums text-ink-primary">
+                <div className="kpi-hero text-4xl font-semibold text-ink-primary">
                   {formattedTime}
                 </div>
               </div>
             </div>
 
-            {/* Timer Controls */}
             <div className="flex items-center gap-2">
               <Button
                 size="sm"
                 onClick={toggleTimer}
                 variant={isRunning ? "secondary" : "default"}
                 className={cn(
-                  "font-medium shadow-xs",
-                  !isRunning && "bg-brand text-on-brand hover:bg-brand-hover",
+                  "font-medium",
+                  !isRunning && "bg-brand text-on-brand shadow-primary hover:bg-brand-hover",
                 )}
               >
                 {isRunning ? (
                   <>
-                    <Pause className="size-3.5 mr-1.5" />
+                    <Pause className="mr-1.5 size-3.5" aria-hidden="true" />
                     Jeda
                   </>
                 ) : (
                   <>
-                    <Play className="size-3.5 mr-1.5" />
+                    <Play className="mr-1.5 size-3.5" aria-hidden="true" />
                     Mulai
                   </>
                 )}
@@ -291,41 +272,40 @@ function PairingSessionModalBody({
                 size="sm"
                 variant="outline"
                 onClick={resetTimer}
-                className="border-line-subtle text-xs hover:bg-muted"
+                aria-label="Reset timer ke 10:00"
                 title="Reset ke 10:00"
               >
-                <RotateCcw className="size-3.5" />
+                <RotateCcw className="size-3.5" aria-hidden="true" />
               </Button>
             </div>
           </div>
 
-          {/* Time progress bar */}
-          <div className="mt-3 overflow-hidden rounded-full bg-muted h-1.5">
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full bg-brand transition-[width] duration-300 ease-out"
+              className="h-full bg-tertiary transition-[width] duration-300 ease-out"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
         </div>
 
-        {/* Grounded Discussion Points from Project Brain DEC-02 */}
+        {/* Grounded Discussion Points */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <FileText className="size-4 text-brand" />
-              <h3 className="font-heading text-xs font-semibold tracking-wide text-ink-primary uppercase">
-                PANDUAN DISKUSI (DARI PROJECT BRAIN DEC-02)
+              <FileText className="size-4 text-ink-cyan" aria-hidden="true" />
+              <h3 className="font-sans text-xs font-semibold tracking-wide text-ink-primary uppercase">
+                Panduan Diskusi ({decisionItem?.code ?? "DEC-02"})
               </h3>
             </div>
-            <span className="font-mono text-[11px] text-ink-tertiary tabular-nums">
-              {Object.values(checkedPoints).filter(Boolean).length}/3 Selesai Dibahas
+            <span className="text-xs tabular-nums text-ink-secondary">
+              {Object.values(checkedPoints).filter(Boolean).length}/3 Dibahas
             </span>
           </div>
 
           {isLoadingDecision ? (
             <div className="space-y-2 py-2" role="status" aria-label="Memuat konteks keputusan">
               {[1, 2].map((slot) => (
-                <div key={slot} className="h-14 rounded-xl border border-line-subtle bg-surface/60" />
+                <div key={slot} className="h-14 rounded-xl border border-line-subtle bg-surface" />
               ))}
             </div>
           ) : (
@@ -342,26 +322,26 @@ function PairingSessionModalBody({
                     className={cn(
                       "group flex w-full cursor-pointer items-start gap-3 rounded-xl border p-3.5 text-left transition-[border-color,background-color,transform] duration-150 ease-out active:scale-[0.99] select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       isChecked
-                        ? "border-success/30 bg-success-subtle/20 dark:bg-success-subtle/10"
-                        : "border-line-subtle bg-surface hover:border-brand/40",
+                        ? "border-success/40 bg-success-subtle/30"
+                        : "border-line-subtle bg-surface-card hover:border-tertiary",
                     )}
                   >
                     <span
                       aria-hidden="true"
                       className={cn(
-                        "mt-0.5 flex size-4.5 shrink-0 items-center justify-center rounded-md border transition-colors",
+                        "mt-0.5 flex size-4.5 shrink-0 items-center justify-center rounded-md border transition-[border-color,background-color] duration-150",
                         isChecked
                           ? "border-success bg-success text-on-success"
-                          : "border-line-default bg-surface group-hover:border-brand",
+                          : "border-line-default bg-surface-card group-hover:border-tertiary",
                       )}
                     >
                       {isChecked && <CheckCircle2 className="size-3.5 stroke-[2.5]" />}
                     </span>
 
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="text-xs font-semibold text-ink-primary">{item.title}</span>
-                        <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-ink-tertiary">
+                        <span className="rounded bg-surface px-2 py-0.5 text-xs font-medium text-ink-secondary">
                           {item.badge}
                         </span>
                       </div>
@@ -375,9 +355,9 @@ function PairingSessionModalBody({
         </div>
       </div>
 
-      <DialogFooter className="border-t border-line-subtle bg-canvas/40 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-[11px] text-ink-tertiary">
-          Setelah sesi, kuis adaptif Explain-Back akan memperbarui skor P(L) mandiri.
+      <DialogFooter className="border-t border-line-subtle bg-surface p-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-xs text-ink-secondary">
+          Lanjut ke Explain-Back untuk memperbarui skor P(L).
         </p>
 
         <div className="flex items-center gap-2 pt-2 sm:pt-0">
@@ -385,7 +365,7 @@ function PairingSessionModalBody({
             variant="outline"
             size="sm"
             onClick={() => onOpenChange(false)}
-            className="border-line-subtle text-xs"
+            className="text-xs"
           >
             Tutup
           </Button>
@@ -394,15 +374,15 @@ function PairingSessionModalBody({
             size="sm"
             onClick={handleFinishAndNavigate}
             className={cn(
-              "font-medium shadow-xs",
+              "font-medium shadow-primary",
               allPointsChecked
                 ? "bg-success text-on-success hover:bg-success/90"
                 : "bg-brand text-on-brand hover:bg-brand-hover",
             )}
           >
-            <CheckCircle2 className="size-3.5 mr-1.5" aria-hidden="true" />
-            Selesai Sesi & Lanjut Explain-Back
-            <ArrowRight className="size-3.5 ml-1" />
+            <CheckCircle2 className="mr-1.5 size-3.5" aria-hidden="true" />
+            Lanjut Explain-Back
+            <ArrowRight className="ml-1 size-3.5" aria-hidden="true" />
           </Button>
         </div>
       </DialogFooter>
@@ -420,7 +400,7 @@ export function PairingSessionModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto border border-line-subtle bg-surface-raised p-0 shadow-raised sm:max-w-xl">
+      <DialogContent className="max-h-[92vh] overflow-y-auto border border-line-subtle bg-surface-raised p-0 ring-0 shadow-raised sm:max-w-xl">
         <PairingSessionModalBody
           key={suggestion.id}
           suggestion={suggestion}

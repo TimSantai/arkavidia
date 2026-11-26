@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useParams } from "react-router"
 import {
   ArrowDown,
-  Bot,
   GitPullRequestDraft,
+  HelpCircle,
   Maximize2,
   Minimize2,
   ShieldAlert,
@@ -23,10 +23,18 @@ import {
   PromptInputTools,
 } from "@/components/ai-elements/prompt-input"
 import { Shimmer } from "@/components/ai-elements/shimmer"
-import { Suggestion } from "@/components/ai-elements/suggestion"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { Status, StatusIndicator, StatusLabel } from "@/components/kibo-ui/status"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { getStoredDemoUser } from "@/features/auth/components/demoSession"
 import { cn } from "@/lib/utils"
 import { bersamaApi } from "@/services/api"
@@ -284,7 +292,7 @@ export function TeamChatPage() {
         isFullscreen ? "inset-0 z-40" : "inset-x-0 top-14 bottom-0 z-20 lg:left-64"
       )}
     >
-      {/* Top Context Bar — docked safely into AppShell's left/center h-14 header on desktop */}
+      {/* Top Context Bar: docked safely into AppShell's left/center h-14 header on desktop */}
       <div
         className={cn(
           "flex shrink-0 flex-nowrap items-center justify-between gap-2 border-b border-line-subtle bg-surface px-4 py-2.5 sm:px-6",
@@ -293,18 +301,43 @@ export function TeamChatPage() {
         )}
       >
         <div className="flex min-w-0 items-center gap-2.5">
-          <h1 className="truncate font-heading text-base font-semibold text-ink-primary sm:text-lg">
-            Ruang Tim
+          <h1 className="truncate font-display text-xl font-semibold tracking-tight text-ink-primary">
+            Ruang <span className="font-display-oblique text-ink-link">Tim</span>
           </h1>
+
           <Status
             status="online"
-            className="shrink-0 border border-line-subtle bg-canvas px-2.5 py-0.5 font-mono text-[11px]"
+            className="h-7 shrink-0 border border-brand-subtle bg-wash-brand px-2.5 text-xs font-semibold shadow-badge"
           >
             <StatusIndicator />
-            <StatusLabel className="text-ink-secondary">
-              M2 · RLS Aktif
+            <StatusLabel className="text-ink-link">
+              M2 <span className="hidden sm:inline">· RLS</span>
             </StatusLabel>
           </Status>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-xs"
+                aria-label="Info ruang memori M2"
+                className="rounded-full border-line-subtle bg-surface-top text-ink-secondary hover:text-ink-primary"
+              >
+                <HelpCircle className="size-3.5" aria-hidden="true" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-72">
+              <PopoverHeader>
+                <PopoverTitle>Ruang Tim · Memori M2</PopoverTitle>
+                <PopoverDescription>
+                  Team Agent hanya mengakses memori tim (M2) yang dikonfirmasi.
+                  Catatan pribadi (M1) diblokir otomatis oleh RLS dan Cedar
+                  Policy sebelum menyentuh LLM.
+                </PopoverDescription>
+              </PopoverHeader>
+            </PopoverContent>
+          </Popover>
         </div>
 
         <Button
@@ -313,7 +346,7 @@ export function TeamChatPage() {
           onClick={() => setIsFullscreen((prev) => !prev)}
           aria-label={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
           title={isFullscreen ? "Keluar layar penuh (Esc)" : "Layar penuh"}
-          className="size-10 shrink-0 border-line-subtle bg-canvas text-ink-secondary hover:text-ink-primary sm:size-8"
+          className="size-10 shrink-0 border-line-subtle bg-surface-top text-ink-secondary hover:text-ink-primary sm:size-8"
         >
           {isFullscreen ? (
             <Minimize2 className="size-4" aria-hidden="true" />
@@ -329,19 +362,21 @@ export function TeamChatPage() {
           <button
             type="button"
             onClick={handleJumpToPendingProposal}
-            className="pointer-events-auto inline-flex min-h-9 items-center gap-2 rounded-full border border-line-active/40 bg-surface-raised/95 py-1.5 pr-2 pl-3.5 text-xs shadow-raised backdrop-blur-md transition-[border-color,transform] duration-150 ease-out hover:border-line-active active:scale-[0.98]"
+            className="pointer-events-auto inline-flex min-h-9 items-center gap-2 rounded-full border border-brand-subtle bg-surface-raised/95 py-1.5 pr-2 pl-3 text-xs shadow-raised backdrop-blur-md transition-[border-color,transform] duration-150 ease-out hover:border-line-active active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            <span className="size-2 shrink-0 rounded-full bg-warning" aria-hidden="true" />
-            <GitPullRequestDraft className="size-3.5 text-text-warning" aria-hidden="true" />
-            <span className="font-medium text-ink-primary">
-              {pendingProposals.length} Usulan Menunggu
+            <GitPullRequestDraft
+              className="size-3.5 shrink-0 text-text-warning"
+              aria-hidden="true"
+            />
+            <span className="font-semibold text-ink-primary">
+              {pendingProposals.length} Usulan
             </span>
-            <span className="rounded-full border border-line-subtle bg-canvas px-2 py-0.5 font-mono text-[10px] font-semibold text-ink-secondary">
+            <span className="rounded-full border border-brand-subtle bg-wash-brand px-2 py-0.5 text-xs font-semibold tabular-nums text-ink-link">
               {pendingProposals[0].code}
             </span>
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-ink-link">
+            <span className="inline-flex items-center gap-1 rounded-full bg-brand px-2.5 py-0.5 text-xs font-semibold text-on-brand">
               Tinjau
-              <ArrowDown className="size-2.5" />
+              <ArrowDown className="size-3" aria-hidden="true" />
             </span>
           </button>
         </div>
@@ -374,13 +409,16 @@ export function TeamChatPage() {
 
           {isAgentThinking && (
             <div className="flex items-center gap-3 px-2 py-1">
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-line-subtle bg-brand text-on-brand">
-                <Bot className="size-4" />
-              </div>
-              <div className="inline-flex items-center gap-2 rounded-2xl border border-line-subtle bg-surface px-3.5 py-2 text-xs shadow-surface">
+              <AgentStickerAvatar
+                role="team"
+                state="thinking"
+                size={36}
+                interactive={false}
+              />
+              <div className="inline-flex items-center gap-2 rounded-2xl border border-brand-subtle bg-wash-brand px-3.5 py-2 text-xs shadow-card">
                 <Loader size={14} className="text-ink-link" />
-                <Shimmer duration={1.4} className="font-mono text-xs">
-                  Team Agent mengevaluasi Cedar Policy &amp; memori M2...
+                <Shimmer duration={1.4} className="text-xs font-medium">
+                  Team Agent menyaring memori M2...
                 </Shimmer>
               </div>
             </div>
@@ -389,64 +427,70 @@ export function TeamChatPage() {
         <ConversationScrollButton className="right-6 bottom-40 left-auto translate-x-0 border-line-subtle bg-surface-raised text-ink-primary shadow-raised sm:bottom-36" />
       </Conversation>
 
-      {/* Floating Bottom Quick Prompt Chips + PromptInput Composer */}
+      {/* Floating Bottom Quick Preset Chips + PromptInput Composer */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-canvas via-canvas/90 to-transparent px-4 pt-8 pb-4 sm:px-8 sm:pb-5">
         <div className="pointer-events-auto mx-auto w-full max-w-4xl space-y-2.5">
           <div className="flex flex-wrap items-center gap-2">
             {TEAM_CHAT_SUGGESTIONS.map((chip) => (
-              <Suggestion
+              <button
                 key={chip.id}
-                suggestion={chip.prompt}
-                onClick={(prompt) => void handleSendText(prompt)}
+                type="button"
+                onClick={() => void handleSendText(chip.prompt)}
                 className={cn(
-                  "h-7 rounded-full border px-3 text-xs font-medium shadow-surface backdrop-blur-sm",
+                  "inline-flex min-h-8 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium shadow-control backdrop-blur-sm transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
                   chip.isRedTeam
                     ? "border-line-error/40 bg-error-subtle/90 text-text-error hover:bg-error-subtle"
-                    : "border-line-subtle bg-surface/95 text-ink-secondary hover:border-line-default hover:text-ink-primary"
+                    : "border-brand-subtle bg-surface-card/95 text-ink-secondary hover:border-line-active hover:bg-wash-brand hover:text-ink-link"
                 )}
               >
-                {chip.isRedTeam && <ShieldAlert className="mr-1 size-3 shrink-0" />}
+                {chip.isRedTeam && (
+                  <ShieldAlert className="size-3.5 shrink-0" aria-hidden="true" />
+                )}
                 <span>{chip.label}</span>
-              </Suggestion>
+              </button>
             ))}
           </div>
 
           <PromptInput
             onSubmit={({ text }) => void handleSendText(text || inputText)}
-            className="[&_[data-slot=input-group]]:rounded-2xl [&_[data-slot=input-group]]:border-line-subtle [&_[data-slot=input-group]]:bg-surface-raised [&_[data-slot=input-group]]:shadow-raised"
+            className="[&_[data-slot=input-group]]:rounded-2xl [&_[data-slot=input-group]]:border-brand-subtle [&_[data-slot=input-group]]:bg-surface-raised [&_[data-slot=input-group]]:shadow-raised"
           >
             <PromptInputBody>
               <PromptInputTextarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder="Tulis pesan ke tim atau mention @TeamAgent..."
-                className="min-h-11 px-3.5 py-2.5 text-sm text-ink-primary"
+                placeholder="Tulis pesan atau mention @TeamAgent..."
+                className="min-h-11 px-3.5 py-2.5 text-base text-ink-primary sm:text-sm"
               />
             </PromptInputBody>
             <PromptInputFooter className="border-t border-line-subtle/60 px-3 py-1.5">
               <PromptInputTools className="gap-2">
                 <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface py-0.5 pr-2.5 pl-1">
-                  <Avatar size="sm" className="size-4">
+                  <Avatar size="sm" className="size-5">
                     {activeAvatarSrc && (
-                      <AvatarImage src={activeAvatarSrc} alt={activeUser.name} />
+                      <AvatarImage
+                        src={activeAvatarSrc}
+                        alt={activeUser.name}
+                        className="object-cover"
+                      />
                     )}
-                    <AvatarFallback className="text-[9px] font-semibold">
+                    <AvatarFallback className="text-xs font-semibold">
                       {activeUser.initials}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-[11px] font-medium text-ink-secondary">
+                  <span className="text-xs font-medium text-ink-secondary">
                     {activeUser.name.split(" ")[0]}
                   </span>
                 </div>
-                <span className="rounded-full bg-info-subtle px-2 py-0.5 font-mono text-[10px] font-medium text-text-info">
-                  M2 TEAM
+                <span className="rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-semibold text-ink-link">
+                  M2 Tim
                 </span>
               </PromptInputTools>
 
               <PromptInputSubmit
                 status={isAgentThinking ? "submitted" : undefined}
                 disabled={!inputText.trim() || isAgentThinking}
-                className="bg-brand text-on-brand hover:bg-brand-hover disabled:opacity-40"
+                className="bg-brand text-on-brand shadow-primary hover:bg-brand-hover disabled:opacity-40"
               />
             </PromptInputFooter>
           </PromptInput>

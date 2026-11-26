@@ -3,13 +3,14 @@ import { Link } from "react-router"
 import {
   ArrowRight,
   Bot,
-  Brain,
+  HelpCircle,
   Lock,
   Mic,
   Network,
   ShieldAlert,
 } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { AvatarStack } from "@/components/kibo-ui/avatar-stack"
 import {
   Cursor,
@@ -19,8 +20,15 @@ import {
   CursorPointer,
 } from "@/components/kibo-ui/cursor"
 import { PillDelta } from "@/components/kibo-ui/pill"
-import { Status, StatusIndicator, StatusLabel } from "@/components/kibo-ui/status"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import {
   DEMO_TEAM_MEMBERS,
@@ -34,6 +42,7 @@ const SHOWCASE_VIEWS: readonly {
   readonly id: ShowcaseViewId
   readonly label: string
   readonly tag: string
+  readonly roomToneClass: string
   readonly route: string
   readonly routeLabel: string
 }[] = [
@@ -41,6 +50,7 @@ const SHOWCASE_VIEWS: readonly {
     id: "ifc",
     label: "Ruang Tim",
     tag: "M1/M2 IFC",
+    roomToneClass: "bg-wash-brand text-ink-link",
     route: "/teams/team-pbo-01/chat",
     routeLabel: "Buka Ruang Tim Demo",
   },
@@ -48,13 +58,15 @@ const SHOWCASE_VIEWS: readonly {
     id: "explain",
     label: "Explain-Back",
     tag: "DEC-02",
+    roomToneClass: "bg-wash-cyan text-ink-cyan",
     route: "/teams/team-pbo-01/check",
     routeLabel: "Coba Explain-Back Check",
   },
   {
     id: "bus",
     label: "Peta Pemahaman",
-    tag: "BUS FACTOR: 1",
+    tag: "Bus Factor: 1",
+    roomToneClass: "bg-wash-cyan text-ink-cyan",
     route: "/teams/team-pbo-01/understanding",
     routeLabel: "Lihat Peta Pemahaman Tim",
   },
@@ -75,7 +87,7 @@ function getScoreStyle(score: number, isSiloCol?: boolean) {
   if (isSiloCol) {
     return "bg-warning-subtle text-text-warning border border-line-default"
   }
-  return "bg-canvas text-ink-secondary border border-line-subtle"
+  return "bg-surface-card text-ink-secondary border border-line-subtle"
 }
 
 export function HeroWorkspaceShowcase() {
@@ -87,16 +99,15 @@ export function HeroWorkspaceShowcase() {
   const dimas = MEMBER_MAP.get("user-dimas")
 
   return (
-    <div className="mx-auto max-w-5xl rounded-2xl border border-line-subtle bg-surface shadow-raised overflow-hidden">
-      {/* Top Browser/App Window Strip */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line-subtle bg-canvas/60 px-4 py-2.5">
+    <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-line-subtle bg-surface shadow-raised">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line-subtle bg-surface-card/70 px-4 py-2.5">
         <div className="flex items-center gap-3">
           <div className="hidden items-center gap-1.5 sm:flex" aria-hidden="true">
             <span className="size-2.5 rounded-full bg-muted" />
             <span className="size-2.5 rounded-full bg-muted" />
             <span className="size-2.5 rounded-full bg-muted" />
           </div>
-          <span className="rounded-md border border-line-subtle bg-surface px-2.5 py-0.5 font-mono text-[11px] text-ink-tertiary">
+          <span className="rounded-md border border-line-subtle bg-surface-card px-2.5 py-0.5 font-sans text-xs text-ink-secondary">
             bersama.app / if2210-pbo / kelompok-4
           </span>
         </div>
@@ -106,20 +117,20 @@ export function HeroWorkspaceShowcase() {
             {DEMO_TEAM_MEMBERS.map((member) => (
               <Avatar key={member.id}>
                 <AvatarImage src={member.avatarSrc} alt={member.name} />
-                <AvatarFallback className="bg-canvas text-[10px] font-medium text-ink-primary">
+                <AvatarFallback className="bg-surface-card text-xs font-medium text-ink-primary">
                   {member.initials}
                 </AvatarFallback>
               </Avatar>
             ))}
           </AvatarStack>
 
-          <Status
-            status="online"
-            className="border border-line-subtle bg-surface px-2.5 py-0.5 font-mono text-[11px] font-medium"
-          >
-            <StatusIndicator />
-            <StatusLabel className="text-ink-secondary">LIVE WORKSPACE</StatusLabel>
-          </Status>
+          <span className="inline-flex items-center gap-2 rounded-full border border-line-subtle bg-surface-card px-2.5 py-0.5 font-sans text-xs font-medium text-ink-secondary shadow-badge">
+            <span className="relative flex size-2" aria-hidden="true">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-success" />
+            </span>
+            <span>Live Demo</span>
+          </span>
         </div>
       </div>
 
@@ -127,7 +138,7 @@ export function HeroWorkspaceShowcase() {
       <div
         role="tablist"
         aria-label="Pilih tampilan workspace BERSAMA"
-        className="grid grid-cols-3 gap-1 border-b border-line-subtle bg-canvas/40 p-1.5 md:hidden"
+        className="grid grid-cols-3 gap-1 border-b border-line-subtle bg-well/70 p-1.5 md:hidden"
       >
         {SHOWCASE_VIEWS.map((view) => {
           const isSelected = activeView === view.id
@@ -141,8 +152,8 @@ export function HeroWorkspaceShowcase() {
               className={cn(
                 "min-h-10 rounded-lg border px-2 py-1.5 text-xs font-medium transition-[background-color,border-color,color,box-shadow] duration-150 ease-out",
                 isSelected
-                  ? "border-line-subtle bg-surface text-ink-primary shadow-surface"
-                  : "border-transparent text-ink-tertiary hover:text-ink-primary"
+                  ? "border-line-subtle bg-surface-card text-ink-primary shadow-card"
+                  : "border-transparent text-ink-secondary hover:text-ink-primary"
               )}
             >
               {view.label}
@@ -152,15 +163,14 @@ export function HeroWorkspaceShowcase() {
       </div>
 
       {/* 2-Pane Desktop Workspace */}
-      <div className="grid grid-cols-1 md:grid-cols-[224px_1fr]">
-        {/* Left Sidebar */}
-        <aside className="hidden flex-col justify-between border-r border-line-subtle bg-canvas/45 p-3 md:flex">
+      <div className="grid grid-cols-1 md:grid-cols-[240px_1fr]">
+        <aside className="hidden flex-col justify-between border-r border-line-subtle bg-well/65 p-3 md:flex">
           <div className="space-y-3">
-            <div className="rounded-lg border border-line-subtle bg-surface px-3 py-2">
-              <p className="font-heading text-xs font-semibold text-ink-primary">
-                Kelompok 4 • PBO
+            <div className="rounded-xl border border-line-subtle bg-surface-card px-3 py-2.5 shadow-card">
+              <p className="font-sans text-xs font-semibold text-ink-primary">
+                Kelompok 4 · PBO
               </p>
-              <p className="mt-0.5 font-sans text-[11px] text-ink-tertiary">
+              <p className="mt-0.5 font-sans text-xs text-ink-secondary">
                 Sistem Antrean Klinik
               </p>
             </div>
@@ -176,18 +186,18 @@ export function HeroWorkspaceShowcase() {
                     aria-selected={isSelected}
                     onClick={() => setActiveView(view.id)}
                     className={cn(
-                      "flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left text-xs font-medium transition-[background-color,border-color,color,box-shadow] duration-150 ease-out",
+                      "flex w-full items-center justify-between gap-2 rounded-xl border px-3 py-2.5 text-left text-xs font-medium transition-[background-color,border-color,color,box-shadow] duration-150 ease-out",
                       isSelected
-                        ? "border-line-subtle bg-surface text-ink-primary shadow-surface"
-                        : "border-transparent text-ink-secondary hover:bg-surface/60 hover:text-ink-primary"
+                        ? "border-line-subtle bg-surface-card text-ink-primary shadow-card"
+                        : "border-transparent text-ink-secondary hover:bg-surface-card/60 hover:text-ink-primary"
                     )}
                   >
-                    <span>{view.label}</span>
+                    <span className="truncate">{view.label}</span>
                     <span
                       className={cn(
-                        "rounded-full px-1.5 py-0.5 font-mono text-[9px]",
+                        "shrink-0 rounded-full px-2 py-0.5 font-sans text-xs font-medium tabular-nums",
                         isSelected
-                          ? "bg-brand/10 text-ink-link"
+                          ? view.roomToneClass
                           : "text-ink-tertiary"
                       )}
                     >
@@ -200,7 +210,7 @@ export function HeroWorkspaceShowcase() {
           </div>
 
           <div className="space-y-2 border-t border-line-subtle pt-3">
-            <p className="px-1 font-sans text-[11px] font-semibold text-ink-tertiary">
+            <p className="px-1 font-sans text-xs font-semibold text-ink-secondary">
               Anggota Tim
             </p>
             <div className="space-y-1.5">
@@ -211,7 +221,7 @@ export function HeroWorkspaceShowcase() {
                 >
                   <Avatar size="sm">
                     <AvatarImage src={member.avatarSrc} alt={member.name} />
-                    <AvatarFallback className="text-[10px]">
+                    <AvatarFallback className="text-xs font-medium">
                       {member.initials}
                     </AvatarFallback>
                   </Avatar>
@@ -219,7 +229,7 @@ export function HeroWorkspaceShowcase() {
                     <p className="truncate text-xs font-medium text-ink-primary">
                       {member.shortName}
                     </p>
-                    <p className="truncate font-sans text-[11px] text-ink-tertiary">
+                    <p className="truncate font-sans text-xs text-ink-tertiary">
                       {member.roleLabel}
                     </p>
                   </div>
@@ -231,13 +241,14 @@ export function HeroWorkspaceShowcase() {
         </aside>
 
         {/* Main Stage */}
-        <div className="relative flex min-h-[400px] flex-col justify-between bg-canvas/25 p-4 sm:p-6">
-          {/* Decorative live cursor in desktop corner */}
+        <div className="relative flex min-h-[400px] flex-col justify-between bg-canvas/55 p-4 sm:p-6">
           <Cursor className="pointer-events-none absolute top-4 right-5 z-20 hidden lg:inline-flex">
             <CursorPointer className="text-ink-link" />
             <CursorBody className="border border-line-subtle bg-surface-raised text-ink-primary shadow-raised">
               <CursorName>Rani</CursorName>
-              <CursorMessage>M1 Private Terisolasi</CursorMessage>
+              <CursorMessage className="text-ink-secondary">
+                M1 Private Terisolasi
+              </CursorMessage>
             </CursorBody>
           </Cursor>
 
@@ -251,19 +262,18 @@ export function HeroWorkspaceShowcase() {
                 transition={{ duration: 0.16, ease: "easeOut" }}
                 className="space-y-4"
               >
-                {/* Chat Request */}
-                <div className="flex items-start gap-3 rounded-xl border border-line-subtle bg-surface p-3.5 shadow-surface">
+                <div className="flex items-start gap-3 rounded-xl border border-brand-subtle bg-wash-brand p-3.5 shadow-card">
                   <Avatar>
                     <AvatarImage src={dimas?.avatarSrc} alt="Dimas Pratama" />
-                    <AvatarFallback>DP</AvatarFallback>
+                    <AvatarFallback className="text-xs">DP</AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-xs font-semibold text-ink-primary">
                         Dimas Pratama
                       </span>
-                      <span className="rounded-full border border-line-subtle bg-canvas px-2 py-0.5 font-mono text-[10px] text-ink-tertiary">
-                        RUANG TIM • M2
+                      <span className="rounded-full border border-brand-subtle bg-surface-card px-2.5 py-0.5 font-sans text-xs font-medium text-ink-link">
+                        Ruang Tim · M2
                       </span>
                     </div>
                     <p className="mt-1 text-sm text-ink-secondary">
@@ -274,60 +284,79 @@ export function HeroWorkspaceShowcase() {
 
                 {/* Visual 3-Node IFC Pipeline Diagram */}
                 <div className="grid grid-cols-1 items-center gap-2.5 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
-                  <div className="rounded-xl border border-line-subtle bg-surface p-3 text-center shadow-surface">
-                    <Lock className="mx-auto size-4 text-ink-tertiary" />
-                    <p className="mt-1 font-mono text-[11px] font-medium text-ink-primary">
+                  <div className="flex flex-col items-center rounded-xl border border-violet-subtle bg-wash-violet p-3 text-center shadow-card">
+                    <AgentStickerAvatar
+                      role="private"
+                      state="idle"
+                      size={36}
+                      interactive={false}
+                    />
+                    <p className="mt-2 inline-flex items-center gap-1 font-sans text-xs font-semibold text-ink-primary">
+                      <Lock className="size-3.5 text-ink-violet" aria-hidden="true" />
                       M1 Rani Private
                     </p>
-                    <p className="font-mono text-[10px] text-ink-tertiary">
-                      scope: private
+                    <p className="font-sans text-xs text-ink-violet">
+                      Terenkripsi
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-center font-mono text-xs font-semibold text-text-error">
-                    <span className="rounded-full bg-error-subtle px-2 py-0.5">✕ BLOKIR</span>
+                  <div className="flex items-center justify-center font-sans text-xs font-semibold text-text-error">
+                    <span className="rounded-full bg-error-subtle px-2.5 py-1">
+                      Blokir
+                    </span>
                   </div>
 
                   <div className="rounded-xl border border-line-error/50 bg-error-subtle p-3 text-center">
-                    <ShieldAlert className="mx-auto size-4 text-text-error" />
-                    <p className="mt-1 font-mono text-[11px] font-semibold text-text-error">
-                      RLS + Cedar Gate
+                    <ShieldAlert
+                      className="mx-auto size-5 text-text-error"
+                      aria-hidden="true"
+                    />
+                    <p className="mt-1.5 font-sans text-xs font-semibold text-text-error">
+                      IFC Gate (Pre-LLM)
                     </p>
-                    <p className="font-mono text-[10px] text-text-error">
-                      IFC DENY (Pre-LLM)
+                    <p className="font-sans text-xs text-text-error">
+                      Akses M1 Ditolak
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-center font-mono text-xs text-ink-tertiary">
-                    →
+                  <div
+                    className="flex items-center justify-center font-sans text-xs text-ink-secondary"
+                    aria-hidden="true"
+                  >
+                    <ArrowRight className="size-4" />
                   </div>
 
-                  <div className="rounded-xl border border-line-subtle bg-surface p-3 text-center shadow-surface">
-                    <Brain className="mx-auto size-4 text-ink-link" />
-                    <p className="mt-1 font-mono text-[11px] font-medium text-ink-primary">
+                  <div className="flex flex-col items-center rounded-xl border border-brand-subtle bg-wash-brand p-3 text-center shadow-card">
+                    <AgentStickerAvatar
+                      role="team"
+                      state="blocked"
+                      size={36}
+                      interactive={false}
+                    />
+                    <p className="mt-2 font-sans text-xs font-semibold text-ink-primary">
                       Team Agent
                     </p>
-                    <p className="font-mono text-[10px] text-ink-tertiary">
+                    <p className="font-sans text-xs text-ink-link">
                       Hanya baca M2
                     </p>
                   </div>
                 </div>
 
                 {/* Context Passport PII Preview Pill */}
-                <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line-subtle bg-surface p-3 shadow-surface">
+                <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line-subtle bg-surface-card p-3 shadow-card">
                   <div className="flex items-center gap-2 text-xs text-ink-secondary">
-                    <span className="rounded-full bg-warning-subtle px-2 py-0.5 font-mono text-[10px] font-medium text-text-warning">
-                      CONTEXT PASSPORT
+                    <span className="rounded-full bg-warning-subtle px-2.5 py-0.5 font-sans text-xs font-medium text-text-warning">
+                      Context Passport
                     </span>
-                    <span>Berbagi M1 → M2 menyamarkan PII otomatis:</span>
+                    <span>Masking PII saat berbagi M1 ke M2:</span>
                   </div>
-                  <div className="flex items-center gap-1.5 font-mono text-[11px]">
-                    <span className="rounded bg-error-subtle px-1.5 py-0.5 text-text-error line-through">
+                  <div className="flex items-center gap-2 font-sans text-xs tabular-nums">
+                    <span className="rounded bg-error-subtle px-2 py-0.5 text-text-error line-through">
                       13523042
                     </span>
-                    <span className="text-ink-tertiary">→</span>
-                    <span className="rounded bg-success-subtle px-1.5 py-0.5 text-text-success">
-                      [NIM REDACTED]
+                    <ArrowRight className="size-3 text-ink-tertiary" aria-hidden="true" />
+                    <span className="rounded bg-success-subtle px-2 py-0.5 font-medium text-text-success">
+                      [NIM Redacted]
                     </span>
                   </div>
                 </div>
@@ -343,28 +372,28 @@ export function HeroWorkspaceShowcase() {
                 transition={{ duration: 0.16, ease: "easeOut" }}
                 className="space-y-4"
               >
-                <div className="rounded-xl border border-line-subtle bg-surface p-4 shadow-surface">
+                <div className="rounded-xl border border-cyan-subtle bg-wash-cyan p-4 shadow-card">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">
                       <Avatar>
                         <AvatarImage src={rani?.avatarSrc} alt="Rani Kusuma" />
-                        <AvatarFallback>RK</AvatarFallback>
+                        <AvatarFallback className="text-xs">RK</AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="text-xs font-semibold text-ink-primary">
-                          Explain-Back Check • Rani Kusuma
+                          Explain-Back · Rani Kusuma
                         </p>
-                        <p className="font-mono text-[10px] text-ink-tertiary">
-                          DEC-02 • KC-02 JWT vs Session
+                        <p className="font-sans text-xs text-ink-secondary">
+                          DEC-02 · KC-02 JWT vs Session
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2.5 py-0.5 font-mono text-[10px] font-medium text-text-warning">
-                        <Bot className="size-3" aria-hidden="true" />
+                      <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2.5 py-0.5 font-sans text-xs font-medium text-text-warning">
+                        <Bot className="size-3.5" aria-hidden="true" />
                         Item Dibantu AI
                       </span>
-                      <span className="font-mono text-[11px] tabular-nums text-ink-tertiary">
+                      <span className="font-sans text-xs font-medium tabular-nums text-ink-secondary">
                         02:14 / 05:00
                       </span>
                     </div>
@@ -374,12 +403,14 @@ export function HeroWorkspaceShowcase() {
                     &ldquo;Kenapa tim memilih JWT stateless dibanding Cookie Session untuk antrean klinik?&rdquo;
                   </p>
 
-                  {/* Mini Voice / Answer Bar */}
-                  <div className="mt-3 flex items-center gap-3 rounded-lg border border-line-subtle bg-canvas/70 px-3 py-2">
+                  <div className="mt-3 flex items-center gap-3 rounded-lg border border-line-subtle bg-surface-card px-3 py-2">
                     <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand text-on-brand">
-                      <Mic className="size-3.5" />
+                      <Mic className="size-3.5" aria-hidden="true" />
                     </span>
-                    <div className="flex h-5 flex-1 items-center gap-1" aria-hidden="true">
+                    <div
+                      className="flex h-5 flex-1 items-center gap-1"
+                      aria-hidden="true"
+                    >
                       {[35, 70, 55, 90, 45, 80, 65, 95, 50, 75, 40, 60, 85, 50].map(
                         (h, idx) => (
                           <span
@@ -390,54 +421,79 @@ export function HeroWorkspaceShowcase() {
                         )
                       )}
                     </div>
-                    <span className="font-mono text-[10px] text-ink-tertiary">
-                      Voice Note • 0:18
+                    <span className="font-sans text-xs tabular-nums text-ink-secondary">
+                      Voice · 0:18
                     </span>
                   </div>
                 </div>
 
                 {/* Conformal Uncertainty Scale + Handoff Visual */}
-                <div className="rounded-xl border border-line-default bg-warning-subtle/75 p-4">
+                <div className="rounded-xl border border-line-default bg-warning-subtle/80 p-4">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-[11px] font-semibold tabular-nums text-text-warning">
-                      CONFORMAL ABSTAIN • s = 0.34 &gt; λ̂ (0.25)
-                    </span>
-                    <span className="font-mono text-[10px] text-text-warning">
-                      α = 0.1 Risk Control
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <AgentStickerAvatar
+                        role="tutor"
+                        state="nudge"
+                        size={32}
+                        interactive={false}
+                      />
+                      <span className="font-sans text-xs font-semibold text-text-warning">
+                        Grader Ragu · Dialihkan ke Rekan
+                      </span>
+                    </div>
+
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          aria-label="Detail ambang Conformal Abstention"
+                          className="inline-flex size-7 items-center justify-center rounded-full border border-line-default bg-surface-card text-ink-secondary shadow-control transition-colors duration-150 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                        >
+                          <HelpCircle className="size-3.5" aria-hidden="true" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent align="end" className="w-72">
+                        <PopoverHeader>
+                          <PopoverTitle>Conformal Risk Control</PopoverTitle>
+                          <PopoverDescription>
+                            Skor ketidakpastian s = 0.34 melampaui ambang kalibrasi
+                            lambda = 0.25 (alpha = 0.10). Sistem abstain dan
+                            mengajak diskusi rekan alih-alih memberi skor keliru.
+                          </PopoverDescription>
+                        </PopoverHeader>
+                      </PopoverContent>
+                    </Popover>
                   </div>
 
-                  {/* Uncertainty Bar */}
-                  <div className="relative mt-3 h-2.5 w-full rounded-full bg-surface">
+                  <div className="relative mt-3 h-2.5 w-full rounded-full bg-surface-card">
                     <div className="h-full w-[34%] rounded-full bg-warning" />
                     <div
                       className="absolute top-1/2 h-4 w-0.5 -translate-y-1/2 bg-ink-primary"
                       style={{ left: "25%" }}
-                      title="Ambang batas λ̂"
+                      title="Ambang batas risiko"
                     />
                   </div>
-                  <div className="mt-1 flex justify-between font-mono text-[10px] tabular-nums text-text-warning">
-                    <span>0.0 Yakin</span>
-                    <span>λ̂ = 0.25</span>
-                    <span>1.0 Ragu</span>
+                  <div className="mt-1.5 flex justify-between font-sans text-xs tabular-nums text-text-warning">
+                    <span>Yakin</span>
+                    <span>Ambang</span>
+                    <span>Ragu</span>
                   </div>
 
-                  {/* Peer Handoff Pill */}
-                  <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-line-subtle bg-surface px-3 py-2 text-xs text-ink-primary">
+                  <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-line-subtle bg-surface-card px-3 py-2 text-xs text-ink-primary">
                     <Avatar size="sm">
                       <AvatarImage src={rani?.avatarSrc} alt="Rani" />
-                      <AvatarFallback>RK</AvatarFallback>
+                      <AvatarFallback className="text-xs">RK</AvatarFallback>
                     </Avatar>
                     <span className="font-medium">Rani</span>
-                    <ArrowRight className="size-3.5 text-ink-tertiary" />
+                    <ArrowRight
+                      className="size-3.5 text-ink-tertiary"
+                      aria-hidden="true"
+                    />
                     <Avatar size="sm">
                       <AvatarImage src={dimas?.avatarSrc} alt="Dimas" />
-                      <AvatarFallback>DP</AvatarFallback>
+                      <AvatarFallback className="text-xs">DP</AvatarFallback>
                     </Avatar>
                     <span className="font-medium">Dimas (Penulis DEC-02)</span>
-                    <span className="font-mono text-[10px] text-ink-tertiary">
-                      Peer Explanation
-                    </span>
                   </div>
                 </div>
               </motion.div>
@@ -453,83 +509,126 @@ export function HeroWorkspaceShowcase() {
                 className="grid grid-cols-1 gap-4 lg:grid-cols-[1.35fr_1fr]"
               >
                 {/* 4x4 Knowledge Coverage Heatmap Matrix */}
-                <div className="rounded-xl border border-line-subtle bg-surface p-3.5 shadow-surface">
+                <div className="rounded-xl border border-line-subtle bg-surface-card p-3.5 shadow-card">
                   <div className="flex items-center justify-between gap-2 pb-2.5">
-                    <p className="font-heading text-xs font-semibold text-ink-primary">
-                      Peta Penguasaan Tim P(L)
+                    <p className="font-sans text-xs font-semibold text-ink-primary">
+                      Peta Penguasaan Tim
                     </p>
-                    <span className="font-mono text-[10px] tabular-nums text-ink-tertiary">
-                      Threshold τ = 0.70
-                    </span>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          aria-label="Metodologi skor penguasaan tim"
+                          className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-surface px-2 py-0.5 font-sans text-xs font-medium text-ink-secondary transition-colors duration-150 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                        >
+                          <span>Target 70%</span>
+                          <HelpCircle className="size-3" aria-hidden="true" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent align="end" className="w-72">
+                        <PopoverHeader>
+                          <PopoverTitle>Threshold Penguasaan BKT</PopoverTitle>
+                          <PopoverDescription>
+                            Anggota dinyatakan menguasai topik bila probabilitas
+                            penguasaan P(L) mencapai ambang tau = 0.70.
+                          </PopoverDescription>
+                        </PopoverHeader>
+                      </PopoverContent>
+                    </Popover>
                   </div>
 
                   <div className="overflow-x-auto">
-                    <div className="grid min-w-[400px] grid-cols-[100px_repeat(4,1fr)] items-center gap-1.5 text-center">
-                    <div />
-                    {HEATMAP_KCS.map((kc) => (
-                      <div key={kc.code} className="space-y-0.5 pb-1">
-                        <p className="font-mono text-[10px] font-semibold text-ink-primary">
-                          {kc.code}
-                        </p>
-                        <p className="truncate text-[10px] text-ink-tertiary">
-                          {kc.shortLabel}
-                        </p>
-                      </div>
-                    ))}
-
-                    {HEATMAP_MATRIX.map((row) => {
-                      const member = MEMBER_MAP.get(row.memberId)
-                      return (
-                        <div key={row.memberId} className="contents">
-                          <div className="flex items-center gap-2 pr-1 text-left">
-                            <Avatar size="sm">
-                              <AvatarImage
-                                src={member?.avatarSrc}
-                                alt={member?.name}
-                              />
-                              <AvatarFallback>{member?.initials}</AvatarFallback>
-                            </Avatar>
-                            <span className="truncate text-xs font-medium text-ink-primary">
-                              {member?.shortName}
-                            </span>
-                          </div>
-
-                          {row.scores.map((score, idx) => {
-                            const col = HEATMAP_KCS[idx]
-                            return (
-                              <div
-                                key={`${row.memberId}-${col.code}`}
-                                className={cn(
-                                  "rounded-lg py-2 font-mono text-[11px] font-semibold tabular-nums",
-                                  getScoreStyle(score, col.isSilo)
-                                )}
-                              >
-                                {Math.round(score * 100)}%
-                              </div>
-                            )
-                          })}
+                    <div className="grid min-w-[400px] grid-cols-[96px_repeat(4,1fr)] items-center gap-1.5 text-center">
+                      <div />
+                      {HEATMAP_KCS.map((kc) => (
+                        <div key={kc.code} className="space-y-0.5 pb-1">
+                          <p className="font-sans text-xs font-semibold text-ink-primary">
+                            {kc.code}
+                          </p>
+                          <p className="truncate font-sans text-xs text-ink-secondary">
+                            {kc.shortLabel}
+                          </p>
                         </div>
-                      )
-                    })}
+                      ))}
+
+                      {HEATMAP_MATRIX.map((row) => {
+                        const member = MEMBER_MAP.get(row.memberId)
+                        return (
+                          <div key={row.memberId} className="contents">
+                            <div className="flex items-center gap-2 pr-1 text-left">
+                              <Avatar size="sm">
+                                <AvatarImage
+                                  src={member?.avatarSrc}
+                                  alt={member?.name}
+                                />
+                                <AvatarFallback className="text-xs">
+                                  {member?.initials}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="truncate text-xs font-medium text-ink-primary">
+                                {member?.shortName}
+                              </span>
+                            </div>
+
+                            {row.scores.map((score, idx) => {
+                              const col = HEATMAP_KCS[idx]
+                              return (
+                                <div
+                                  key={`${row.memberId}-${col.code}`}
+                                  className={cn(
+                                    "rounded-lg py-2 font-sans text-xs font-semibold tabular-nums",
+                                    getScoreStyle(score, col.isSilo)
+                                  )}
+                                >
+                                  {Math.round(score * 100)}%
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 </div>
 
                 {/* Bus Factor Gauge + Pairing Recommendation */}
                 <div className="flex flex-col justify-between gap-3">
-                  <div className="rounded-xl border border-line-subtle bg-surface p-3.5 shadow-surface">
-                    <div className="flex items-center justify-between">
-                      <span className="rounded-full bg-error-subtle px-2.5 py-0.5 font-mono text-[10px] font-semibold tabular-nums text-text-error">
-                        BUS FACTOR: 1
+                  <div className="rounded-xl border border-line-subtle bg-surface-card p-3.5 shadow-card">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="rounded-full bg-error-subtle px-2.5 py-0.5 font-sans text-xs font-semibold tabular-nums text-text-error">
+                        Bus Factor: 1
                       </span>
-                      <span className="font-mono text-[11px] tabular-nums text-ink-tertiary">
-                        Gini 0.42
-                      </span>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button
+                            type="button"
+                            aria-label="Detail metrik Bus Factor dan Gini"
+                            className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-surface px-2 py-0.5 font-sans text-xs tabular-nums text-ink-secondary transition-colors duration-150 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                          >
+                            <span>Gini 0.42</span>
+                            <HelpCircle className="size-3" aria-hidden="true" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent align="end" className="w-72">
+                          <PopoverHeader>
+                            <PopoverTitle>Deteksi Silo Pengetahuan</PopoverTitle>
+                            <PopoverDescription>
+                              Knowledge Bus Factor = 1 berarti kehilangan 1
+                              anggota membuat cakupan topik tim turun di bawah
+                              50%. Indeks Gini 0.42 menandai ketimpangan
+                              penguasaan.
+                            </PopoverDescription>
+                          </PopoverHeader>
+                        </PopoverContent>
+                      </Popover>
                     </div>
 
-                    {/* SVG Semi-Circular Gauge */}
-                    <div className="mt-2 flex items-center gap-3">
-                      <svg viewBox="0 0 120 68" className="h-14 w-24 shrink-0" aria-hidden="true">
+                    <div className="mt-2.5 flex items-center gap-3">
+                      <svg
+                        viewBox="0 0 120 70"
+                        className="h-16 w-24 shrink-0"
+                        aria-hidden="true"
+                      >
                         <path
                           d="M 14 58 A 46 46 0 0 1 106 58"
                           fill="none"
@@ -546,48 +645,59 @@ export function HeroWorkspaceShowcase() {
                         />
                         <text
                           x="60"
-                          y="54"
+                          y="56"
                           textAnchor="middle"
                           fill="currentColor"
-                          className="font-mono text-[18px] font-semibold"
+                          className="kpi-hero text-xl font-semibold"
                         >
                           1 / 4
                         </text>
                       </svg>
                       <p className="text-xs leading-snug text-ink-secondary">
-                        KC-02 JWT hanya dikuasai 1 anggota (silo risiko tinggi).
+                        KC-02 JWT baru dikuasai 1 anggota.
                       </p>
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-line-subtle bg-surface p-3.5 shadow-surface">
+                  <div className="rounded-xl border border-cyan-subtle bg-wash-cyan p-3.5 shadow-card">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-text-warning">
-                        <Network className="size-3.5" />
-                        SARAN PAIRING 10 MNT
+                      <span className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-ink-cyan">
+                        <Network className="size-3.5" aria-hidden="true" />
+                        Saran Pairing 10 mnt
                       </span>
-                      <span className="inline-flex items-center gap-0.5 font-mono text-[11px] font-semibold tabular-nums text-text-success">
+                      <span className="inline-flex items-center gap-1 font-sans text-xs font-semibold tabular-nums text-text-success">
                         <PillDelta delta={25} />
                         +25%
                       </span>
                     </div>
 
-                    <div className="mt-2.5 flex items-center gap-2">
-                      <Avatar size="sm">
-                        <AvatarImage src={dimas?.avatarSrc} alt="Dimas" />
-                        <AvatarFallback>DP</AvatarFallback>
-                      </Avatar>
-                      <span className="text-xs font-semibold text-ink-primary">
-                        Dimas
-                      </span>
-                      <span className="font-mono text-xs text-ink-tertiary">↔</span>
-                      <Avatar size="sm">
-                        <AvatarImage src={rani?.avatarSrc} alt="Rani" />
-                        <AvatarFallback>RK</AvatarFallback>
-                      </Avatar>
-                      <span className="text-xs font-semibold text-ink-primary">
-                        Rani
-                      </span>
+                    <div className="mt-2.5 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Avatar size="sm">
+                          <AvatarImage src={dimas?.avatarSrc} alt="Dimas" />
+                          <AvatarFallback className="text-xs">DP</AvatarFallback>
+                        </Avatar>
+                        <span className="text-xs font-semibold text-ink-primary">
+                          Dimas
+                        </span>
+                        <ArrowRight
+                          className="size-3.5 text-ink-tertiary"
+                          aria-hidden="true"
+                        />
+                        <Avatar size="sm">
+                          <AvatarImage src={rani?.avatarSrc} alt="Rani" />
+                          <AvatarFallback className="text-xs">RK</AvatarFallback>
+                        </Avatar>
+                        <span className="text-xs font-semibold text-ink-primary">
+                          Rani
+                        </span>
+                      </div>
+                      <AgentStickerAvatar
+                        role="tutor"
+                        state="warning"
+                        size={32}
+                        interactive={false}
+                      />
                     </div>
                   </div>
                 </div>
@@ -596,16 +706,16 @@ export function HeroWorkspaceShowcase() {
           </AnimatePresence>
 
           {/* Bottom Action Strip */}
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-line-subtle pt-3">
-            <span className="font-sans text-xs text-ink-tertiary">
-              Klik tab di samping untuk simulasi 3 mekanisme inti
+          <div className="mt-4 flex items-center justify-between gap-2 border-t border-line-subtle pt-3">
+            <span className="font-sans text-xs font-medium text-ink-secondary">
+              {activeMeta.label} · {activeMeta.tag}
             </span>
             <Link
               to={activeMeta.route}
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-link hover:underline"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-link hover:underline"
             >
               {activeMeta.routeLabel}
-              <ArrowRight className="size-3.5" />
+              <ArrowRight className="size-3.5" aria-hidden="true" />
             </Link>
           </div>
         </div>

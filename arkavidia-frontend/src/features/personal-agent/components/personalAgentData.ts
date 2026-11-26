@@ -16,17 +16,17 @@ export interface TextHighlightSegment {
 export const PERSONAL_AGENT_SUGGESTIONS: readonly PersonalSuggestionChip[] = [
   {
     id: "team-delta",
-    label: "Apa yang berubah di tim dan menyangkut tugasku?",
+    label: "Delta tim & tugasku",
     prompt: "Apa yang berubah di tim dan menyangkut tugasku?",
   },
   {
     id: "explain-jwt",
-    label: "Bantu jelaskan ulang kenapa tim memilih JWT di DEC-02",
+    label: "Kenapa tim pilih JWT?",
     prompt: "Bantu jelaskan ulang kenapa tim memilih JWT di DEC-02",
   },
   {
     id: "simulate-pii",
-    label: "Simulasikan catatan dengan nomor HP 0812-9988-7766 untuk tes Context Passport",
+    label: "Tes PII Context Passport",
     prompt: "Simulasikan catatan dengan nomor HP 0812-9988-7766 untuk tes Context Passport",
   },
 ]
