@@ -8,6 +8,7 @@ import { LandingPage } from "@/features/landing/LandingPage"
 import { PersonalAgentPage } from "@/features/personal-agent/PersonalAgentPage"
 import { ProjectBrainPage } from "@/features/project-brain/ProjectBrainPage"
 import { TeamChatPage } from "@/features/team-chat/TeamChatPage"
+import { TeamHomePage } from "@/features/team-home/TeamHomePage"
 import { TutoredBriefingPage } from "@/features/tutored-briefing/TutoredBriefingPage"
 import { UnderstandingMapPage } from "@/features/understanding-map/UnderstandingMapPage"
 
@@ -22,6 +23,7 @@ export default function App() {
 
           <Route path="/teams/:teamId" element={<AppShell />}>
             <Route index element={<Navigate to="chat" replace />} />
+            <Route path="home" element={<TeamHomePage />} />
             {/* Track A — Collaboration, Chat & Memory Layer */}
             <Route path="chat" element={<TeamChatPage />} />
             <Route path="private" element={<PersonalAgentPage />} />

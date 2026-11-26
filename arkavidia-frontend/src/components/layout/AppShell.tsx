@@ -6,6 +6,7 @@ import {
   Brain,
   ClipboardCheck,
   GraduationCap,
+  House,
   Lock,
   Menu,
   MessageSquare,
@@ -92,6 +93,11 @@ export function AppShell() {
   }, [mobileMenuOpen, closeMobileMenu])
 
   const workspaceLinks: readonly NavItem[] = [
+    {
+      to: `/teams/${teamId}/home`,
+      label: "Beranda",
+      icon: House,
+    },
     {
       to: `/teams/${teamId}/chat`,
       label: "Ruang Tim",
