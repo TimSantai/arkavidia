@@ -37,6 +37,12 @@ export function FloatingNav({ navItems, className }: FloatingNavProps) {
       return
     }
 
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight
+    if (current >= maxScroll - 4) {
+      return
+    }
+
     if (delta > 4) {
       setVisible(false)
     } else if (delta < -4) {
@@ -228,8 +234,8 @@ export function FloatingNav({ navItems, className }: FloatingNavProps) {
             className={cn(
               "inline-flex h-9 items-center justify-center rounded-full px-3.5 font-sans text-sm font-medium whitespace-nowrap transition-[background-color,color,transform] duration-150 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:h-10 sm:px-4",
               overDarkStage
-                ? "bg-white text-[#1d1e21] shadow-[inset_0_1px_0_rgb(255_255_255/0.8)] hover:bg-[#e9ebef]"
-                : "bg-[#1d1e21] text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.14)] hover:bg-[#323337] dark:bg-white dark:text-[#1d1e21] dark:hover:bg-[#e9ebef]"
+                ? "bg-[#4784ff] text-[#001652] shadow-[inset_0_1px_0_rgb(255_255_255/0.35)] hover:bg-[#6ea0ff]"
+                : "bg-[#1a51c4] text-[#f1f6ff] shadow-[inset_0_1px_0_rgb(255_255_255/0.22),0_8px_20px_-8px_rgb(26_81_196/0.55)] hover:bg-[#0c3c9f] dark:bg-[#4784ff] dark:text-[#001652] dark:hover:bg-[#6ea0ff]"
             )}
           >
             Coba demo

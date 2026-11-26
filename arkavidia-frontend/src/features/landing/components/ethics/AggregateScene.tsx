@@ -77,7 +77,7 @@ export function AggregateScene({
         </motion.p>
 
         <span className="font-sans text-xs font-medium text-ink-tertiary">
-          Hanya pemilik
+          Individu · terkunci
         </span>
       </div>
 
@@ -85,14 +85,14 @@ export function AggregateScene({
       <div className="flex h-full flex-col justify-between rounded-lg border border-brand-subtle bg-wash-brand p-2.5">
         <div className="flex items-center justify-between gap-1">
           <span className="font-sans text-xs font-semibold text-ink-primary">
-            Dosen
+            Tampilan Dosen
           </span>
           <Users className="size-3.5 text-ink-link" />
         </div>
 
         <div className="space-y-1.5">
           <div className="flex items-center justify-between font-sans text-xs">
-            <span className="text-ink-secondary">Coverage tim</span>
+            <span className="text-ink-secondary">Agregat tim</span>
             <motion.span
               animate={{ opacity: currentStage >= 2 ? 1 : 0.25 }}
               transition={{ duration: isStatic ? 0 : 0.35 }}

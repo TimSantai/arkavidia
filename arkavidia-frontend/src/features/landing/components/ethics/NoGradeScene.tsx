@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Ban } from "lucide-react"
 import { motion } from "motion/react"
 import { cn } from "@/lib/utils"
 
@@ -58,12 +58,12 @@ export function NoGradeScene({
 
   return (
     <div className="flex h-full w-full items-center justify-between gap-2 px-1">
-      {/* Left: Formative P(L) bar */}
+      {/* Left: Formative understanding bar */}
       <div className="min-w-0 flex-1 space-y-1.5">
         <div className="flex items-center justify-between gap-2 font-sans text-xs">
-          <span className="font-semibold text-ink-primary">P(L)</span>
+          <span className="font-semibold text-ink-primary">Skor paham</span>
           <span className="font-semibold tabular-nums text-text-success">
-            {displayScore.toFixed(2)}
+            {Math.round(displayScore * 100)}%
           </span>
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-muted/60">
@@ -73,9 +73,12 @@ export function NoGradeScene({
             className="h-full rounded-full bg-success"
           />
         </div>
+        <span className="block font-sans text-xs text-ink-tertiary">
+          Latihan formatif
+        </span>
       </div>
 
-      {/* Center: Blocked dashed arrow + vertical firewall */}
+      {/* Center: Blocked dashed arrow + firewall shield */}
       <div className="flex shrink-0 items-center gap-1.5">
         <motion.div
           animate={
@@ -88,10 +91,15 @@ export function NoGradeScene({
           transition={{ duration: isStatic ? 0 : 0.35, ease: EASE }}
           className="flex items-center text-ink-tertiary"
         >
-          <span className="h-px w-5 border-t border-dashed border-current" />
+          <span className="h-px w-4 border-t border-dashed border-current" />
           <ArrowRight className="-ml-1 size-3.5" />
         </motion.div>
-        <span className="h-12 w-0.5 rounded-full bg-error/65" />
+        <div className="relative flex flex-col items-center">
+          <span className="h-12 w-0.5 rounded-full bg-error/65" />
+          <span className="absolute top-1/2 -translate-y-1/2 rounded-full bg-error-subtle p-1 text-text-error">
+            <Ban className="size-3" />
+          </span>
+        </div>
       </div>
 
       {/* Right: Academic grade box crossed out */}
@@ -108,11 +116,11 @@ export function NoGradeScene({
         </span>
         <span
           className={cn(
-            "font-sans text-xs transition-opacity duration-300",
-            currentStep >= 3 ? "text-ink-tertiary opacity-100" : "opacity-0"
+            "font-sans text-xs font-medium transition-opacity duration-300",
+            currentStep >= 3 ? "text-text-error opacity-100" : "opacity-0"
           )}
         >
-          tidak terhubung
+          Terputus
         </span>
       </div>
     </div>

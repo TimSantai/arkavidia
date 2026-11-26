@@ -104,7 +104,7 @@ export function LandingFooterCta() {
                 onMouseLeave={() => setCtaHovered(false)}
                 onFocus={() => setCtaHovered(true)}
                 onBlur={() => setCtaHovered(false)}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-7 font-sans text-sm font-medium text-[#1d1e21] shadow-[0_0_0_1px_rgb(255_255_255/0.1),0_0_32px_-6px_rgb(224_187_108/0.7)] transition-[background-color,box-shadow,transform] duration-150 hover:bg-[#f4f6f9] hover:shadow-[0_0_0_1px_rgb(255_255_255/0.2),0_0_40px_-4px_rgb(241_214_155/0.88)] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6ea0ff] sm:w-auto"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#2d6ae7] px-7 font-sans text-sm font-medium text-[#f1f6ff] shadow-[inset_0_1px_0_rgb(255_255_255/0.25),0_0_32px_-6px_rgb(71_132_255/0.75)] transition-[background-color,box-shadow,transform] duration-150 hover:bg-[#4784ff] hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.32),0_0_40px_-4px_rgb(110_160_255/0.88)] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6ea0ff] sm:w-auto"
               >
                 <span>{CLOSING_CONTENT.primaryCta.label}</span>
                 <ArrowRight className="size-4" aria-hidden="true" />

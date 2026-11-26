@@ -366,8 +366,7 @@ export const ETHICS_GUARDRAILS: readonly EthicsGuardrail[] = [
     id: "no-override",
     badge: "PROPOSE -> CONFIRM",
     title: "Tidak memutuskan atas nama tim",
-    description:
-      "AI hanya mengusulkan kandidat keputusan. Konfirmasi dan revisi tetap di tangan mahasiswa.",
+    description: "AI mengusulkan, keputusan tetap di tangan tim.",
     technicalNote:
       "Setiap usulan dari chat atau Context Passport berstatus proposed hingga disetujui anggota di Ruang Tim.",
   },
@@ -375,8 +374,7 @@ export const ETHICS_GUARDRAILS: readonly EthicsGuardrail[] = [
     id: "no-leak",
     badge: "RLS + CEDAR + PII MASK",
     title: "Tidak membocorkan catatan pribadi",
-    description:
-      "Catatan di Ruang Pribadi hanya pindah ke tim lewat Context Passport: data pribadi disamarkan dan kamu setujui dulu.",
+    description: "Data pribadi disamarkan otomatis sebelum masuk ruang tim.",
     technicalNote:
       "Isolasi ditegakkan lewat Postgres Row-Level Security (RLS), Cedar Policy pre-LLM gate, dan deteksi PII otomatis.",
   },
@@ -384,8 +382,7 @@ export const ETHICS_GUARDRAILS: readonly EthicsGuardrail[] = [
     id: "no-grading",
     badge: "FORMATIF ONLY",
     title: "Bukan untuk nilai kuliah",
-    description:
-      "Skor pemahaman adalah cermin belajar, bukan alat pemeringkatan.",
+    description: "Cermin belajar tim, terputus dari nilai akademik.",
     technicalNote:
       "Tidak ada ekspor nilai individu ke rubrik penilaian akademik atau peringkat kelas.",
   },
@@ -393,8 +390,7 @@ export const ETHICS_GUARDRAILS: readonly EthicsGuardrail[] = [
     id: "no-surveillance",
     badge: "AGREGAT TIM ONLY",
     title: "Dosen tidak melihat skor individu",
-    description:
-      "Sesuai UU PDP No. 27/2022, dosen hanya melihat kesehatan tim secara agregat.",
+    description: "Dosen hanya melihat kesehatan tim secara agregat.",
     technicalNote:
       "Dirancang selaras dengan prinsip minimalisasi data dan persetujuan eksplisit UU PDP No. 27/2022.",
   },

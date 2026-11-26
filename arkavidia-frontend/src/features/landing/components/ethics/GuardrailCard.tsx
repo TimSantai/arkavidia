@@ -35,11 +35,7 @@ export function GuardrailCard({
         <Scene playKey={playKey} isStatic={isStatic} />
       </div>
 
-      <div className="space-y-2">
-        <span className="inline-block rounded-md bg-[#f4f6f9] px-2.5 py-1 font-sans text-xs font-semibold tracking-wide text-ink-secondary dark:bg-surface">
-          {guardrail.badge}
-        </span>
-
+      <div className="space-y-1.5">
         <h3 className="font-sans text-[17px] leading-snug font-semibold text-ink-primary">
           {guardrail.title}
         </h3>

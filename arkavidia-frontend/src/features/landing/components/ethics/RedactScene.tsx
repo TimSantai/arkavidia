@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Lock, LockOpen } from "lucide-react"
+import { ArrowRight, Lock, LockOpen } from "lucide-react"
 import { motion } from "motion/react"
 import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 
@@ -61,7 +61,27 @@ export function RedactScene({
   const isRedacted = currentStage === "redacted"
 
   return (
-    <div className="relative flex h-full w-full items-center justify-between gap-2.5 overflow-hidden px-1">
+    <div className="relative flex h-full w-full flex-col justify-between gap-2 overflow-hidden px-1 py-0.5">
+      {/* Flow header showing private note -> Context Passport -> Team room */}
+      <div className="flex items-center justify-between gap-2 font-sans text-xs">
+        <div className="flex items-center gap-1.5 text-ink-tertiary">
+          <span className="font-medium text-ink-secondary">Ruang Pribadi</span>
+          <ArrowRight className="size-3 shrink-0" />
+          <span className="font-medium text-ink-link">Ruang Tim</span>
+        </div>
+        <span
+          className={
+            isRedacted
+              ? "inline-flex items-center gap-1 rounded-full bg-success-subtle px-2 py-0.5 font-medium text-text-success"
+              : "inline-flex items-center gap-1 rounded-full bg-surface-card px-2 py-0.5 font-medium text-ink-secondary"
+          }
+        >
+          {isRedacted ? <Lock className="size-3" /> : <LockOpen className="size-3" />}
+          <span>{isRedacted ? "Aman" : "Memindai"}</span>
+        </span>
+      </div>
+
+      {/* Main redaction row */}
       <div className="flex min-w-0 items-center gap-2.5">
         <AgentStickerAvatar
           role="private"
@@ -77,38 +97,28 @@ export function RedactScene({
         />
         <div className="flex min-w-0 flex-wrap items-center gap-1.5 font-sans text-xs text-ink-secondary">
           <span>Hubungi aku di</span>
-        {currentStage === "raw" && (
-          <span className="rounded-md bg-surface-card px-2 py-0.5 font-medium tabular-nums text-ink-primary">
-            {ORIGINAL_PHONE}
-          </span>
-        )}
-        {currentStage === "flagged" && (
-          <span className="rounded-md bg-error-subtle px-2 py-0.5 font-medium tabular-nums text-text-error line-through">
-            {ORIGINAL_PHONE}
-          </span>
-        )}
-        {currentStage === "scrambling" && (
-          <span className="rounded-md bg-error-subtle px-2 py-0.5 font-medium tabular-nums text-text-error">
-            {SCRAMBLE_FRAMES[scrambleIdx]}
-          </span>
-        )}
-        {isRedacted && (
-          <span className="rounded-md bg-warning-subtle px-2 py-0.5 font-semibold tracking-wide text-text-warning">
-            [NO_HP_DISAMARKAN]
-          </span>
-        )}
+          {currentStage === "raw" && (
+            <span className="rounded-md bg-surface-card px-2 py-0.5 font-medium tabular-nums text-ink-primary">
+              {ORIGINAL_PHONE}
+            </span>
+          )}
+          {currentStage === "flagged" && (
+            <span className="rounded-md bg-error-subtle px-2 py-0.5 font-medium tabular-nums text-text-error line-through">
+              {ORIGINAL_PHONE}
+            </span>
+          )}
+          {currentStage === "scrambling" && (
+            <span className="rounded-md bg-error-subtle px-2 py-0.5 font-medium tabular-nums text-text-error">
+              {SCRAMBLE_FRAMES[scrambleIdx]}
+            </span>
+          )}
+          {isRedacted && (
+            <span className="rounded-md bg-warning-subtle px-2 py-0.5 font-semibold tracking-wide text-text-warning">
+              [NO_HP_DISAMARKAN]
+            </span>
+          )}
         </div>
       </div>
-
-      <span
-        className={
-          isRedacted
-            ? "inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-success-subtle text-text-success"
-            : "inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-surface-card text-ink-secondary"
-        }
-      >
-        {isRedacted ? <Lock className="size-4" /> : <LockOpen className="size-4" />}
-      </span>
 
       {/* Scanning light sweep */}
       {!isStatic && scanning && (

@@ -58,7 +58,7 @@ export function ConfirmScene({
             )}
           >
             {isConfirmed && <Check className="size-3" />}
-            {isConfirmed ? "CONFIRMED" : "AI DRAFT · PROPOSED"}
+            {isConfirmed ? "Disetujui tim" : "Usulan AI"}
           </span>
           <span className="font-sans text-xs text-ink-secondary">
             DEC-14 · JWT + refresh token

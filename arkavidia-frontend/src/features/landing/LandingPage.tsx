@@ -3,6 +3,7 @@ import { Link } from "react-router"
 import { ArrowRight } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
+import { useTheme } from "@/components/theme/useTheme"
 import {
   Announcement,
   AnnouncementTag,
@@ -25,6 +26,8 @@ import "./landing.css"
 const HERO_EASE = [0.2, 0.8, 0.2, 1] as const
 
 export function LandingPage() {
+  const { resolvedTheme } = useTheme()
+  const isLight = resolvedTheme !== "dark"
   const prefersReducedMotion = useReducedMotion()
   const [ctaHovered, setCtaHovered] = useState(false)
   const workspaceSurfaceRef = useRef<HTMLDivElement | null>(null)
@@ -78,7 +81,15 @@ export function LandingPage() {
 
               <motion.h1
                 {...fadeUp(0.08)}
-                className="font-display mt-6 max-w-[13ch] text-[2.75rem] leading-none font-semibold tracking-[-0.045em] text-[#1d1e21] text-balance sm:text-6xl lg:text-[5.25rem] dark:text-ink-primary"
+                className="font-display mt-6 max-w-[13ch] pb-[0.08em] text-[2.75rem] leading-none font-semibold tracking-[-0.045em] text-balance sm:text-6xl lg:text-[5.25rem]"
+                style={{
+                  background: isLight
+                    ? "linear-gradient(to right bottom, #141518 34%, #1e315c 72%, #2d6ae7 100%)"
+                    : "linear-gradient(to right bottom, #ffffff 35%, #c6daff 72%, #fce9c2 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
               >
                 {HERO_CONTENT.titleLead}{" "}
                 <span className="font-display-oblique">
