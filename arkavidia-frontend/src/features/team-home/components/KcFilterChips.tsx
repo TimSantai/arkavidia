@@ -26,37 +26,37 @@ const CHIP_STYLES: Record<string, ChipStyle> = {
   all: {
     icon: BookOpen,
     inactiveClass:
-      "border border-[#e4e6ea] text-ink-secondary hover:bg-[#f6f7f9] dark:border-line-subtle dark:hover:bg-surface-top",
+      "border border-line-subtle text-ink-secondary hover:bg-surface",
     activeClass:
-      "bg-[#1d1e21] text-white border-transparent font-semibold dark:bg-white dark:text-[#1d1e21]",
+      "bg-brand text-on-brand border-transparent font-semibold shadow-xs",
   },
   "kc-mvc": {
     icon: LayoutGrid,
     inactiveClass:
-      "border border-[#c6daff] text-[#1a51c4] hover:bg-[#f1f6ff]/60 dark:border-brand-subtle dark:text-text-info",
+      "border border-brand-subtle text-ink-link hover:bg-wash-brand/60",
     activeClass:
-      "bg-[#f1f6ff] text-[#1a51c4] border-transparent font-semibold dark:bg-info-subtle dark:text-text-info",
+      "bg-wash-brand text-ink-link border-brand-subtle font-semibold",
   },
   "kc-jwt": {
     icon: KeyRound,
     inactiveClass:
-      "border border-[#e0bb6c] text-[#755700] hover:bg-[#fef8ec]/60 dark:border-warning dark:text-text-warning",
+      "border border-line-strong text-text-warning hover:bg-warning-subtle/60",
     activeClass:
-      "bg-[#fef8ec] text-[#755700] border-transparent font-semibold dark:bg-warning-subtle dark:text-text-warning",
+      "bg-warning-subtle text-text-warning border-transparent font-semibold",
   },
   "kc-db": {
     icon: Database,
     inactiveClass:
-      "border border-[#c6daff] text-[#1a51c4] hover:bg-[#f1f6ff]/60 dark:border-brand-subtle dark:text-text-info",
+      "border border-brand-subtle text-ink-link hover:bg-wash-brand/60",
     activeClass:
-      "bg-[#f1f6ff] text-[#1a51c4] border-transparent font-semibold dark:bg-info-subtle dark:text-text-info",
+      "bg-wash-brand text-ink-link border-brand-subtle font-semibold",
   },
   "kc-api": {
     icon: Network,
     inactiveClass:
-      "border border-[#c6daff] text-[#1a51c4] hover:bg-[#f1f6ff]/60 dark:border-brand-subtle dark:text-text-info",
+      "border border-brand-subtle text-ink-link hover:bg-wash-brand/60",
     activeClass:
-      "bg-[#f1f6ff] text-[#1a51c4] border-transparent font-semibold dark:bg-info-subtle dark:text-text-info",
+      "bg-wash-brand text-ink-link border-brand-subtle font-semibold",
   },
 }
 

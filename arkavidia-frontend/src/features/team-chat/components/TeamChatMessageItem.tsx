@@ -121,7 +121,7 @@ export function TeamChatMessageItem({
           <div
             className={cn(
               "flex min-w-0 flex-1 flex-col gap-2",
-              isCurrentUser ? "max-w-xl items-end" : "max-w-3xl"
+              isCurrentUser ? "max-w-2xl items-end" : "max-w-4xl 2xl:max-w-5xl"
             )}
           >
             {/* Sender Metadata Row */}

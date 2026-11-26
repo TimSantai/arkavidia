@@ -217,7 +217,7 @@ export function SiloPairingPanel({
 
                   {/* Submodular Gain & Action Buttons */}
                   <div className="flex flex-col gap-3 border-t border-line-subtle pt-3 sm:flex-row sm:items-center sm:justify-between">
-                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-success-subtle px-2.5 py-1 text-xs font-semibold tabular-nums text-text-success shadow-badge">
+                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-success/20 bg-success-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-text-success">
                       <TrendingUp className="size-3.5" aria-hidden="true" />
                       Coverage: {item.projectedCoverageBefore} → {item.projectedCoverageAfter}
                     </span>

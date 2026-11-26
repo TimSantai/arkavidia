@@ -18,6 +18,7 @@ interface BusFactorGaugeProps {
   readonly className?: string
 }
 
+// Q: "Berapa banyak anggota yang menahan risiko pengetahuan kritis tim?"
 export function BusFactorGauge({
   busFactor,
   totalMembers,
@@ -30,15 +31,15 @@ export function BusFactorGauge({
   return (
     <Card
       className={cn(
-        "relative overflow-hidden border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150",
+        "relative overflow-hidden rounded-3xl border border-line-subtle bg-surface-card transition-[border-color] duration-150 shadow-none",
         className,
       )}
     >
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs font-semibold tracking-wide text-ink-secondary uppercase">
-              Bus Factor
+            <span className="text-xs font-medium text-ink-secondary">
+              Bus factor
             </span>
             <Popover>
               <PopoverTrigger asChild>
@@ -64,8 +65,8 @@ export function BusFactorGauge({
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold",
               isVulnerable
-                ? "bg-warning-subtle text-text-warning"
-                : "bg-success-subtle text-text-success",
+                ? "border border-warning/20 bg-warning-subtle text-text-warning"
+                : "border border-success/20 bg-success-subtle text-text-success",
             )}
           >
             {isVulnerable ? (

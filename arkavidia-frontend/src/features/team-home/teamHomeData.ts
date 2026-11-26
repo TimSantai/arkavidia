@@ -88,7 +88,7 @@ export function getWeeklyTasks(teamId: string): readonly WeeklyTask[] {
       statLabel: "pertanyaan",
       kcId: "kc-jwt",
       to: `/teams/${teamId}/check`,
-      cta: "Mulai sekarang",
+      cta: "Mulai 3 pertanyaan",
     },
     {
       id: "task-pair-01",
@@ -100,7 +100,7 @@ export function getWeeklyTasks(teamId: string): readonly WeeklyTask[] {
       kcId: "kc-jwt",
       people: ["user-dimas"],
       to: `/teams/${teamId}/understanding`,
-      cta: "Jadwalkan sesi",
+      cta: "Jadwalkan dengan Dimas",
     },
     {
       id: "task-dec-01",
@@ -111,7 +111,7 @@ export function getWeeklyTasks(teamId: string): readonly WeeklyTask[] {
       statLabel: "ditinjau",
       kcId: "kc-db",
       to: `/teams/${teamId}/brain`,
-      cta: "Tinjau usulan",
+      cta: "Tinjau usulan DEC-03",
     },
   ]
 }

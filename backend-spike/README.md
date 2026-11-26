@@ -60,7 +60,3 @@ Tes integrasi mencakup siklus penuh (pesan → usulan berbukti → konfirmasi �
 6. Pada tier Free, embedding query pertanyaan pengguna tetap dikirim ke provider embedding. Ini perlu dicek terhadap ketentuan provider yang dipilih.
 7. Tidak ada rate limit per IP dan tidak ada SSE streaming.
 8. `docker-compose.local.yml` dan `Dockerfile` belum dijalankan, karena Docker tidak tersedia di lingkungan pengembangan saya. Tes di atas memakai Postgres 16 yang dipasang langsung. Bila container Postgres gagal start, cek dulu log inisialisasi shim dan migrasi.
-
-## Kesesuaian dengan blueprint
-
-Semua endpoint di `03-kontrak-api.md` sudah ada, ditambah `/v1/me`, `/members`, `/notes`, `/kcs`, dan `/peer-requests`. Perbedaan dari blueprint: KC usulan AI langsung dibuat dengan `created_by='ai'` dan bisa diubah lewat `PATCH /v1/kcs/{id}`, bukan menunggu konfirmasi. Ekstraksi hanya berjalan di Ruang Tim. Soal hanya dibangkitkan untuk satu KC utama per keputusan.

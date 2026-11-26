@@ -54,19 +54,19 @@ export function DecisionRecordCard({
   return (
     <article
       className={cn(
-        "rounded-xl border transition-[border-color,box-shadow,background-color] duration-150",
+        "rounded-2xl border transition-[border-color,background-color] duration-150 overflow-hidden",
         isSelected
-          ? "border-line-active bg-wash-brand shadow-raised"
+          ? "border-line-active bg-wash-brand"
           : item.status === "proposed"
-            ? "border-brand-subtle bg-surface-card shadow-card hover:border-line-active"
-            : "border-line-subtle bg-surface-card shadow-card hover:border-line-strong"
+            ? "border-brand-subtle/80 bg-surface-card hover:border-line-active"
+            : "border-line-subtle bg-surface-card hover:border-line-default"
       )}
     >
       <button
         type="button"
         onClick={() => onSelect(item)}
         aria-pressed={isSelected}
-        className="w-full cursor-pointer rounded-t-xl p-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+        className="w-full cursor-pointer p-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
       >
         {/* Top Metadata Row */}
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -123,13 +123,13 @@ export function DecisionRecordCard({
           {item.content.title}
         </h2>
 
-        <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-ink-secondary">
+        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-ink-secondary">
           {item.content.rationale}
         </p>
       </button>
 
       {/* Footer: KC Chips, PIC Avatar, and Quick Confirm Action */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line-subtle px-4 py-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line-subtle/50 px-4 py-2.5 bg-surface/30">
         <div className="flex flex-wrap items-center gap-2">
           <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface py-0.5 pr-2.5 pl-1">
             <Avatar size="sm" className="size-5">
@@ -146,7 +146,7 @@ export function DecisionRecordCard({
           {matchedKcs.map((kc) => (
             <span
               key={kc.id}
-              className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-surface px-2.5 py-0.5 text-xs text-ink-secondary"
+              className="inline-flex items-center gap-1 rounded-full bg-surface px-2.5 py-0.5 text-xs text-ink-secondary"
             >
               <span className="font-semibold text-ink-primary">{kc.code}</span>
               <span className="hidden sm:inline">· {kc.name}</span>
@@ -160,7 +160,7 @@ export function DecisionRecordCard({
             size="sm"
             disabled={isConfirming}
             onClick={() => void onConfirm(item.id)}
-            className="gap-1.5 bg-brand text-on-brand shadow-primary hover:bg-brand-hover active:bg-brand-active"
+            className="gap-1.5 rounded-full bg-brand text-on-brand shadow-xs hover:bg-brand-hover active:bg-brand-active"
           >
             <CheckCircle2 className="size-3.5" aria-hidden="true" />
             <span>{isConfirming ? "Mengonfirmasi..." : "Konfirmasi Keputusan"}</span>

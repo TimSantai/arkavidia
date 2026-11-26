@@ -421,7 +421,7 @@ export function ContextPassportDrawer({
 }: ContextPassportDrawerProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] overflow-y-auto border border-line-subtle bg-surface-raised ring-0 shadow-raised sm:max-w-3xl">
+      <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl border border-line-subtle bg-surface-raised p-6 ring-0 shadow-raised sm:max-w-3xl">
         {preview && (
           <ContextPassportForm
             key={`${preview.sourceMessageId}:${preview.originalText}`}
