@@ -49,7 +49,7 @@ export function CaptureIllustration({
           animate={{ opacity: 1, y: 0 }}
           initial={reducedMotion ? false : { opacity: 0, y: 6 }}
           transition={{ duration: 0.3 }}
-          className="rounded-xl border border-[#c6daff]/80 bg-white/95 px-3 py-1.5 font-sans text-xs text-ink-secondary shadow-badge dark:border-white/12 dark:bg-[#1e263b] dark:text-[#bec0c5]"
+          className="rounded-xl border border-[#e4ecfb] bg-white/95 px-3 py-1.5 font-sans text-xs text-ink-secondary shadow-[0_2px_8px_-4px_rgb(29_30_33/0.08)] dark:border-white/12 dark:bg-[#1e263b] dark:text-[#bec0c5]"
         >
           &ldquo;Pakai JWT + refresh token aja?&rdquo;
         </motion.div>
@@ -57,7 +57,7 @@ export function CaptureIllustration({
           animate={{ opacity: 1, y: 0 }}
           initial={reducedMotion ? false : { opacity: 0, y: 6 }}
           transition={{ duration: 0.3, delay: 0.3 }}
-          className="rounded-xl border border-[#c6daff]/80 bg-white/95 px-3 py-1.5 font-sans text-xs text-ink-secondary shadow-badge dark:border-white/12 dark:bg-[#1e263b] dark:text-[#bec0c5]"
+          className="rounded-xl border border-[#e4ecfb] bg-white/95 px-3 py-1.5 font-sans text-xs text-ink-secondary shadow-[0_2px_8px_-4px_rgb(29_30_33/0.08)] dark:border-white/12 dark:bg-[#1e263b] dark:text-[#bec0c5]"
         >
           &ldquo;Setuju, session di server berat.&rdquo;
         </motion.div>
@@ -70,7 +70,7 @@ export function CaptureIllustration({
             : { opacity: 0.25, y: 8 }
         }
         transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
-        className="flex items-center gap-3 rounded-2xl border border-[#c6daff] bg-white p-3.5 shadow-card dark:border-white/12 dark:bg-[#232c45]"
+        className="flex items-center gap-3 rounded-2xl border border-[#e4ecfb] bg-white p-3.5 shadow-[0_6px_18px_-10px_rgb(29_30_33/0.1)] dark:border-white/12 dark:bg-[#232c45]"
       >
         <AgentStickerAvatar
           role="team"

@@ -28,7 +28,7 @@ export function MapIllustration({
   return (
     <div
       aria-hidden="true"
-      className="inline-flex flex-col gap-2 rounded-2xl border border-[#c6daff] bg-white p-3.5 shadow-card select-none dark:border-white/12 dark:bg-[#1e263b]"
+      className="inline-flex flex-col gap-2 rounded-2xl border border-[#e4ecfb] bg-white p-3.5 shadow-[0_6px_18px_-10px_rgb(29_30_33/0.1)] select-none dark:border-white/12 dark:bg-[#1e263b]"
     >
       <div className="flex items-center justify-between gap-4">
         <span className="font-sans text-xs font-medium text-ink-secondary dark:text-[#bec0c5]">

@@ -347,7 +347,10 @@ export function ComparisonSection() {
         {/* 3 Empirical Research Stat Cards */}
         <div className="mx-auto mt-16 grid max-w-[1080px] grid-cols-1 gap-4 sm:mt-[72px] sm:grid-cols-3">
           {EMPIRICAL_STATS.map((stat) => (
-            <Card key={stat.id} className="justify-between py-5">
+            <Card
+              key={stat.id}
+              className="justify-between rounded-3xl border-[#dce7fb] bg-gradient-to-b from-white to-[#f7faff] py-5 shadow-[0_4px_16px_-10px_rgb(29_30_33/0.08)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-[#c6daff] hover:shadow-[0_10px_24px_-14px_rgb(26_81_196/0.14)] dark:border-[#4784ff]/20 dark:from-[#161c2e] dark:to-[#131826]"
+            >
               <CardContent className="flex flex-1 flex-col justify-between gap-4 px-5">
                 <div>
                   <div className="flex items-start justify-between gap-2">

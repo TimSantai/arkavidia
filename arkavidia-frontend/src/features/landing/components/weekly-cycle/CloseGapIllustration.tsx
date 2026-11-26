@@ -15,7 +15,7 @@ export function CloseGapIllustration({
   return (
     <div
       aria-hidden="true"
-      className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-2xl border border-[#c6daff] bg-white p-4 shadow-card select-none dark:border-white/12 dark:bg-[#1e263b]"
+      className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-2xl border border-[#e4ecfb] bg-white p-4 shadow-[0_6px_18px_-10px_rgb(29_30_33/0.1)] select-none dark:border-white/12 dark:bg-[#1e263b]"
     >
       <div className="flex items-center justify-between gap-2">
         <span className="rounded-full bg-info-subtle px-2.5 py-0.5 font-sans text-xs font-semibold tracking-wide text-text-info dark:bg-[#163644] dark:text-[#73cdf8]">
