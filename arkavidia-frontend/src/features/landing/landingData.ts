@@ -92,9 +92,10 @@ export const HERO_CONTENT = {
 } as const
 
 export const NAV_LINKS: readonly NavLinkItem[] = [
-  { href: "#perbedaan", label: "Perbedaan" },
-  { href: "#cara-kerja", label: "Cara Kerja" },
-  { href: "#privasi-etika", label: "Privasi & Etika" },
+  { href: "#cara-kerja", label: "Cara kerja" },
+  { href: "#privasi", label: "Privasi" },
+  { href: "#riset", label: "Riset" },
+  { href: "#tim", label: "Tim" },
 ]
 
 export const DEMO_TEAM_MEMBERS: readonly DemoTeamMember[] = [
