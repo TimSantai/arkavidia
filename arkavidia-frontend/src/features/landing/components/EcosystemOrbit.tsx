@@ -6,12 +6,14 @@ import {
   useReducedMotion,
 } from "motion/react"
 import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
+import { useTheme } from "@/components/theme/useTheme"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { WebThreads } from "@/components/ui/web-threads"
 import { cn } from "@/lib/utils"
 import {
   ECOSYSTEM_NODES,
@@ -181,6 +183,8 @@ function BrainCard({
 }
 
 export function EcosystemOrbit() {
+  const { resolvedTheme } = useTheme()
+  const isLight = resolvedTheme !== "dark"
   const sectionRef = useRef<HTMLElement | null>(null)
   const isInView = useInView(sectionRef, { amount: 0.25 })
   const hasEntered = useInView(sectionRef, { once: true, amount: 0.3 })
@@ -264,7 +268,44 @@ export function EcosystemOrbit() {
           </div>
 
           {/* Desktop 2-Ring Orbit Stage */}
-          <div className="group/orbit relative mx-auto mt-14 hidden size-[560px] max-w-full items-center justify-center sm:flex">
+          <div className="relative mt-14 hidden items-center justify-center sm:flex">
+            {/* Subtle Cobalt-Violet WebThreads weaving across and converging behind Project Brain */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-1/2 h-[540px] -translate-y-1/2"
+              style={{
+                maskImage:
+                  "linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%)",
+              }}
+            >
+              <WebThreads
+                colors={
+                  isLight
+                    ? ["#2d6ae7", "#6ea0ff", "#7f51db"]
+                    : ["#4784ff", "#9fc1ff", "#9669f8"]
+                }
+                coreColor="#ffffff"
+                threadCount={6}
+                spread={0.15}
+                pinch={0.5}
+                position={0.5}
+                lightMode={isLight}
+                glow={0.018}
+                brightness={isLight ? 0.82 : 0.6}
+                opacity={isLight ? 0.42 : 0.38}
+                fade={0.68}
+                grain={0.012}
+                speed={0.16}
+                mouseInteraction
+                mouseStrength={0.35}
+                pulseOnClick
+                dpr={1.5}
+              />
+            </div>
+
+            <div className="group/orbit relative z-10 mx-auto flex size-[560px] max-w-full items-center justify-center">
             {/* Dashed concentric SVG rings */}
             <svg
               viewBox="0 0 560 560"
@@ -444,6 +485,7 @@ export function EcosystemOrbit() {
                 reducedMotion={prefersReducedMotion}
               />
             </motion.div>
+            </div>
           </div>
 
           {/* Mobile Stack (< 640px): Brain card + 3x3 grid */}

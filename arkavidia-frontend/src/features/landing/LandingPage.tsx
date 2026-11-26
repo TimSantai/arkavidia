@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Link } from "react-router"
 import { ArrowRight } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
@@ -27,6 +27,7 @@ const HERO_EASE = [0.2, 0.8, 0.2, 1] as const
 export function LandingPage() {
   const prefersReducedMotion = useReducedMotion()
   const [ctaHovered, setCtaHovered] = useState(false)
+  const workspaceSurfaceRef = useRef<HTMLDivElement | null>(null)
 
   const fadeUp = (delaySeconds: number) =>
     prefersReducedMotion
@@ -58,9 +59,9 @@ export function LandingPage() {
       <LandingHeader />
 
       <main>
-        {/* Full-width white hero so dawn glows extend cleanly without clipping */}
+        {/* Full-width white hero so LaserFlow beam & dawn glows extend cleanly without clipping */}
         <section className="relative overflow-x-clip pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-32">
-          <HeroBackdrop />
+          <HeroBackdrop surfaceRef={workspaceSurfaceRef} />
 
           <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
             <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
@@ -166,11 +167,6 @@ export function LandingPage() {
               {...windowMotion}
               className="relative mx-auto mt-14 max-w-[1140px] sm:mt-16"
             >
-              {/* Centered vertical beam descending into the top edge of the workspace window */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -top-12 left-1/2 z-0 h-[420px] w-[2px] -translate-x-1/2 bg-gradient-to-b from-transparent via-[var(--beam)] to-transparent opacity-65 blur-[0.5px] sm:-top-14 dark:opacity-50"
-              />
               {/* Interactive peeking Team Agent perched subtly on top-right corner of the dawn frame */}
               <div className="absolute -top-7 right-7 z-20 hidden sm:flex">
                 <AgentStickerAvatar
@@ -181,7 +177,10 @@ export function LandingPage() {
                   label="Team Agent BERSAMA"
                 />
               </div>
-              <div className="bg-dawn grain relative z-10 rounded-[28px] border border-line-subtle p-3 sm:p-6">
+              <div
+                ref={workspaceSurfaceRef}
+                className="bg-dawn grain relative z-10 rounded-[28px] border border-line-subtle p-3 sm:p-6"
+              >
                 <div className="relative z-10">
                   <HeroWorkspaceShowcase />
                 </div>

@@ -17,6 +17,7 @@ import {
 } from "motion/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
+import { CountUp } from "@/components/ui/count-up"
 import {
   Popover,
   PopoverContent,
@@ -35,6 +36,76 @@ import { GlowWindow } from "./GlowWindow"
 
 const MEMBER_MAP = new Map(DEMO_TEAM_MEMBERS.map((m) => [m.id, m]))
 const EASE = [0.2, 0.8, 0.2, 1] as const
+
+function EmpiricalStatValue({
+  id,
+  fallback,
+}: {
+  readonly id: string
+  readonly fallback: string
+}) {
+  if (id === "bastani") {
+    return (
+      <CountUp
+        from={0}
+        to={-17}
+        suffix="%"
+        mode="roll"
+        easing="spring"
+        duration={0.95}
+        trigger="view"
+        replayOnHover
+      />
+    )
+  }
+
+  if (id === "anthropic") {
+    return (
+      <span className="inline-flex items-baseline gap-2">
+        <CountUp
+          from={0}
+          to={50}
+          suffix="%"
+          mode="roll"
+          easing="spring"
+          duration={0.9}
+          trigger="view"
+          replayOnHover
+        />
+        <span>vs</span>
+        <CountUp
+          from={0}
+          to={67}
+          suffix="%"
+          mode="roll"
+          easing="spring"
+          duration={1.05}
+          delay={0.08}
+          trigger="view"
+          replayOnHover
+        />
+      </span>
+    )
+  }
+
+  if (id === "cscl") {
+    return (
+      <CountUp
+        from={0}
+        to={0.61}
+        decimals={2}
+        prefix="g = "
+        mode="roll"
+        easing="spring"
+        duration={1.05}
+        trigger="view"
+        replayOnHover
+      />
+    )
+  }
+
+  return <>{fallback}</>
+}
 
 export function ComparisonSection() {
   const sectionRef = useRef<HTMLElement | null>(null)
@@ -281,7 +352,7 @@ export function ComparisonSection() {
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <p className="kpi-hero text-[40px] leading-none font-semibold tracking-[-0.03em] text-ink-primary sm:text-[44px]">
-                      {stat.value}
+                      <EmpiricalStatValue id={stat.id} fallback={stat.value} />
                     </p>
                     <Popover>
                       <PopoverTrigger asChild>

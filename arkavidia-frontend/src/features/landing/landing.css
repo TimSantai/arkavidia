@@ -70,22 +70,6 @@
   background-color: #ffffff;
 }
 
-/* Subtle hairline hero grid behind headline block, masked radially */
-.landing-root .hero-grid {
-  background-image:
-    linear-gradient(#e9ebef 1px, transparent 1px),
-    linear-gradient(90deg, #e9ebef 1px, transparent 1px);
-  background-size: 64px 64px;
-  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
-  mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 70%);
-}
-
-.dark .landing-root .hero-grid {
-  background-image:
-    linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px);
-}
-
 /* Subtle printed film grain (3.5% opacity) to prevent banding on dawn wallpaper */
 .landing-root .grain {
   position: relative;
