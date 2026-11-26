@@ -126,7 +126,7 @@ Jangan pernah menggabungkan `ring-1` dan `border` pada komponen yang sama. Gunak
 * `--shadow-raised`: Elemen melayang (`<Popover>`, `<DropdownMenu>`, `<Dialog>`, floating composer, tooltip).
 * `--shadow-primary`: Tombol CTA Cobalt (`bg-brand`) dengan glow tepi bawah halus.
 * `--shadow-badge`: Badge status dan pill penanda ruang.
-* `--shadow-sticker`: Kontainer stiker `<AgentStickerAvatar />` berbingkai putih taktil (`2.5px` white border + drop shadow lembut).
+* `--shadow-sticker`: (Opsional / utility) Shadow lembut untuk elemen stiker mengambang.
 * **Dark Mode Ambient Borders:** Di `.dark`, kartu dan permukaan terangkat memakai highlight tepi atas tipis (`border-white/[0.08]`) atau wash border berwarna per ruang agar pemisahan layer tetap tegas tanpa shadow berat.
 
 ---
@@ -135,9 +135,9 @@ Jangan pernah menggabungkan `ring-1` dan `border` pada komponen yang sama. Gunak
 
 1. **Maksimum informasi inti di permukaan:** Kartu keputusan, node pemahaman, dan kartu briefing menampilkan judul, status visual, pemilik/avatar, dan satu ringkasan inti.
 2. **Pola `?` Popover (`<Popover>`):** Metadata teknis sekunder (referensi pasal UU PDP, ID pesan rujukan mentah, hash/versi bitemporal database, rumus BKT/IRT) **wajib** disembunyikan di balik tombol `<button>` ikon `?` (`HelpCircle`) atau `Info` yang membuka `<PopoverContent>` ketika diklik/fokus.
-3. **Human Portraits vs. Agent Stickers:**
+3. **Human Portraits vs. Agent Avatars:**
    * Manusia (Rani, Dimas, Budi, Sari) -> `<Avatar>` dengan foto potret `USER_AVATAR_MAP`.
-   * AI Agent (`team`, `private`, `tutor`) -> `<AgentStickerAvatar role="..." state="..." />` (`boopface` web component di dalam die-cut sticker badge).
+   * AI Agent (`team`, `private`, `tutor`) -> `<AgentStickerAvatar role="..." state="..." />` (`boopface` web component bersih tanpa outline frame dan berlatar transparan).
 
 ---
 

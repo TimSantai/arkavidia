@@ -42,11 +42,6 @@ function usePrefersReducedMotion(): boolean {
   return reduced
 }
 
-const STATE_RING_OVERRIDE: Partial<Record<AgentSemanticState, string>> = {
-  warning: "bg-[#fce9c2] dark:bg-[#423000]",
-  blocked: "bg-[#ffe4e0] dark:bg-[#630b0c]",
-}
-
 export function AgentStickerAvatar({
   role,
   state = "idle",
@@ -63,8 +58,6 @@ export function AgentStickerAvatar({
 
   const appearance = appearanceOverride ?? appearances[role]
   const meta = AGENT_ROLE_META[role]
-  const ringBgClass = STATE_RING_OVERRIDE[state] ?? meta.stickerBgClass
-  const faceSize = Math.max(24, Math.round(size * 0.8))
 
   // Only pass eye-color when supported by the skin or when transparent, preventing console warnings.
   const resolvedEyeColor =
@@ -140,8 +133,7 @@ export function AgentStickerAvatar({
   return (
     <span
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center rounded-2xl border-[2.5px] border-white shadow-sticker transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] dark:border-[#e9ebef]/90",
-        ringBgClass,
+        "relative inline-flex shrink-0 items-center justify-center transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)]",
         className
       )}
       style={{ width: size, height: size }}
@@ -149,7 +141,7 @@ export function AgentStickerAvatar({
     >
       <boop-face
         ref={faceRef}
-        size={faceSize}
+        size={size}
         color={appearance.color}
         skin={appearance.skin ?? "none"}
         eye-color={resolvedEyeColor}
