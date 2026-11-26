@@ -111,7 +111,7 @@ export function CoverageMatrix({
                   className={cn(
                     "transition-[background-color] duration-150",
                     isSelected
-                      ? "bg-wash-cyan"
+                      ? "bg-wash-brand"
                       : isSilo
                         ? "bg-warning-subtle/20 hover:bg-surface"
                         : "hover:bg-surface",
@@ -126,10 +126,10 @@ export function CoverageMatrix({
                       className="group flex w-full cursor-pointer flex-col items-start gap-0.5 rounded-lg p-1.5 -m-1.5 text-left transition-[background-color] duration-150 focus-visible:outline-2 focus-visible:outline-ring"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="rounded bg-wash-cyan px-1.5 py-0.5 text-xs font-semibold text-ink-cyan">
+                        <span className="rounded bg-wash-brand px-1.5 py-0.5 text-xs font-semibold text-ink-link">
                           {entry.kc.code}
                         </span>
-                        <span className="font-sans text-sm font-semibold text-ink-primary group-hover:text-ink-cyan">
+                        <span className="font-sans text-sm font-semibold text-ink-primary group-hover:text-ink-link">
                           {entry.kc.name}
                         </span>
                       </div>
@@ -165,15 +165,15 @@ export function CoverageMatrix({
                     return (
                       <td key={member.id} className="px-2 py-3 text-center">
                         {isCurrentUser ? (
-                          <div className="inline-flex flex-col items-center gap-1 rounded-lg border border-cyan-subtle bg-wash-cyan px-2.5 py-1.5">
-                            <span className="text-xs font-semibold tabular-nums text-ink-cyan">
+                          <div className="inline-flex flex-col items-center gap-1 rounded-lg border border-brand-subtle bg-wash-brand px-2.5 py-1.5">
+                            <span className="text-xs font-semibold tabular-nums text-ink-link">
                               P(L) = {pMastery.toFixed(2)}
                             </span>
                             <div className="w-16 overflow-hidden rounded-full bg-muted">
                               <div
                                 className={cn(
                                   "h-1.5 rounded-full transition-[width] duration-300 ease-out",
-                                  isUnderstood ? "bg-tertiary" : "bg-accent-violet",
+                                  isUnderstood ? "bg-success" : "bg-brand",
                                 )}
                                 style={{ width: `${Math.round(pMastery * 100)}%` }}
                               />

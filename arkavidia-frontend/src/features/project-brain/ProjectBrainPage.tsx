@@ -238,7 +238,7 @@ export function ProjectBrainPage() {
                   className={cn(
                     "rounded-md px-2.5 py-1 text-xs font-medium transition-[background-color,color,box-shadow] duration-150",
                     isActive
-                      ? "bg-tertiary text-on-tertiary shadow-badge"
+                      ? "bg-brand text-on-brand shadow-badge"
                       : "text-ink-secondary hover:bg-surface-top hover:text-ink-primary"
                   )}
                 >
@@ -259,7 +259,7 @@ export function ProjectBrainPage() {
               className={cn(
                 "rounded-full border px-2.5 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
                 kcFilter === "all"
-                  ? "border-cyan-subtle bg-wash-cyan text-ink-cyan"
+                  ? "border-brand-subtle bg-wash-brand text-ink-link"
                   : "border-line-subtle bg-surface text-ink-secondary hover:border-line-default hover:text-ink-primary"
               )}
             >
@@ -276,7 +276,7 @@ export function ProjectBrainPage() {
                   className={cn(
                     "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
                     isActive
-                      ? "border-cyan-subtle bg-wash-cyan text-ink-cyan"
+                      ? "border-brand-subtle bg-wash-brand text-ink-link"
                       : "border-line-subtle bg-surface text-ink-secondary hover:border-line-default hover:text-ink-primary"
                   )}
                 >
@@ -349,7 +349,7 @@ export function ProjectBrainPage() {
                     type="button"
                     size="sm"
                     onClick={() => setAsOf(undefined)}
-                    className="bg-tertiary text-on-tertiary hover:bg-tertiary-hover"
+                    className="bg-brand text-on-brand hover:bg-brand-hover"
                   >
                     Kembali ke Live
                   </Button>

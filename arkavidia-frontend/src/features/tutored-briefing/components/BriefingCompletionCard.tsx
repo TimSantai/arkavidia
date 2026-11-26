@@ -20,11 +20,11 @@ export function BriefingCompletionCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden border-cyan-subtle bg-surface-card py-0 shadow-card transition-[border-color,box-shadow] duration-200 animate-in fade-in-50 zoom-in-98",
+        "overflow-hidden border-brand-subtle bg-surface-card py-0 shadow-card transition-[border-color,box-shadow] duration-200 animate-in fade-in-50 zoom-in-98",
         className,
       )}
     >
-      <CardHeader className="border-b border-cyan-subtle bg-wash-cyan p-6">
+      <CardHeader className="border-b border-brand-subtle bg-wash-brand p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-4">
             <AgentStickerAvatar
@@ -43,7 +43,7 @@ export function BriefingCompletionCard({
               </Badge>
 
               <CardTitle className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
-                Siap <span className="font-display-oblique text-ink-cyan">Berkontribusi,</span> Sari
+                Siap <span className="font-display-oblique text-ink-link">Berkontribusi,</span> Sari
               </CardTitle>
 
               <p className="text-sm text-ink-secondary">
@@ -53,7 +53,7 @@ export function BriefingCompletionCard({
           </div>
 
           <div className="flex items-baseline gap-2 self-end sm:flex-col sm:items-end sm:gap-0.5 sm:self-center">
-            <span className="kpi-hero text-[40px] leading-none font-semibold text-ink-cyan">
+            <span className="kpi-hero text-[40px] leading-none font-semibold text-ink-link">
               100%
             </span>
             <span className="text-xs font-medium text-ink-secondary tabular-nums">
@@ -68,7 +68,7 @@ export function BriefingCompletionCard({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="space-y-1.5 rounded-xl border border-line-subtle bg-surface p-4">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs font-semibold text-ink-cyan">DEC-01</span>
+              <span className="text-xs font-semibold text-ink-link">DEC-01</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-medium text-text-success">
                 <CheckCircle2 className="size-3.5" aria-hidden="true" />
                 <span>Paham</span>
@@ -85,7 +85,7 @@ export function BriefingCompletionCard({
 
           <div className="space-y-1.5 rounded-xl border border-line-subtle bg-surface p-4">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs font-semibold text-ink-cyan">DEC-02</span>
+              <span className="text-xs font-semibold text-ink-link">DEC-02</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-medium text-text-success">
                 <CheckCircle2 className="size-3.5" aria-hidden="true" />
                 <span>Paham</span>
@@ -101,7 +101,7 @@ export function BriefingCompletionCard({
         </div>
 
         {/* Personal Agent Synchronization */}
-        <div className="flex items-center gap-3.5 rounded-xl border border-violet-subtle bg-wash-violet p-4">
+        <div className="flex items-center gap-3.5 rounded-xl border border-brand-subtle bg-wash-brand p-4">
           <AgentStickerAvatar
             role="private"
             state="success"
@@ -114,7 +114,7 @@ export function BriefingCompletionCard({
               <span className="text-sm font-semibold text-ink-primary">
                 Personal Agent Tersinkronkan
               </span>
-              <span className="rounded-full bg-surface-card px-2.5 py-0.5 text-xs font-medium text-ink-violet shadow-badge">
+              <span className="rounded-full bg-surface-card px-2.5 py-0.5 text-xs font-medium text-ink-link shadow-badge">
                 M1 + M2 Siap
               </span>
             </div>
@@ -135,7 +135,7 @@ export function BriefingCompletionCard({
           <div className="flex flex-wrap items-center gap-2">
             <Button asChild variant="outline" size="sm">
               <Link to={`/teams/${teamId}/understanding`}>
-                <Compass className="size-3.5 text-ink-cyan" aria-hidden="true" />
+                <Compass className="size-3.5 text-ink-link" aria-hidden="true" />
                 <span>Peta Pemahaman</span>
               </Link>
             </Button>

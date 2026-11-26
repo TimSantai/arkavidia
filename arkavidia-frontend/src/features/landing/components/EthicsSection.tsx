@@ -28,7 +28,7 @@ function GuardrailMicroVisual({ id }: { id: EthicsGuardrail["id"] }) {
       )
     case "no-leak":
       return (
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-violet-subtle bg-wash-violet px-3 py-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-subtle bg-wash-brand px-3 py-2">
           <div className="flex items-center gap-2">
             <AgentStickerAvatar
               role="private"
@@ -48,7 +48,7 @@ function GuardrailMicroVisual({ id }: { id: EthicsGuardrail["id"] }) {
       )
     case "no-grading":
       return (
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-cyan-subtle bg-wash-cyan px-3 py-2.5">
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-brand-subtle bg-wash-brand px-3 py-2.5">
           <div className="flex flex-1 items-center gap-2">
             <span className="font-sans text-xs font-semibold tabular-nums text-ink-primary">
               P(L) 0.78
@@ -72,7 +72,7 @@ function GuardrailMicroVisual({ id }: { id: EthicsGuardrail["id"] }) {
             />
             <span className="truncate">Skor Individu: Terkunci</span>
           </div>
-          <div className="flex items-center gap-1.5 rounded-xl border border-cyan-subtle bg-wash-cyan px-2.5 py-2 font-sans text-xs font-medium text-ink-cyan">
+          <div className="flex items-center gap-1.5 rounded-xl border border-brand-subtle bg-wash-brand px-2.5 py-2 font-sans text-xs font-medium text-ink-link">
             <ShieldCheck className="size-3.5 shrink-0" aria-hidden="true" />
             <span className="truncate">Dosen: Agregat Tim</span>
           </div>

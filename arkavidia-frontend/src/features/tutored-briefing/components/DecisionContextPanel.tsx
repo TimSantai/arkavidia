@@ -57,10 +57,10 @@ export function DecisionContextPanel({
         className,
       )}
     >
-      <CardHeader className="border-b border-line-subtle bg-wash-cyan/45 p-4">
+      <CardHeader className="border-b border-line-subtle bg-wash-brand/45 p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-ink-cyan">
+            <span className="text-xs font-semibold text-ink-link">
               {decisionItem.code}
             </span>
             <Badge
@@ -173,9 +173,9 @@ export function DecisionContextPanel({
             </div>
           </div>
         ) : (
-          <div className="rounded-xl border border-cyan-subtle bg-wash-cyan/45 p-4 text-center">
+          <div className="rounded-xl border border-brand-subtle bg-wash-brand/45 p-4 text-center">
             <div className="space-y-2">
-              <div className="mx-auto flex size-9 items-center justify-center rounded-full bg-surface-card text-ink-cyan shadow-badge">
+              <div className="mx-auto flex size-9 items-center justify-center rounded-full bg-surface-card text-ink-link shadow-badge">
                 <Lock className="size-4" aria-hidden="true" />
               </div>
               <p className="text-xs font-semibold text-ink-primary">

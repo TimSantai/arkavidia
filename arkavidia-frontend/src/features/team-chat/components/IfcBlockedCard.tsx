@@ -71,7 +71,7 @@ export function IfcBlockedCard({ teamId }: IfcBlockedCardProps) {
       {/* Compact Visual 3-Node Firewall Diagram */}
       <div className="mt-3 grid grid-cols-1 items-center gap-1.5 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
         <div className="flex items-center gap-2 rounded-xl border border-line-subtle bg-surface-card px-3 py-2 text-ink-primary">
-          <Lock className="size-3.5 shrink-0 text-ink-violet" aria-hidden="true" />
+          <Lock className="size-3.5 shrink-0 text-ink-link" aria-hidden="true" />
           <div className="min-w-0">
             <p className="truncate text-xs font-semibold">M1 Pribadi</p>
             <p className="text-xs text-ink-tertiary">Terkunci</p>

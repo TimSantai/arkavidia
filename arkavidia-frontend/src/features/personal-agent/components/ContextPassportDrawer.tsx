@@ -132,7 +132,7 @@ function ContextPassportForm({
                   variant="outline"
                   size="icon-xs"
                   aria-label="Penjelasan gerbang IFC dan UU PDP"
-                  className="rounded-full border-violet-subtle bg-wash-violet text-ink-violet hover:bg-accent-violet/15"
+                  className="rounded-full border-brand-subtle bg-wash-brand text-ink-link hover:bg-brand/15"
                 >
                   <HelpCircle className="size-3.5" aria-hidden="true" />
                 </Button>
@@ -171,7 +171,7 @@ function ContextPassportForm({
 
         {/* Visual Pipeline */}
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line-subtle bg-surface px-3 py-2 text-xs">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-subtle bg-wash-violet px-2.5 py-0.5 font-semibold text-ink-violet">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 font-semibold text-ink-link">
             <Lock className="size-3" aria-hidden="true" />
             M1 Pribadi
           </span>
@@ -237,11 +237,11 @@ function ContextPassportForm({
                   <span className="text-xs font-semibold text-ink-primary">
                     Sumber Asli M1 (Hanya Baca)
                   </span>
-                  <span className="text-xs font-medium text-ink-violet">
+                  <span className="text-xs font-medium text-ink-link">
                     Tetap Privat
                   </span>
                 </div>
-                <div className="max-h-36 overflow-y-auto rounded-xl border border-violet-subtle bg-wash-violet/60 p-3 text-xs leading-relaxed whitespace-pre-wrap text-ink-secondary">
+                <div className="max-h-36 overflow-y-auto rounded-xl border border-brand-subtle bg-wash-brand/60 p-3 text-xs leading-relaxed whitespace-pre-wrap text-ink-secondary">
                   {highlightedSegments.map((seg) =>
                     seg.pii ? (
                       <span

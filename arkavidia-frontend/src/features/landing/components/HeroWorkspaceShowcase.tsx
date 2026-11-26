@@ -58,7 +58,7 @@ const SHOWCASE_VIEWS: readonly {
     id: "explain",
     label: "Explain-Back",
     tag: "DEC-02",
-    roomToneClass: "bg-wash-cyan text-ink-cyan",
+    roomToneClass: "bg-wash-brand text-ink-link",
     route: "/teams/team-pbo-01/check",
     routeLabel: "Coba Explain-Back Check",
   },
@@ -66,7 +66,7 @@ const SHOWCASE_VIEWS: readonly {
     id: "bus",
     label: "Peta Pemahaman",
     tag: "Bus Factor: 1",
-    roomToneClass: "bg-wash-cyan text-ink-cyan",
+    roomToneClass: "bg-wash-brand text-ink-link",
     route: "/teams/team-pbo-01/understanding",
     routeLabel: "Lihat Peta Pemahaman Tim",
   },
@@ -79,10 +79,10 @@ function getScoreStyle(score: number, isSiloCol?: boolean) {
     return "bg-brand text-on-brand"
   }
   if (score >= 0.7) {
-    return "bg-tertiary text-on-tertiary"
+    return "bg-brand text-on-brand"
   }
   if (score >= 0.5) {
-    return "bg-accent-violet text-on-accent"
+    return "bg-brand text-on-brand"
   }
   if (isSiloCol) {
     return "bg-warning-subtle text-text-warning border border-line-default"
@@ -284,7 +284,7 @@ export function HeroWorkspaceShowcase() {
 
                 {/* Visual 3-Node IFC Pipeline Diagram */}
                 <div className="grid grid-cols-1 items-center gap-2.5 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
-                  <div className="flex flex-col items-center rounded-xl border border-violet-subtle bg-wash-violet p-3 text-center shadow-card">
+                  <div className="flex flex-col items-center rounded-xl border border-brand-subtle bg-wash-brand p-3 text-center shadow-card">
                     <AgentStickerAvatar
                       role="private"
                       state="idle"
@@ -292,10 +292,10 @@ export function HeroWorkspaceShowcase() {
                       interactive={false}
                     />
                     <p className="mt-2 inline-flex items-center gap-1 font-sans text-xs font-semibold text-ink-primary">
-                      <Lock className="size-3.5 text-ink-violet" aria-hidden="true" />
+                      <Lock className="size-3.5 text-ink-link" aria-hidden="true" />
                       M1 Rani Private
                     </p>
-                    <p className="font-sans text-xs text-ink-violet">
+                    <p className="font-sans text-xs text-ink-link">
                       Terenkripsi
                     </p>
                   </div>
@@ -372,7 +372,7 @@ export function HeroWorkspaceShowcase() {
                 transition={{ duration: 0.16, ease: "easeOut" }}
                 className="space-y-4"
               >
-                <div className="rounded-xl border border-cyan-subtle bg-wash-cyan p-4 shadow-card">
+                <div className="rounded-xl border border-brand-subtle bg-wash-brand p-4 shadow-card">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">
                       <Avatar>
@@ -659,9 +659,9 @@ export function HeroWorkspaceShowcase() {
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-cyan-subtle bg-wash-cyan p-3.5 shadow-card">
+                  <div className="rounded-xl border border-brand-subtle bg-wash-brand p-3.5 shadow-card">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-ink-cyan">
+                      <span className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-ink-link">
                         <Network className="size-3.5" aria-hidden="true" />
                         Saran Pairing 10 mnt
                       </span>

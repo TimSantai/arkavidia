@@ -26,10 +26,10 @@ export function KcDetailCard({ summary, teamId, className }: KcDetailCardProps) 
         className,
       )}
     >
-      <CardHeader className="border-b border-cyan-subtle bg-wash-cyan pb-4">
+      <CardHeader className="border-b border-brand-subtle bg-wash-brand pb-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="rounded-md border border-cyan-subtle bg-surface-card px-2.5 py-0.5 text-xs font-semibold text-ink-cyan">
+            <span className="rounded-md border border-brand-subtle bg-surface-card px-2.5 py-0.5 text-xs font-semibold text-ink-link">
               {kc.code}
             </span>
             <span
@@ -182,7 +182,7 @@ export function KcDetailCard({ summary, teamId, className }: KcDetailCardProps) 
             />
             <div className="space-y-0.5">
               <div className="flex items-center gap-1.5">
-                <Users className="size-3.5 text-ink-cyan" aria-hidden="true" />
+                <Users className="size-3.5 text-ink-link" aria-hidden="true" />
                 <span className="text-xs font-semibold tabular-nums text-ink-primary">
                   Cakupan {understoodCount}/{totalMembers} anggota ({coveragePercent}%)
                 </span>

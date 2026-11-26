@@ -99,7 +99,7 @@ export function DecisionDetailInspector({
   if (!item) {
     return (
       <div className="rounded-xl border border-line-subtle bg-surface-card p-6 text-center shadow-card">
-        <GitBranch className="mx-auto size-6 text-ink-cyan" aria-hidden="true" />
+        <GitBranch className="mx-auto size-6 text-ink-link" aria-hidden="true" />
         <p className="mt-2 font-sans text-base font-semibold text-ink-primary">
           Pilih Decision Record
         </p>
@@ -181,7 +181,7 @@ export function DecisionDetailInspector({
       {/* Header: Code, Status, Title, PIC */}
       <div className="space-y-3 border-b border-line-subtle pb-4">
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="rounded-md border border-cyan-subtle bg-wash-cyan px-2 py-0.5 text-xs font-semibold text-ink-cyan">
+          <span className="rounded-md border border-brand-subtle bg-wash-brand px-2 py-0.5 text-xs font-semibold text-ink-link">
             {displayCode}
           </span>
 
@@ -192,7 +192,7 @@ export function DecisionDetailInspector({
             </span>
           )}
           {item.status === "proposed" && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-cyan-subtle bg-info-subtle px-2.5 py-0.5 text-xs font-medium text-text-info">
+            <span className="inline-flex items-center gap-1 rounded-full border border-brand-subtle bg-info-subtle px-2.5 py-0.5 text-xs font-medium text-text-info">
               <Clock3 className="size-3.5" aria-hidden="true" />
               Usulan
             </span>
@@ -243,7 +243,7 @@ export function DecisionDetailInspector({
         {/* Human-readable validity with raw bitemporal DB keys folded into ? Popover */}
         <div className="flex items-center justify-between gap-2 rounded-lg border border-line-subtle bg-surface px-3 py-2 text-xs text-ink-secondary">
           <div className="flex items-center gap-2 tabular-nums">
-            <CalendarClock className="size-3.5 shrink-0 text-ink-cyan" aria-hidden="true" />
+            <CalendarClock className="size-3.5 shrink-0 text-ink-link" aria-hidden="true" />
             <span>
               Berlaku sejak <strong className="text-ink-primary">{formatReadableDate(item.validFrom)}</strong>
               {item.validTo ? ` hingga ${formatReadableDate(item.validTo)}` : ""}
@@ -344,7 +344,7 @@ export function DecisionDetailInspector({
       {/* Visual Node-Chain Relasi Graf */}
       <section className="space-y-2.5 border-t border-line-subtle pt-4">
         <div className="flex items-center gap-1.5">
-          <GitBranch className="size-3.5 text-ink-cyan" aria-hidden="true" />
+          <GitBranch className="size-3.5 text-ink-link" aria-hidden="true" />
           <h3 className="text-xs font-semibold tracking-wide text-ink-secondary uppercase">
             Relasi Graf Memori
           </h3>
@@ -368,7 +368,7 @@ export function DecisionDetailInspector({
                     "group flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border p-2.5 text-left transition-[border-color,background-color] duration-150",
                     isConflict
                       ? "border-line-error bg-error-subtle text-text-error"
-                      : "border-line-subtle bg-surface hover:border-tertiary hover:bg-wash-cyan/60"
+                      : "border-line-subtle bg-surface hover:border-line-active hover:bg-wash-brand/60"
                   )}
                 >
                   <div className="min-w-0 flex-1 space-y-1">
@@ -380,7 +380,7 @@ export function DecisionDetailInspector({
                       <span
                         className={cn(
                           "font-medium",
-                          isConflict ? "text-text-error" : "text-ink-cyan"
+                          isConflict ? "text-text-error" : "text-ink-link"
                         )}
                       >
                         {node.relationLabel}
@@ -402,7 +402,7 @@ export function DecisionDetailInspector({
                   {isConflict ? (
                     <AlertTriangle className="size-3.5 shrink-0 text-text-error" aria-hidden="true" />
                   ) : (
-                    <Link2 className="size-3.5 shrink-0 text-ink-secondary transition-colors group-hover:text-ink-cyan" aria-hidden="true" />
+                    <Link2 className="size-3.5 shrink-0 text-ink-secondary transition-colors group-hover:text-ink-link" aria-hidden="true" />
                   )}
                 </button>
               )
@@ -415,9 +415,9 @@ export function DecisionDetailInspector({
                     key={kc.id}
                     type="button"
                     onClick={() => onFilterKc?.(kc.id)}
-                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-line-subtle bg-surface px-2.5 py-1.5 text-left text-xs transition-[border-color,background-color] duration-150 hover:border-tertiary hover:bg-wash-cyan/60"
+                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-line-subtle bg-surface px-2.5 py-1.5 text-left text-xs transition-[border-color,background-color] duration-150 hover:border-line-active hover:bg-wash-brand/60"
                   >
-                    <BookOpen className="size-3.5 text-ink-cyan" aria-hidden="true" />
+                    <BookOpen className="size-3.5 text-ink-link" aria-hidden="true" />
                     <span className="font-semibold text-ink-primary">
                       {kc.code}
                     </span>
@@ -479,7 +479,7 @@ export function DecisionDetailInspector({
             className="rounded-lg border border-line-subtle bg-surface p-2.5 text-xs"
           >
             <div className="flex items-center gap-1.5 font-medium text-ink-secondary">
-              <MessageSquareText className="size-3.5 text-ink-cyan" aria-hidden="true" />
+              <MessageSquareText className="size-3.5 text-ink-link" aria-hidden="true" />
               <span>{msg.authorName}</span>
             </div>
             <p className="mt-1 line-clamp-3 text-ink-primary">{msg.body}</p>

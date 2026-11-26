@@ -30,21 +30,14 @@ import { bersamaApi } from "@/services/api"
 import type { Team } from "@/types/bersama"
 import { cn } from "@/lib/utils"
 
-type RoomTone = "brand" | "violet" | "cyan"
-
 interface NavItem {
   readonly to: string
   readonly label: string
   readonly badge?: string
-  readonly tone: RoomTone
   readonly icon: typeof MessageSquare
 }
 
-const ACTIVE_TONE_CLASSES: Readonly<Record<RoomTone, string>> = {
-  brand: "bg-brand text-on-brand shadow-primary",
-  violet: "bg-accent-violet text-on-accent shadow-card",
-  cyan: "bg-tertiary text-on-tertiary shadow-card",
-}
+const ACTIVE_NAV_CLASSES = "bg-brand text-on-brand shadow-primary"
 
 function resolveActiveAgentRole(pathname: string): AgentRole {
   if (pathname.includes("/private")) return "private"
@@ -103,20 +96,17 @@ export function AppShell() {
       to: `/teams/${teamId}/chat`,
       label: "Ruang Tim",
       badge: "M2",
-      tone: "brand",
       icon: MessageSquare,
     },
     {
       to: `/teams/${teamId}/private`,
       label: "Ruang Pribadi",
       badge: "M1",
-      tone: "violet",
       icon: Lock,
     },
     {
       to: `/teams/${teamId}/brain`,
       label: "Project Brain",
-      tone: "cyan",
       icon: Brain,
     },
   ]
@@ -125,19 +115,16 @@ export function AppShell() {
     {
       to: `/teams/${teamId}/understanding`,
       label: "Peta Pemahaman",
-      tone: "cyan",
       icon: Activity,
     },
     {
       to: `/teams/${teamId}/check`,
       label: "Explain-Back Check",
-      tone: "cyan",
       icon: ClipboardCheck,
     },
     {
       to: `/teams/${teamId}/briefing`,
       label: "Tutored Briefing",
-      tone: "cyan",
       icon: GraduationCap,
     },
   ]
@@ -148,10 +135,10 @@ export function AppShell() {
     isMobile = false
   ) => (
     <div className="space-y-1">
-      <p className="px-2.5 pb-1 text-xs font-medium tracking-wide text-ink-tertiary">
+      <p className="px-2.5 pb-1 text-xs font-medium tracking-wide text-ink-secondary">
         {title}
       </p>
-      {items.map(({ to, label, badge, tone, icon: Icon }) => (
+      {items.map(({ to, label, badge, icon: Icon }) => (
         <NavLink
           key={to}
           to={to}
@@ -161,7 +148,7 @@ export function AppShell() {
               "group relative flex items-center justify-between rounded-lg px-2.5 text-[13px] font-medium transition-[background-color,color,transform,box-shadow] duration-150 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
               isMobile ? "min-h-11 py-2.5" : "min-h-9 py-2",
               isActive
-                ? ACTIVE_TONE_CLASSES[tone]
+                ? ACTIVE_NAV_CLASSES
                 : "text-ink-secondary hover:bg-surface-top hover:text-ink-primary"
             )
           }

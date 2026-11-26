@@ -94,7 +94,7 @@ export function SiloPairingPanel({
         <div className="space-y-0.5">
           <div className="flex items-center gap-1.5">
             <h2 className="font-display text-xl font-semibold text-ink-primary">
-              Rekomendasi Sesi <span className="font-display-oblique text-ink-cyan">Jelaskan ke Aku</span>
+              Rekomendasi Sesi <span className="font-display-oblique text-ink-link">Jelaskan ke Aku</span>
             </h2>
             <Popover>
               <PopoverTrigger asChild>
@@ -137,26 +137,26 @@ export function SiloPairingPanel({
             return (
               <Card
                 key={item.id}
-                className="group relative overflow-hidden border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150 hover:border-tertiary hover:shadow-raised"
+                className="group relative overflow-hidden border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150 hover:border-line-active hover:shadow-raised"
               >
                 <CardContent className="space-y-4 p-5">
                   {/* Top Meta Bar */}
                   <div className="flex items-center justify-between border-b border-line-subtle pb-3">
                     <div className="flex items-center gap-1.5">
-                      <Compass className="size-4 text-ink-cyan" aria-hidden="true" />
+                      <Compass className="size-4 text-ink-link" aria-hidden="true" />
                       <span className="text-sm font-semibold text-ink-primary">
                         {item.kcName}
                       </span>
                     </div>
 
                     <span className="inline-flex items-center gap-1 rounded-full bg-surface px-2.5 py-0.5 text-xs font-medium tabular-nums text-ink-secondary">
-                      <Clock className="size-3.5 text-ink-cyan" aria-hidden="true" />
+                      <Clock className="size-3.5 text-ink-link" aria-hidden="true" />
                       {item.durationMinutes} Menit
                     </span>
                   </div>
 
                   {/* Mentor -> Learner Visual Row */}
-                  <div className="flex items-center justify-between gap-3 rounded-xl bg-surface p-3.5 transition-[background-color] duration-150 group-hover:bg-wash-cyan/50">
+                  <div className="flex items-center justify-between gap-3 rounded-xl bg-surface p-3.5 transition-[background-color] duration-150 group-hover:bg-wash-brand/50">
                     {/* Mentor */}
                     <div className="flex items-center gap-2.5">
                       <Avatar className="size-10 border-2 border-success/50 shadow-badge">
@@ -181,7 +181,7 @@ export function SiloPairingPanel({
 
                     {/* Arrow Divider */}
                     <div className="flex flex-col items-center gap-0.5">
-                      <ArrowRight className="size-4 shrink-0 text-ink-cyan" aria-hidden="true" />
+                      <ArrowRight className="size-4 shrink-0 text-ink-link" aria-hidden="true" />
                       <span className="text-xs text-ink-secondary">Pairing</span>
                     </div>
 
@@ -229,12 +229,12 @@ export function SiloPairingPanel({
                         onClick={() => handleScheduleLater(item.id)}
                         className={cn(
                           "text-xs",
-                          isScheduled && "border-cyan-subtle bg-wash-cyan text-ink-cyan",
+                          isScheduled && "border-brand-subtle bg-wash-brand text-ink-link",
                         )}
                       >
                         {isScheduled ? (
                           <>
-                            <CheckCircle2 className="mr-1 size-3.5 text-ink-cyan" aria-hidden="true" />
+                            <CheckCircle2 className="mr-1 size-3.5 text-ink-link" aria-hidden="true" />
                             Terjadwal
                           </>
                         ) : (

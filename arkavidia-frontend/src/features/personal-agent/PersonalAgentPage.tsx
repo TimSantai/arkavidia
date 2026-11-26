@@ -221,17 +221,17 @@ export function PersonalAgentPage() {
       >
         <div className="flex min-w-0 items-center gap-2.5">
           <Lock
-            className="size-4 shrink-0 text-ink-violet"
+            className="size-4 shrink-0 text-ink-link"
             aria-hidden="true"
           />
           <h1 className="truncate font-display text-xl font-semibold tracking-tight text-ink-primary">
             Ruang{" "}
-            <span className="font-display-oblique text-ink-violet">
+            <span className="font-display-oblique text-ink-link">
               Pribadi
             </span>
           </h1>
 
-          <span className="hidden shrink-0 items-center rounded-full border border-violet-subtle bg-wash-violet px-2.5 py-0.5 text-xs font-semibold text-ink-violet shadow-badge sm:inline-flex">
+          <span className="hidden shrink-0 items-center rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-semibold text-ink-link shadow-badge sm:inline-flex">
             M1 Private
           </span>
 
@@ -242,7 +242,7 @@ export function PersonalAgentPage() {
                 variant="outline"
                 size="icon-xs"
                 aria-label="Info enkripsi M1 dan kepatuhan UU PDP"
-                className="rounded-full border-violet-subtle bg-wash-violet text-ink-violet hover:bg-accent-violet/15"
+                className="rounded-full border-brand-subtle bg-wash-brand text-ink-link hover:bg-brand/15"
               >
                 <HelpCircle className="size-3.5" aria-hidden="true" />
               </Button>
@@ -261,7 +261,7 @@ export function PersonalAgentPage() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-violet-subtle bg-wash-violet py-0.5 pr-1 pl-1 shadow-badge">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-subtle bg-wash-brand py-0.5 pr-1 pl-1 shadow-badge">
             <AgentStickerAvatar
               role="private"
               state={agentAvatarState}
@@ -274,7 +274,7 @@ export function PersonalAgentPage() {
               size="xs"
               onClick={() => setCustomizerOpen(true)}
               aria-label="Kustomisasi stiker Personal Agent"
-              className="h-7 gap-1 rounded-full px-2 text-xs font-medium text-ink-violet hover:bg-surface-top hover:text-ink-violet"
+              className="h-7 gap-1 rounded-full px-2 text-xs font-medium text-ink-link hover:bg-surface-top hover:text-ink-link"
             >
               <SlidersHorizontal className="size-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">Atur</span>
@@ -320,8 +320,8 @@ export function PersonalAgentPage() {
                 size={36}
                 interactive={false}
               />
-              <div className="inline-flex items-center gap-2 rounded-2xl border border-violet-subtle bg-wash-violet px-3.5 py-2 text-xs shadow-card">
-                <Loader size={14} className="text-ink-violet" />
+              <div className="inline-flex items-center gap-2 rounded-2xl border border-brand-subtle bg-wash-brand px-3.5 py-2 text-xs shadow-card">
+                <Loader size={14} className="text-ink-link" />
                 <Shimmer duration={1.4} className="text-xs font-medium">
                   Personal Agent menyusun di ruang M1...
                 </Shimmer>
@@ -341,7 +341,7 @@ export function PersonalAgentPage() {
                 key={chip.id}
                 type="button"
                 onClick={() => void handleSendText(chip.prompt)}
-                className="inline-flex min-h-8 max-w-full items-center truncate rounded-full border border-violet-subtle bg-surface-card/95 px-3 py-1 text-xs font-medium text-ink-secondary shadow-control backdrop-blur-sm transition-[background-color,border-color,color,transform] duration-150 hover:border-line-active hover:bg-wash-violet hover:text-ink-violet active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="inline-flex min-h-8 max-w-full items-center truncate rounded-full border border-brand-subtle bg-surface-card/95 px-3 py-1 text-xs font-medium text-ink-secondary shadow-control backdrop-blur-sm transition-[background-color,border-color,color,transform] duration-150 hover:border-line-active hover:bg-wash-brand hover:text-ink-link active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 <span className="truncate">{chip.label}</span>
               </button>
@@ -350,7 +350,7 @@ export function PersonalAgentPage() {
 
           <PromptInput
             onSubmit={({ text }) => void handleSendText(text || inputText)}
-            className="[&_[data-slot=input-group]]:rounded-2xl [&_[data-slot=input-group]]:border-violet-subtle [&_[data-slot=input-group]]:bg-surface-raised [&_[data-slot=input-group]]:shadow-raised"
+            className="[&_[data-slot=input-group]]:rounded-2xl [&_[data-slot=input-group]]:border-brand-subtle [&_[data-slot=input-group]]:bg-surface-raised [&_[data-slot=input-group]]:shadow-raised"
           >
             <PromptInputBody>
               <PromptInputTextarea
@@ -379,7 +379,7 @@ export function PersonalAgentPage() {
                     {activeUser.name.split(" ")[0]}
                   </span>
                 </div>
-                <span className="inline-flex items-center gap-1 rounded-full border border-violet-subtle bg-wash-violet px-2.5 py-0.5 text-xs font-semibold text-ink-violet">
+                <span className="inline-flex items-center gap-1 rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-semibold text-ink-link">
                   <Lock className="size-3" aria-hidden="true" />
                   M1 Private
                 </span>
@@ -388,7 +388,7 @@ export function PersonalAgentPage() {
               <PromptInputSubmit
                 status={isAgentThinking ? "submitted" : undefined}
                 disabled={!inputText.trim() || isAgentThinking}
-                className="bg-accent-violet text-on-accent shadow-card hover:bg-accent-violet-hover active:bg-accent-violet-active disabled:opacity-40"
+                className="bg-brand text-on-brand shadow-card hover:bg-brand-hover active:bg-brand-active disabled:opacity-40"
               />
             </PromptInputFooter>
           </PromptInput>

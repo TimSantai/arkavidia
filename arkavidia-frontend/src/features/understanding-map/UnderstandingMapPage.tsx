@@ -74,7 +74,7 @@ export function UnderstandingMapPage() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1">
           <h1 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
-            Peta <span className="font-display-oblique text-ink-cyan">Pemahaman</span> Tim
+            Peta <span className="font-display-oblique text-ink-link">Pemahaman</span> Tim
           </h1>
           <p className="text-sm text-ink-secondary">
             Kesehatan konsep tim, deteksi silo pengetahuan, dan peluang sesi belajar bareng.
@@ -84,7 +84,7 @@ export function UnderstandingMapPage() {
         <div className="flex shrink-0 items-center gap-2">
           <Pill
             variant="secondary"
-            className="border border-cyan-subtle bg-wash-cyan text-xs font-medium text-ink-cyan shadow-badge"
+            className="border border-brand-subtle bg-wash-brand text-xs font-medium text-ink-link shadow-badge"
           >
             <PillIndicator variant="success" />
             <span>Murni formatif · Bukan nilai kuliah</span>
@@ -113,8 +113,8 @@ export function UnderstandingMapPage() {
       </div>
 
       {/* Compact Privacy Strip */}
-      <div className="flex items-center gap-3 rounded-xl border border-cyan-subtle bg-wash-cyan px-4 py-2.5 text-xs text-ink-primary shadow-card">
-        <ShieldCheck className="size-4 shrink-0 text-ink-cyan" aria-hidden="true" />
+      <div className="flex items-center gap-3 rounded-xl border border-brand-subtle bg-wash-brand px-4 py-2.5 text-xs text-ink-primary shadow-card">
+        <ShieldCheck className="size-4 shrink-0 text-ink-link" aria-hidden="true" />
         <p className="text-ink-secondary">
           Skor angka <strong className="text-ink-primary">P(L)</strong> bersifat privat untuk{" "}
           <strong className="text-ink-primary">{activeUser.name}</strong>. Rekan lain tampil sebagai{" "}
@@ -161,7 +161,7 @@ export function UnderstandingMapPage() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <span className="inline-flex items-center gap-1 rounded-full border border-cyan-subtle bg-wash-cyan px-2.5 py-0.5 text-xs font-semibold text-ink-cyan">
+              <span className="inline-flex items-center gap-1 rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-semibold text-ink-link">
                 <BarChart3 className="size-3.5" aria-hidden="true" />
                 Ambang 0.70
               </span>
@@ -189,12 +189,12 @@ export function UnderstandingMapPage() {
                   title="KC-01 MVC (3/4 anggota paham)"
                 />
                 <div
-                  className="bg-accent-violet transition-[width] duration-300 ease-out"
+                  className="bg-brand transition-[width] duration-300 ease-out"
                   style={{ width: "12.5%" }}
                   title="KC-02 JWT (1/4 anggota paham)"
                 />
                 <div
-                  className="bg-tertiary transition-[width] duration-300 ease-out"
+                  className="bg-brand transition-[width] duration-300 ease-out"
                   style={{ width: "12.5%" }}
                   title="KC-03 DB (2/4 anggota paham)"
                 />
@@ -204,10 +204,10 @@ export function UnderstandingMapPage() {
                   <span className="size-2 rounded-full bg-brand" /> MVC
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="size-2 rounded-full bg-accent-violet" /> JWT
+                  <span className="size-2 rounded-full bg-brand" /> JWT
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="size-2 rounded-full bg-tertiary" /> DB & REST
+                  <span className="size-2 rounded-full bg-brand" /> DB & REST
                 </span>
               </div>
             </div>

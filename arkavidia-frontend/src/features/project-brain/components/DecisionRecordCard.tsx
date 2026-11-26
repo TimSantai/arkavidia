@@ -56,9 +56,9 @@ export function DecisionRecordCard({
       className={cn(
         "rounded-xl border transition-[border-color,box-shadow,background-color] duration-150",
         isSelected
-          ? "border-tertiary bg-wash-cyan shadow-raised"
+          ? "border-line-active bg-wash-brand shadow-raised"
           : item.status === "proposed"
-            ? "border-cyan-subtle bg-surface-card shadow-card hover:border-tertiary"
+            ? "border-brand-subtle bg-surface-card shadow-card hover:border-line-active"
             : "border-line-subtle bg-surface-card shadow-card hover:border-line-strong"
       )}
     >
@@ -72,7 +72,7 @@ export function DecisionRecordCard({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="inline-flex items-center gap-1 rounded-md border border-line-subtle bg-surface px-2 py-0.5 text-xs font-semibold text-ink-primary">
-              <GitCommitHorizontal className="size-3.5 text-ink-cyan" aria-hidden="true" />
+              <GitCommitHorizontal className="size-3.5 text-ink-link" aria-hidden="true" />
               {displayCode}
             </span>
 
@@ -84,7 +84,7 @@ export function DecisionRecordCard({
             )}
 
             {item.status === "proposed" && (
-              <span className="inline-flex items-center gap-1 rounded-full border border-cyan-subtle bg-info-subtle px-2.5 py-0.5 text-xs font-medium text-text-info">
+              <span className="inline-flex items-center gap-1 rounded-full border border-brand-subtle bg-info-subtle px-2.5 py-0.5 text-xs font-medium text-text-info">
                 <Clock3 className="size-3.5" aria-hidden="true" />
                 Usulan
               </span>

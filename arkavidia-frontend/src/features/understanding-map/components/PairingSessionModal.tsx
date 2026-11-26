@@ -150,9 +150,9 @@ function PairingSessionModalBody({
 
   return (
     <>
-      <DialogHeader className="border-b border-line-subtle bg-wash-cyan p-5 pb-4">
+      <DialogHeader className="border-b border-line-subtle bg-wash-brand p-5 pb-4">
         <div className="flex flex-wrap items-center justify-between gap-2 pr-6">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-subtle bg-surface-card px-2.5 py-0.5 text-xs font-medium text-ink-cyan shadow-badge">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-subtle bg-surface-card px-2.5 py-0.5 text-xs font-medium text-ink-link shadow-badge">
             <Clock className="size-3.5" aria-hidden="true" />
             Sesi 10 Menit · Jelaskan ke Aku
           </span>
@@ -196,7 +196,7 @@ function PairingSessionModalBody({
           </div>
 
           <div className="flex flex-col items-center gap-0.5">
-            <ArrowRight className="size-4 text-ink-cyan" aria-hidden="true" />
+            <ArrowRight className="size-4 text-ink-link" aria-hidden="true" />
             <span className="text-xs text-ink-secondary">10 menit</span>
           </div>
 
@@ -229,7 +229,7 @@ function PairingSessionModalBody({
                 className={cn(
                   "flex size-11 items-center justify-center rounded-full transition-[background-color,color] duration-150",
                   isRunning
-                    ? "bg-wash-cyan text-ink-cyan"
+                    ? "bg-wash-brand text-ink-link"
                     : "bg-muted text-ink-secondary",
                 )}
               >
@@ -282,7 +282,7 @@ function PairingSessionModalBody({
 
           <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full bg-tertiary transition-[width] duration-300 ease-out"
+              className="h-full bg-brand transition-[width] duration-300 ease-out"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -292,7 +292,7 @@ function PairingSessionModalBody({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <FileText className="size-4 text-ink-cyan" aria-hidden="true" />
+              <FileText className="size-4 text-ink-link" aria-hidden="true" />
               <h3 className="font-sans text-xs font-semibold tracking-wide text-ink-primary uppercase">
                 Panduan Diskusi ({decisionItem?.code ?? "DEC-02"})
               </h3>
@@ -323,7 +323,7 @@ function PairingSessionModalBody({
                       "group flex w-full cursor-pointer items-start gap-3 rounded-xl border p-3.5 text-left transition-[border-color,background-color,transform] duration-150 ease-out active:scale-[0.99] select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       isChecked
                         ? "border-success/40 bg-success-subtle/30"
-                        : "border-line-subtle bg-surface-card hover:border-tertiary",
+                        : "border-line-subtle bg-surface-card hover:border-line-active",
                     )}
                   >
                     <span
@@ -332,7 +332,7 @@ function PairingSessionModalBody({
                         "mt-0.5 flex size-4.5 shrink-0 items-center justify-center rounded-md border transition-[border-color,background-color] duration-150",
                         isChecked
                           ? "border-success bg-success text-on-success"
-                          : "border-line-default bg-surface-card group-hover:border-tertiary",
+                          : "border-line-default bg-surface-card group-hover:border-line-active",
                       )}
                     >
                       {isChecked && <CheckCircle2 className="size-3.5 stroke-[2.5]" />}

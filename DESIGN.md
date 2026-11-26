@@ -53,13 +53,20 @@ Sumber dasar: `https://www.ramps.studio/?b=3d7dff&m=full&s=analogous&c=AA`
 | **Tier 4B (Raised)** | `--bg-surface-raised` | `#ffffff` | `#3d3f44` | `bg-surface-raised` / `bg-popover` | Popover, dropdown, dialog, floating bar (`shadow-raised`) |
 | **Muted / Inverse** | `--bg-muted` / `--bg-inverse` | `#d7d9dd` / `#323337` | `#5a5c60` / `#e9ebef` | `bg-muted` / `bg-inverse` | Hover kontrol sekunder, badge netral, tooltip kontras tinggi |
 
-### 2.3 Room-Coded Chromatic Washes & Borders
+### 2.3 Unified UI Chrome Palette (Max 3 Core Roles)
 
-| Room / Domain | Wash Token | Light Value | Dark Value | Border Accent | Tailwind Utility |
+Untuk menjaga konsistensi lintas ruang (`Ruang Tim`, `Ruang Pribadi`, `Project Brain`, `Peta Pemahaman`, `Explain-Back`, `Tutored Briefing`), seluruh UI chrome (navigasi aktif, tombol utama, teks judul/tautan, wash panel) dibatasi ke **maksimal 3 peran warna**:
+1. **Netral 4-tier** (surface, border, dan ink primer/sekunder).
+2. **Satu Aksen Brand Terpadu: Cobalt Blue** (`--bg-brand`, `--wash-brand`, `--border-brand-subtle`, `--text-link`) di seluruh ruang.
+3. **Status Semantik Fungsional** (Emerald sukses, Amber peringatan, Coral error) khusus untuk status/alert nyata, bukan tema halaman.
+
+Warna ekspresif tambahan (`Violet` / `Cyan` / palet multi-warna) **dikhususkan hanya untuk ilustrasi, foto, grafik data (`--chart-*`), dan karakter AI `<boop-face>`** agar tampilan tetap bersih namun hidup.
+
+| Domain | Wash Token | Light Value | Dark Value | Border Accent | Tailwind Utility |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **S2 Ruang Tim & Utama (Cobalt)** | `--wash-brand` | `rgb(26 81 196 / 0.08)` | `rgb(71 132 255 / 0.14)` | `#c6daff` / `rgb(71 132 255 / 0.34)` | `bg-wash-brand` |
-| **S3 Ruang Pribadi M1 (Violet)** | `--wash-violet` | `rgb(127 81 219 / 0.09)` | `rgb(150 105 248 / 0.15)` | `#dbd2ff` / `rgb(150 105 248 / 0.36)` | `bg-wash-violet` |
-| **S4/S6/S7 Brain & Tutor (Cyan)** | `--wash-cyan` | `rgb(0 101 136 / 0.08)` | `rgb(0 152 202 / 0.15)` | `#aae2ff` / `rgb(0 152 202 / 0.36)` | `bg-wash-cyan` |
+| **Unified UI Chrome (Cobalt)** | `--wash-brand` | `rgb(26 81 196 / 0.08)` | `rgb(71 132 255 / 0.14)` | `#c6daff` / `rgb(71 132 255 / 0.34)` | `bg-wash-brand` |
+| **Ilustrasi / Chart Only (Violet)** | `--wash-violet` | `rgb(127 81 219 / 0.09)` | `rgb(150 105 248 / 0.15)` | `#dbd2ff` / `rgb(150 105 248 / 0.36)` | Khusus ilustrasi/chart |
+| **Ilustrasi / Chart Only (Cyan)** | `--wash-cyan` | `rgb(0 101 136 / 0.08)` | `rgb(0 152 202 / 0.15)` | `#aae2ff` / `rgb(0 152 202 / 0.36)` | Khusus ilustrasi/chart |
 
 ### 2.4 Brand, Accent & Feedback Tokens
 

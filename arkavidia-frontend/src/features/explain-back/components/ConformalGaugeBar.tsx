@@ -31,13 +31,13 @@ export function ConformalGaugeBar({
     ? "bg-warning"
     : grade === 2
       ? "bg-success"
-      : "bg-tertiary"
+      : "bg-brand"
 
   const statusTextClass = abstained
     ? "text-text-warning"
     : grade === 2
       ? "text-text-success"
-      : "text-ink-cyan"
+      : "text-ink-link"
 
   return (
     <div

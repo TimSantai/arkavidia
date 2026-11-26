@@ -210,12 +210,12 @@ export function TeamsPage() {
 
         {/* Highlight Banner for Sari (New Member Minggu ke-3) */}
         {isNewMemberSari && teams[0] && (
-          <Card className="rounded-2xl border-cyan-subtle bg-wash-cyan py-0">
+          <Card className="rounded-2xl border-brand-subtle bg-wash-brand py-0">
             <CardContent className="flex flex-col items-start justify-between gap-4 p-5 sm:flex-row sm:items-center">
               <div className="flex items-start gap-3.5">
                 <AgentStickerAvatar role="tutor" state="nudge" size={44} />
                 <div className="space-y-1">
-                  <div className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-ink-cyan">
+                  <div className="inline-flex items-center gap-1.5 font-sans text-xs font-semibold text-ink-link">
                     <Compass className="size-3.5" aria-hidden="true" />
                     <span>Onboarding Minggu ke-3</span>
                   </div>

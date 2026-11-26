@@ -33,9 +33,9 @@ const MEMBER_MAP = new Map(DEMO_TEAM_MEMBERS.map((m) => [m.id, m]))
 
 const PHASE_WASH_CLASS: Readonly<Record<WeeklyCyclePhase["id"], string>> = {
   capture: "border-brand-subtle bg-wash-brand",
-  map: "border-cyan-subtle bg-wash-cyan",
-  check: "border-cyan-subtle bg-wash-cyan",
-  close: "border-violet-subtle bg-wash-violet",
+  map: "border-brand-subtle bg-wash-brand",
+  check: "border-brand-subtle bg-wash-brand",
+  close: "border-brand-subtle bg-wash-brand",
 }
 
 function PhaseVisualDiagram({ phaseId }: { phaseId: WeeklyCyclePhase["id"] }) {
@@ -164,12 +164,12 @@ function PhaseVisualDiagram({ phaseId }: { phaseId: WeeklyCyclePhase["id"] }) {
               Silo 1/4
             </text>
 
-            <circle cx="150" cy="98" r="24" fill="var(--bg-tertiary)" />
+            <circle cx="150" cy="98" r="24" fill="var(--bg-brand)" />
             <text
               x="150"
               y="102"
               textAnchor="middle"
-              fill="var(--text-on-tertiary)"
+              fill="var(--text-on-brand)"
               className="font-sans text-xs font-semibold"
             >
               KC-03
@@ -180,7 +180,7 @@ function PhaseVisualDiagram({ phaseId }: { phaseId: WeeklyCyclePhase["id"] }) {
               x="240"
               y="70"
               textAnchor="middle"
-              fill="var(--text-on-accent)"
+              fill="var(--text-on-brand)"
               className="font-sans text-xs font-semibold"
             >
               KC-04
@@ -288,7 +288,7 @@ function PhaseVisualDiagram({ phaseId }: { phaseId: WeeklyCyclePhase["id"] }) {
               interactive={false}
             />
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5 font-sans text-xs font-medium text-ink-cyan">
+              <div className="flex items-center gap-1.5 font-sans text-xs font-medium text-ink-link">
                 <MessageSquare className="size-3.5" aria-hidden="true" />
                 <span>Socratic Tutor · Sari</span>
                 <Avatar size="sm" className="ml-auto size-5">

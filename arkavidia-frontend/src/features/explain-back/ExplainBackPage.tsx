@@ -111,7 +111,7 @@ export function ExplainBackPage() {
         role="status"
         aria-label="Memuat pertanyaan reflektif adaptif"
       >
-        <div className="h-28 rounded-2xl border border-cyan-subtle bg-wash-cyan p-5 shadow-card" />
+        <div className="h-28 rounded-2xl border border-brand-subtle bg-wash-brand p-5 shadow-card" />
         <div className="h-64 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card" />
       </div>
     )
@@ -120,13 +120,13 @@ export function ExplainBackPage() {
   if (isPostponed) {
     return (
       <div className="mx-auto max-w-xl pt-10 text-center">
-        <Card className="border-cyan-subtle bg-surface-card p-8 shadow-card">
+        <Card className="border-brand-subtle bg-surface-card p-8 shadow-card">
           <div className="mx-auto flex justify-center">
             <AgentStickerAvatar role="tutor" state="idle" size={56} />
           </div>
 
           <h2 className="font-display pt-4 text-2xl font-semibold text-ink-primary">
-            Check <span className="font-display-oblique text-ink-cyan">Ditunda</span>
+            Check <span className="font-display-oblique text-ink-link">Ditunda</span>
           </h2>
 
           <p className="pt-2 text-sm leading-relaxed text-ink-secondary">
@@ -154,11 +154,11 @@ export function ExplainBackPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6 pb-16">
       {/* 1. Fresh Cyan Room Header & Progress Hero */}
-      <section className="space-y-4 rounded-2xl border border-cyan-subtle bg-wash-cyan p-5 shadow-card">
+      <section className="space-y-4 rounded-2xl border border-brand-subtle bg-wash-brand p-5 shadow-card">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Link
             to={`/teams/${teamId}/understanding`}
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-cyan hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-link hover:underline"
           >
             <ArrowLeft className="size-3.5" aria-hidden="true" />
             <span>Peta Pemahaman</span>
@@ -167,7 +167,7 @@ export function ExplainBackPage() {
           <div className="flex items-center gap-2">
             <Pill
               variant="secondary"
-              className="border border-cyan-subtle bg-surface-card text-xs font-medium text-ink-secondary shadow-badge"
+              className="border border-brand-subtle bg-surface-card text-xs font-medium text-ink-secondary shadow-badge"
             >
               <PillIndicator variant="success" pulse />
               <span>Formatif · Bukan nilai</span>
@@ -188,7 +188,7 @@ export function ExplainBackPage() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-1">
             <h1 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
-              Explain-Back <span className="font-display-oblique text-ink-cyan">Check</span>
+              Explain-Back <span className="font-display-oblique text-ink-link">Check</span>
             </h1>
             <p className="text-sm text-ink-secondary">
               Konfirmasi pemahaman konsep tim dalam 5 menit.
@@ -196,7 +196,7 @@ export function ExplainBackPage() {
           </div>
 
           <div className="flex items-baseline gap-2 sm:flex-col sm:items-end sm:gap-0.5">
-            <span className="kpi-hero text-[36px] leading-none font-semibold text-ink-cyan">
+            <span className="kpi-hero text-[36px] leading-none font-semibold text-ink-link">
               {progressPct}%
             </span>
             <span className="flex items-center gap-1 text-xs font-medium text-ink-secondary tabular-nums">
@@ -218,7 +218,7 @@ export function ExplainBackPage() {
               className={cn(
                 "h-2 flex-1 rounded-full transition-[background-color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 idx === currentIndex
-                  ? "bg-tertiary"
+                  ? "bg-brand"
                   : idx < currentIndex
                     ? "bg-success"
                     : "bg-surface-card/80 hover:bg-surface-card",
@@ -232,10 +232,10 @@ export function ExplainBackPage() {
       {/* 2. Main Question Card */}
       {currentQuestion && (
         <Card className="border-line-subtle bg-surface-card py-0 shadow-card">
-          <CardHeader className="border-b border-line-subtle bg-wash-cyan/45 p-5">
+          <CardHeader className="border-b border-line-subtle bg-wash-brand/45 p-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-md bg-tertiary px-2.5 py-0.5 text-xs font-semibold text-on-tertiary">
+                <span className="rounded-md bg-brand px-2.5 py-0.5 text-xs font-semibold text-on-brand">
                   {currentQuestion.decisionCode}
                 </span>
 
@@ -258,7 +258,7 @@ export function ExplainBackPage() {
                     aria-label="Kenapa soal ini dipilih secara adaptif"
                     className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface-card px-2.5 py-1 text-xs font-medium text-ink-secondary transition-[background-color,color,border-color] duration-150 hover:border-line-default hover:text-ink-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    <HelpCircle className="size-3.5 text-ink-cyan" aria-hidden="true" />
+                    <HelpCircle className="size-3.5 text-ink-link" aria-hidden="true" />
                     <span>Seleksi Adaptif</span>
                   </button>
                 </PopoverTrigger>
@@ -319,7 +319,7 @@ export function ExplainBackPage() {
                 className={cn(
                   "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-[background-color,color] duration-150",
                   inputMode === "text"
-                    ? "bg-tertiary text-on-tertiary shadow-badge"
+                    ? "bg-brand text-on-brand shadow-badge"
                     : "text-ink-secondary hover:bg-muted hover:text-ink-primary",
                 )}
               >
@@ -333,7 +333,7 @@ export function ExplainBackPage() {
                 className={cn(
                   "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-[background-color,color] duration-150",
                   inputMode === "voice"
-                    ? "bg-tertiary text-on-tertiary shadow-badge"
+                    ? "bg-brand text-on-brand shadow-badge"
                     : "text-ink-secondary hover:bg-muted hover:text-ink-primary",
                 )}
               >
@@ -426,10 +426,10 @@ export function ExplainBackPage() {
           className="flex w-full items-center justify-between text-left text-xs font-medium text-ink-secondary hover:text-ink-primary"
         >
           <span className="flex items-center gap-2">
-            <History className="size-4 text-ink-cyan" aria-hidden="true" />
+            <History className="size-4 text-ink-link" aria-hidden="true" />
             <span>Riwayat Pribadi ({pastAttempts.length})</span>
           </span>
-          <span className="font-semibold text-ink-cyan">
+          <span className="font-semibold text-ink-link">
             {showHistory ? "Tutup" : "Lihat"}
           </span>
         </button>

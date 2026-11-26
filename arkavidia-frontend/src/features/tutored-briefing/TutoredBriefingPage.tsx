@@ -75,7 +75,7 @@ export function TutoredBriefingPage() {
   if (isLoading || steps.length === 0) {
     return (
       <div className="space-y-4 pb-16" role="status" aria-label="Menyiapkan modul Tutored Briefing">
-        <div className="h-32 rounded-2xl border border-cyan-subtle bg-wash-cyan p-5 shadow-card" />
+        <div className="h-32 rounded-2xl border border-brand-subtle bg-wash-brand p-5 shadow-card" />
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
           <div className="h-72 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card lg:col-span-7" />
           <div className="h-72 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card lg:col-span-5" />
@@ -87,18 +87,18 @@ export function TutoredBriefingPage() {
   return (
     <div className="space-y-6 pb-16">
       {/* 1. Fresh Cyan Header & Progress Strip */}
-      <section className="space-y-4 rounded-2xl border border-cyan-subtle bg-wash-cyan p-5 shadow-card">
+      <section className="space-y-4 rounded-2xl border border-brand-subtle bg-wash-brand p-5 shadow-card">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Pill
             variant="secondary"
-            className="border border-cyan-subtle bg-surface-card text-xs font-medium text-ink-secondary shadow-badge"
+            className="border border-brand-subtle bg-surface-card text-xs font-medium text-ink-secondary shadow-badge"
           >
             <PillIndicator variant="success" />
             <span>Sari Wulandari · Minggu ke-3</span>
           </Pill>
 
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-subtle bg-surface-card px-3 py-1 text-xs font-medium text-ink-secondary shadow-badge">
-            <Clock className="size-3.5 text-ink-cyan" aria-hidden="true" />
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-subtle bg-surface-card px-3 py-1 text-xs font-medium text-ink-secondary shadow-badge">
+            <Clock className="size-3.5 text-ink-link" aria-hidden="true" />
             <span>~10 menit</span>
           </div>
         </div>
@@ -106,7 +106,7 @@ export function TutoredBriefingPage() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-1">
             <h1 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
-              Tutored <span className="font-display-oblique text-ink-cyan">Briefing</span>
+              Tutored <span className="font-display-oblique text-ink-link">Briefing</span>
             </h1>
             <p className="text-sm text-ink-secondary">
               Pahami alasan keputusan tim lewat dialog Socratic interaktif.
@@ -114,7 +114,7 @@ export function TutoredBriefingPage() {
           </div>
 
           <div className="flex items-baseline gap-2 sm:flex-col sm:items-end sm:gap-0.5">
-            <span className="kpi-hero text-[36px] leading-none font-semibold text-ink-cyan">
+            <span className="kpi-hero text-[36px] leading-none font-semibold text-ink-link">
               {completionPct}%
             </span>
             <span className="text-xs font-medium text-ink-secondary tabular-nums">
@@ -137,7 +137,7 @@ export function TutoredBriefingPage() {
                 className={cn(
                   "flex min-h-12 items-center justify-between rounded-xl border bg-surface-card px-3.5 py-2.5 text-left shadow-card transition-[border-color,background-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.99]",
                   isActive
-                    ? "border-tertiary bg-surface-card"
+                    ? "border-line-active bg-surface-card"
                     : isDone
                       ? "border-success/40 bg-success-subtle/30"
                       : "border-line-subtle hover:border-line-default",
@@ -150,7 +150,7 @@ export function TutoredBriefingPage() {
                       isDone
                         ? "bg-success text-on-success"
                         : isActive
-                          ? "bg-tertiary text-on-tertiary"
+                          ? "bg-brand text-on-brand"
                           : "bg-muted text-ink-secondary",
                     )}
                   >
@@ -194,7 +194,7 @@ export function TutoredBriefingPage() {
           {/* Right Column: Project Brain Context Reference Panel (5 cols) */}
           <div className="space-y-3 lg:col-span-5">
             <div className="flex items-center gap-1.5 text-xs font-medium text-ink-secondary">
-              <GraduationCap className="size-4 text-ink-cyan" aria-hidden="true" />
+              <GraduationCap className="size-4 text-ink-link" aria-hidden="true" />
               <span>Referensi Project Brain</span>
             </div>
 

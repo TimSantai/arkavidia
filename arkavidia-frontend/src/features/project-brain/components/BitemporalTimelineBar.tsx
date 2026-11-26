@@ -81,7 +81,7 @@ export function BitemporalTimelineBar({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1">
           <h1 className="font-display text-2xl font-semibold tracking-tight text-ink-primary sm:text-3xl">
-            Project <span className="font-display-oblique text-ink-cyan">Brain</span>
+            Project <span className="font-display-oblique text-ink-link">Brain</span>
           </h1>
           <p className="text-sm text-ink-secondary">
             Rekam keputusan arsitektur tim, alasan, dan riwayat per waktu.
@@ -109,7 +109,7 @@ export function BitemporalTimelineBar({
 
           <Button variant="outline" size="sm" asChild>
             <Link to={`/teams/${teamId}/chat`} className="gap-1.5">
-              <MessageSquare className="size-3.5 text-ink-cyan" />
+              <MessageSquare className="size-3.5 text-ink-link" />
               <span>Buka Ruang Tim</span>
             </Link>
           </Button>
@@ -119,11 +119,11 @@ export function BitemporalTimelineBar({
       {/* Fresh Cyan Bitemporal Time-Travel Bar */}
       <section
         aria-label="Time-travel bitemporal"
-        className="rounded-xl border border-cyan-subtle bg-wash-cyan p-3.5 shadow-card"
+        className="rounded-xl border border-brand-subtle bg-wash-brand p-3.5 shadow-card"
       >
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-cyan">
+            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-link">
               <History className="size-4 shrink-0" aria-hidden="true" />
               <span>Linimasa</span>
               <Popover>
@@ -131,7 +131,7 @@ export function BitemporalTimelineBar({
                   <button
                     type="button"
                     aria-label="Penjelasan time-travel bitemporal"
-                    className="inline-flex size-5 items-center justify-center rounded-full text-ink-cyan transition-[background-color,color] duration-150 hover:bg-surface-card/70 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring"
+                    className="inline-flex size-5 items-center justify-center rounded-full text-ink-link transition-[background-color,color] duration-150 hover:bg-surface-card/70 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring"
                   >
                     <HelpCircle className="size-3.5" aria-hidden="true" />
                   </button>
@@ -164,7 +164,7 @@ export function BitemporalTimelineBar({
                     className={cn(
                       "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-[background-color,color,box-shadow] duration-150",
                       isActive
-                        ? "bg-tertiary text-on-tertiary shadow-badge"
+                        ? "bg-brand text-on-brand shadow-badge"
                         : "text-ink-secondary hover:bg-surface hover:text-ink-primary"
                     )}
                   >
@@ -172,7 +172,7 @@ export function BitemporalTimelineBar({
                       <span
                         className={cn(
                           "size-1.5 rounded-full",
-                          isActive ? "bg-on-tertiary" : "bg-success"
+                          isActive ? "bg-on-brand" : "bg-success"
                         )}
                       />
                     )}
@@ -184,7 +184,7 @@ export function BitemporalTimelineBar({
           </div>
 
           <label className="flex items-center gap-2 text-xs font-medium text-ink-secondary">
-            <Calendar className="size-3.5 shrink-0 text-ink-cyan" aria-hidden="true" />
+            <Calendar className="size-3.5 shrink-0 text-ink-link" aria-hidden="true" />
             <span className="whitespace-nowrap">Tanggal kustom:</span>
             <input
               type="date"
@@ -197,9 +197,9 @@ export function BitemporalTimelineBar({
         </div>
 
         {asOf && (
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-cyan-subtle bg-surface-card px-3 py-2 text-xs text-ink-primary shadow-control">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-brand-subtle bg-surface-card px-3 py-2 text-xs text-ink-primary shadow-control">
             <div className="flex items-center gap-2">
-              <Clock className="size-3.5 shrink-0 text-ink-cyan" aria-hidden="true" />
+              <Clock className="size-3.5 shrink-0 text-ink-link" aria-hidden="true" />
               <span className="font-medium">
                 Snapshot per {formatSnapshotDate(asOf)}
               </span>

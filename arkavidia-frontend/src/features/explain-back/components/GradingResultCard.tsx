@@ -63,7 +63,7 @@ export function GradingResultCard({
           ? "border-warning/40"
           : attempt.grade === 2
             ? "border-success/40"
-            : "border-cyan-subtle",
+            : "border-brand-subtle",
         className,
       )}
     >
@@ -74,7 +74,7 @@ export function GradingResultCard({
             ? "border-warning/30 bg-warning-subtle/40"
             : attempt.grade === 2
               ? "border-success/30 bg-success-subtle/30"
-              : "border-cyan-subtle bg-wash-cyan",
+              : "border-brand-subtle bg-wash-brand",
         )}
       >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -95,7 +95,7 @@ export function GradingResultCard({
                     ? "border-warning/50 bg-warning-subtle text-text-warning"
                     : attempt.grade === 2
                       ? "border-success/50 bg-success-subtle text-text-success"
-                      : "border-cyan-subtle bg-wash-cyan text-ink-cyan",
+                      : "border-brand-subtle bg-wash-brand text-ink-link",
                 )}
               >
                 {isAbstained ? (
@@ -135,7 +135,7 @@ export function GradingResultCard({
                   ? "text-text-warning"
                   : attempt.grade === 2
                     ? "text-text-success"
-                    : "text-ink-cyan",
+                    : "text-ink-link",
               )}
             >
               {isAbstained ? `${confidencePct}%` : `${scorePct}%`}

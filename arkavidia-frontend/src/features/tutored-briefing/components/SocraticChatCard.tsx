@@ -87,17 +87,17 @@ export function SocraticChatCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden border-cyan-subtle bg-surface-card py-0 shadow-card transition-[border-color,box-shadow] duration-150 ease-out",
+        "overflow-hidden border-brand-subtle bg-surface-card py-0 shadow-card transition-[border-color,box-shadow] duration-150 ease-out",
         className,
       )}
     >
-      <CardHeader className="border-b border-line-subtle bg-wash-cyan/50 p-5">
+      <CardHeader className="border-b border-line-subtle bg-wash-brand/50 p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="rounded-md bg-tertiary px-2.5 py-0.5 text-xs font-semibold text-on-tertiary tabular-nums">
+            <span className="rounded-md bg-brand px-2.5 py-0.5 text-xs font-semibold text-on-brand tabular-nums">
               Langkah {step.order}/{totalSteps}
             </span>
-            <span className="text-xs font-semibold text-ink-cyan">
+            <span className="text-xs font-semibold text-ink-link">
               {step.decisionCode}
             </span>
           </div>
@@ -111,7 +111,7 @@ export function SocraticChatCard({
               <span>Dipahami</span>
             </Badge>
           ) : (
-            <span className="rounded-full border border-cyan-subtle bg-surface-card px-2.5 py-0.5 text-xs font-medium text-ink-secondary">
+            <span className="rounded-full border border-brand-subtle bg-surface-card px-2.5 py-0.5 text-xs font-medium text-ink-secondary">
               Dialog Socratic
             </span>
           )}
@@ -124,7 +124,7 @@ export function SocraticChatCard({
 
       <CardContent className="space-y-4 p-5">
         {/* 1. Tutor Socratic Prompt Bubble */}
-        <div className="flex items-start gap-3.5 rounded-xl border border-cyan-subtle bg-wash-cyan/45 p-4">
+        <div className="flex items-start gap-3.5 rounded-xl border border-brand-subtle bg-wash-brand/45 p-4">
           <AgentStickerAvatar
             role="tutor"
             state={tutorState}
@@ -137,7 +137,7 @@ export function SocraticChatCard({
               <span className="text-xs font-semibold text-ink-primary">
                 Socratic Tutor
               </span>
-              <span className="text-xs text-ink-cyan">Mentor AI</span>
+              <span className="text-xs text-ink-link">Mentor AI</span>
             </div>
 
             <p className="text-sm leading-relaxed text-ink-primary">
@@ -147,7 +147,7 @@ export function SocraticChatCard({
             <button
               type="button"
               onClick={() => setShowHint((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-cyan hover:underline"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-link hover:underline"
             >
               <Lightbulb className="size-3.5" aria-hidden="true" />
               <span>{showHint ? "Tutup Petunjuk" : "Lihat Petunjuk"}</span>
@@ -262,7 +262,7 @@ export function SocraticChatCard({
                 htmlFor="socratic-answer-input"
                 className="flex items-center gap-1.5 text-xs font-medium text-ink-secondary"
               >
-                <MessageSquare className="size-3.5 text-ink-cyan" aria-hidden="true" />
+                <MessageSquare className="size-3.5 text-ink-link" aria-hidden="true" />
                 <span>Jawabanmu</span>
               </label>
 

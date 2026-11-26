@@ -39,7 +39,7 @@ function renderInlineFormatting(
             "rounded px-1.5 py-0.5 font-sans text-xs font-semibold",
             isCurrentUser
               ? "bg-surface-card/90 text-ink-primary"
-              : "border border-violet-subtle bg-wash-violet text-ink-violet"
+              : "border border-brand-subtle bg-wash-brand text-ink-link"
           )}
         >
           {token.slice(1, -1)}
@@ -130,7 +130,7 @@ export function PrivateMessageItem({
                 </span>
               )}
 
-              <span className="inline-flex items-center gap-1 rounded-full border border-violet-subtle bg-wash-violet px-2.5 py-0.5 text-xs font-medium text-ink-violet">
+              <span className="inline-flex items-center gap-1 rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-medium text-ink-link">
                 <Lock className="size-3" aria-hidden="true" />
                 {message.taintedPrivate ? "M1 Privat" : "M1"}
               </span>
@@ -145,8 +145,8 @@ export function PrivateMessageItem({
               className={cn(
                 "rounded-2xl px-4 py-3 text-sm leading-relaxed",
                 isCurrentUser
-                  ? "ml-auto w-fit max-w-full rounded-tr-sm bg-accent-violet text-on-accent shadow-card group-[.is-user]:bg-accent-violet group-[.is-user]:text-on-accent"
-                  : "w-fit max-w-full rounded-tl-sm border border-violet-subtle bg-surface-card text-ink-primary shadow-card"
+                  ? "ml-auto w-fit max-w-full rounded-tr-sm bg-brand text-on-brand shadow-card group-[.is-user]:bg-brand group-[.is-user]:text-on-brand"
+                  : "w-fit max-w-full rounded-tl-sm border border-brand-subtle bg-surface-card text-ink-primary shadow-card"
               )}
             >
               <p className="whitespace-pre-wrap">
@@ -167,7 +167,7 @@ export function PrivateMessageItem({
                 size="sm"
                 disabled={isLoadingPassport}
                 onClick={() => onOpenPassport(message)}
-                className="gap-1.5 rounded-full border-violet-subtle bg-surface-card px-3 text-xs font-medium text-ink-violet shadow-control hover:border-line-active hover:bg-wash-violet hover:text-ink-violet"
+                className="gap-1.5 rounded-full border-brand-subtle bg-surface-card px-3 text-xs font-medium text-ink-link shadow-control hover:border-line-active hover:bg-wash-brand hover:text-ink-link"
               >
                 <ShieldCheck className="size-3.5" aria-hidden="true" />
                 <span>

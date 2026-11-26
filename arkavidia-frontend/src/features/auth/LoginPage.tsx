@@ -260,7 +260,7 @@ export function LoginPage() {
                     "space-y-3 rounded-xl border p-4",
                     errors.consent
                       ? "border-line-error bg-error-subtle/40"
-                      : "border-violet-subtle bg-wash-violet"
+                      : "border-brand-subtle bg-wash-brand"
                   )}
                 >
                   <div className="flex items-center justify-between gap-2">

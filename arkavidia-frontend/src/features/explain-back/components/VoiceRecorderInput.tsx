@@ -174,7 +174,7 @@ export function VoiceRecorderInput({
   return (
     <div className={cn("space-y-3", className)}>
       {/* Cyan Recording Deck */}
-      <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-cyan-subtle bg-wash-cyan p-4 sm:flex-row">
+      <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-brand-subtle bg-wash-brand p-4 sm:flex-row">
         <div className="flex items-center gap-3">
           <Button
             type="button"
@@ -186,7 +186,7 @@ export function VoiceRecorderInput({
               "size-12 rounded-full p-0 shadow-card transition-[transform,background-color,box-shadow] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)]",
               isRecording
                 ? "animate-pulse bg-error text-on-error hover:bg-error/90"
-                : "bg-tertiary text-on-tertiary hover:bg-tertiary-hover",
+                : "bg-brand text-on-brand hover:bg-brand-hover",
             )}
           >
             {isRecording ? <MicOff className="size-5" /> : <Mic className="size-5" />}
@@ -212,7 +212,7 @@ export function VoiceRecorderInput({
               key={idx}
               className={cn(
                 "w-1 rounded-full transition-[height,opacity,background-color] duration-150 ease-out",
-                isRecording ? "bg-tertiary opacity-85" : "h-2 bg-muted opacity-50",
+                isRecording ? "bg-brand opacity-85" : "h-2 bg-muted opacity-50",
               )}
               style={{
                 height: isRecording
@@ -240,7 +240,7 @@ export function VoiceRecorderInput({
       <div className="space-y-1.5">
         <div className="flex items-center justify-between gap-2 text-xs text-ink-secondary">
           <span className="flex items-center gap-1.5 font-medium">
-            <Volume2 className="size-3.5 text-ink-cyan" aria-hidden="true" />
+            <Volume2 className="size-3.5 text-ink-link" aria-hidden="true" />
             <span>Transkripsi Suara</span>
           </span>
           {speechConfidence !== null && (
