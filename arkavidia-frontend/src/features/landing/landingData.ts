@@ -364,37 +364,37 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
 export const ETHICS_GUARDRAILS: readonly EthicsGuardrail[] = [
   {
     id: "no-override",
-    badge: "Propose · Confirm",
+    badge: "PROPOSE -> CONFIRM",
     title: "Tidak memutuskan atas nama tim",
     description:
-      "AI hanya mengekstrak kandidat keputusan; konfirmasi dan revisi tetap di tangan mahasiswa.",
+      "AI hanya mengusulkan kandidat keputusan. Konfirmasi dan revisi tetap di tangan mahasiswa.",
     technicalNote:
       "Setiap usulan dari chat atau Context Passport berstatus proposed hingga disetujui anggota di Ruang Tim.",
   },
   {
     id: "no-leak",
-    badge: "IFC Zero-Leak",
-    title: "Tidak membocorkan M1 tanpa Context Passport",
+    badge: "RLS + CEDAR + PII MASK",
+    title: "Tidak membocorkan catatan pribadi",
     description:
-      "Catatan pribadi M1 terisolasi dan wajib melewati pratinjau penyamaran PII sebelum dibagikan.",
+      "Catatan di Ruang Pribadi hanya pindah ke tim lewat Context Passport: data pribadi disamarkan dan kamu setujui dulu.",
     technicalNote:
       "Isolasi ditegakkan lewat Postgres Row-Level Security (RLS), Cedar Policy pre-LLM gate, dan deteksi PII otomatis.",
   },
   {
     id: "no-grading",
-    badge: "Formatif Only",
-    title: "Skor pemahaman bukan untuk nilai kuliah",
+    badge: "FORMATIF ONLY",
+    title: "Bukan untuk nilai kuliah",
     description:
-      "Probabilitas P(L) hanya menjadi cermin belajar pribadi agar tim berani menutup celah.",
+      "Skor pemahaman adalah cermin belajar, bukan alat pemeringkatan.",
     technicalNote:
       "Tidak ada ekspor nilai individu ke rubrik penilaian akademik atau peringkat kelas.",
   },
   {
     id: "no-surveillance",
-    badge: "Agregat Tim",
-    title: "Tidak mengirim skor individu ke dosen",
+    badge: "AGREGAT TIM ONLY",
+    title: "Dosen tidak melihat skor individu",
     description:
-      "Dosen hanya melihat kesehatan belajar agregat tim tanpa akses ke catatan M1 maupun skor pribadi.",
+      "Sesuai UU PDP No. 27/2022, dosen hanya melihat kesehatan tim secara agregat.",
     technicalNote:
       "Dirancang selaras dengan prinsip minimalisasi data dan persetujuan eksplisit UU PDP No. 27/2022.",
   },
