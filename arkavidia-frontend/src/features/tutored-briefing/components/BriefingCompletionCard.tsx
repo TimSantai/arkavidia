@@ -6,7 +6,6 @@ import {
   Compass,
   PartyPopper,
   RotateCcw,
-  Sparkles,
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -27,7 +26,7 @@ export function BriefingCompletionCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden border border-success/30 bg-surface shadow-surface transition-all animate-in fade-in-50 zoom-in-98 duration-200",
+        "overflow-hidden border border-success/30 bg-surface shadow-surface transition-[border-color,box-shadow] animate-in fade-in-50 zoom-in-98 duration-200",
         className,
       )}
     >
@@ -45,7 +44,7 @@ export function BriefingCompletionCard({
           </Badge>
 
           <CardTitle className="font-heading text-2xl font-semibold text-ink-primary">
-            Selamat Datang di Tim, Sari! 🎉
+            Selamat Datang di Tim, Sari!
           </CardTitle>
 
           <p className="mx-auto max-w-lg text-xs leading-relaxed text-ink-secondary">
@@ -152,9 +151,9 @@ export function BriefingCompletionCard({
                 size="sm"
                 className="bg-brand text-on-brand hover:bg-brand-hover text-xs font-medium shadow-sm"
               >
-                <Sparkles className="size-3.5 mr-1" />
+                <Bot className="size-3.5 mr-1" aria-hidden="true" />
                 Buka Personal Agent (M1)
-                <ArrowRight className="size-3.5 ml-1" />
+                <ArrowRight className="size-3.5 ml-1" aria-hidden="true" />
               </Button>
             </Link>
           </div>

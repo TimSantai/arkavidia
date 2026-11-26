@@ -310,16 +310,15 @@ export function TeamChatPage() {
         <Button
           type="button"
           variant="outline"
-          size="icon-sm"
           onClick={() => setIsFullscreen((prev) => !prev)}
           aria-label={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
           title={isFullscreen ? "Keluar layar penuh (Esc)" : "Layar penuh"}
-          className="shrink-0 border-line-subtle bg-canvas text-ink-secondary hover:text-ink-primary"
+          className="size-10 shrink-0 border-line-subtle bg-canvas text-ink-secondary hover:text-ink-primary sm:size-8"
         >
           {isFullscreen ? (
-            <Minimize2 className="size-4" />
+            <Minimize2 className="size-4" aria-hidden="true" />
           ) : (
-            <Maximize2 className="size-4" />
+            <Maximize2 className="size-4" aria-hidden="true" />
           )}
         </Button>
       </div>
@@ -330,13 +329,10 @@ export function TeamChatPage() {
           <button
             type="button"
             onClick={handleJumpToPendingProposal}
-            className="pointer-events-auto inline-flex items-center gap-2.5 rounded-full border border-line-active/40 bg-surface-raised/95 py-1.5 pr-2 pl-3.5 text-xs shadow-raised backdrop-blur-md transition-colors hover:border-line-active"
+            className="pointer-events-auto inline-flex min-h-9 items-center gap-2 rounded-full border border-line-active/40 bg-surface-raised/95 py-1.5 pr-2 pl-3.5 text-xs shadow-raised backdrop-blur-md transition-[border-color,transform] duration-150 ease-out hover:border-line-active active:scale-[0.98]"
           >
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-warning opacity-75" />
-              <span className="relative inline-flex size-2 rounded-full bg-warning" />
-            </span>
-            <GitPullRequestDraft className="size-3.5 text-text-warning" />
+            <span className="size-2 shrink-0 rounded-full bg-warning" aria-hidden="true" />
+            <GitPullRequestDraft className="size-3.5 text-text-warning" aria-hidden="true" />
             <span className="font-medium text-ink-primary">
               {pendingProposals.length} Usulan Menunggu
             </span>

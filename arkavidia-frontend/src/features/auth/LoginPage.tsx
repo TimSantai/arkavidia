@@ -9,11 +9,12 @@ import {
   Lock,
   Mic,
   ShieldCheck,
-  Sparkles,
+  Users,
 } from "lucide-react"
 import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher"
 import { useTheme } from "@/components/theme/useTheme"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
@@ -301,7 +302,7 @@ export function LoginPage() {
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-info-subtle px-2.5 py-0.5 text-[11px] font-medium text-text-info">
-                  <Sparkles className="size-3" />
+                  <Users className="size-3" aria-hidden="true" />
                   <span>Quick Demo Persona Switcher</span>
                 </div>
                 <h2 className="font-heading text-lg font-semibold text-ink-primary">
@@ -316,19 +317,23 @@ export function LoginPage() {
                 {SEED_USERS.map((persona) => {
                   const isCurrent = initialUser.id === persona.id
                   const isNewMember = persona.id === "user-sari"
+                  const avatarSrc = USER_AVATAR_MAP[persona.id]
                   return (
                     <button
                       key={persona.id}
                       type="button"
                       onClick={() => handleQuickDemoSelect(persona)}
                       className={cn(
-                        "group flex w-full items-start gap-3 rounded-xl border p-3.5 text-left transition-[border-color,background-color,box-shadow] duration-150 ease-out",
+                        "group flex min-h-11 w-full items-start gap-3 rounded-xl border p-3.5 text-left transition-[border-color,background-color,box-shadow,transform] duration-150 ease-out active:scale-[0.99]",
                         isCurrent
                           ? "border-line-active bg-canvas/80 shadow-surface"
                           : "border-line-subtle bg-canvas/40 hover:border-line-default hover:bg-canvas/70"
                       )}
                     >
                       <Avatar>
+                        {avatarSrc && (
+                          <AvatarImage src={avatarSrc} alt={persona.name} className="object-cover" />
+                        )}
                         <AvatarFallback className="border border-line-subtle bg-surface text-xs font-semibold text-ink-primary">
                           {persona.initials}
                         </AvatarFallback>

@@ -56,7 +56,7 @@ export function LandingFooterCta() {
 
       <div className="mx-auto mt-10 flex max-w-5xl flex-col items-start justify-between gap-4 border-t border-line-subtle pt-6 text-xs text-ink-tertiary sm:flex-row sm:items-center">
         <p>
-          BERSAMA v2.0 — Hackvidia, Arkavidia 11.0 (HMIF ITB) • AI for Learning &amp; Self-Growth
+          BERSAMA v2.0 · Hackvidia, Arkavidia 11.0 (HMIF ITB) · AI for Learning &amp; Self-Growth
         </p>
         <a
           href="https://github.com/TimSantai/arkavidia"

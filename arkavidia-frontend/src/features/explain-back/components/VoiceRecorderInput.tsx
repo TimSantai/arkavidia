@@ -184,7 +184,7 @@ export function VoiceRecorderInput({
             disabled={disabled}
             onClick={toggleRecording}
             className={cn(
-              "size-12 rounded-full p-0 shadow-sm transition-all",
+              "size-12 rounded-full p-0 shadow-sm transition-[transform,background-color,box-shadow] duration-150 ease-out",
               isRecording
                 ? "animate-pulse bg-error text-on-error hover:bg-error/90"
                 : "bg-brand text-on-brand hover:bg-brand-hover",
@@ -212,8 +212,8 @@ export function VoiceRecorderInput({
             <div
               key={idx}
               className={cn(
-                "w-1 rounded-full bg-brand transition-all duration-150",
-                isRecording ? "animate-pulse opacity-80" : "h-2 bg-muted opacity-40",
+                "w-1 rounded-full bg-brand transition-[height,opacity,background-color] duration-150 ease-out",
+                isRecording ? "opacity-80" : "h-2 bg-muted opacity-40",
               )}
               style={{
                 height: isRecording

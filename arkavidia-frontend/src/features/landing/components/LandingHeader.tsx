@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Link } from "react-router"
 import { Menu, X } from "lucide-react"
 import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher"
@@ -9,8 +9,26 @@ import { NAV_LINKS } from "../landingData"
 export function LandingHeader() {
   const { theme, setTheme } = useTheme()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
 
-  const closeMenu = () => setMobileMenuOpen(false)
+  const closeMenu = useCallback(() => {
+    setMobileMenuOpen(false)
+    window.requestAnimationFrame(() => {
+      triggerRef.current?.focus()
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault()
+        closeMenu()
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [mobileMenuOpen, closeMenu])
 
   return (
     <header className="sticky top-0 z-40 border-b border-line-subtle bg-surface/90 backdrop-blur-md">
@@ -61,14 +79,15 @@ export function LandingHeader() {
           </Button>
 
           <button
+            ref={triggerRef}
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
             aria-expanded={mobileMenuOpen}
             aria-controls="landing-mobile-nav"
             aria-label={mobileMenuOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
-            className="inline-flex size-10 items-center justify-center rounded-lg border border-line-subtle bg-canvas text-ink-primary transition-colors duration-150 hover:bg-muted md:hidden"
+            className="inline-flex size-11 items-center justify-center rounded-lg border border-line-subtle bg-canvas text-ink-primary transition-colors duration-150 hover:bg-muted active:scale-[0.97] md:hidden"
           >
-            {mobileMenuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
+            {mobileMenuOpen ? <X className="size-4" aria-hidden="true" /> : <Menu className="size-4" aria-hidden="true" />}
           </button>
         </div>
       </div>

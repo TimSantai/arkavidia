@@ -22,7 +22,7 @@ export function BusFactorGauge({
   return (
     <Card
       className={cn(
-        "relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all",
+        "relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out",
         className,
       )}
     >
@@ -83,7 +83,7 @@ export function BusFactorGauge({
                 <div
                   key={index}
                   className={cn(
-                    "h-2 rounded-full transition-all duration-300",
+                    "h-2 rounded-full transition-[background-color] duration-300 ease-out",
                     isFilled
                       ? isVulnerable
                         ? "bg-warning"

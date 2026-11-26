@@ -281,6 +281,10 @@ export function WeeklyCycleSection() {
             <img
               src={TEAM_COLLAB_SCENE_SRC}
               alt="Empat mahasiswa Indonesia berkolaborasi tenang dengan laptop di ruang belajar kampus"
+              width={1376}
+              height={768}
+              fetchPriority="high"
+              decoding="async"
               className="aspect-video w-full object-cover outline-1 -outline-offset-1 outline-ink-primary/10"
             />
             <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line-subtle bg-surface/95 px-4 py-2.5 backdrop-blur-sm">

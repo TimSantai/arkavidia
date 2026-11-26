@@ -56,7 +56,7 @@ export function DecisionContextPanel({
   return (
     <Card
       className={cn(
-        "overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all",
+        "overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out",
         className,
       )}
     >

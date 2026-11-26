@@ -1,4 +1,6 @@
-import { motion } from "motion/react"
+import { useState } from "react"
+import { Pause, Play } from "lucide-react"
+import { motion, useReducedMotion } from "motion/react"
 import type { EcosystemBrandId } from "../landingData"
 import { BrandLogo } from "./BrandLogos"
 
@@ -19,31 +21,71 @@ const ECOSYSTEM_BRANDS: readonly {
 ]
 
 export function EcosystemLogoMarquee() {
-  const repeatedBrands = [...ECOSYSTEM_BRANDS, ...ECOSYSTEM_BRANDS]
+  const prefersReducedMotion = useReducedMotion()
+  const [isPaused, setIsPaused] = useState(false)
+  const shouldAnimate = !prefersReducedMotion && !isPaused
+  const repeatedBrands = shouldAnimate
+    ? [...ECOSYSTEM_BRANDS, ...ECOSYSTEM_BRANDS]
+    : ECOSYSTEM_BRANDS
 
   return (
     <section aria-label="Ekosistem dan arsitektur pendukung BERSAMA" className="py-10 sm:py-12">
-      <p className="text-center font-sans text-xs font-medium text-ink-tertiary">
-        Terintegrasi dengan alur kerja &amp; infrastruktur AI tim mahasiswa
-      </p>
+      <div className="flex flex-wrap items-center justify-center gap-2.5 text-center">
+        <p className="font-sans text-xs font-medium text-ink-tertiary">
+          Terintegrasi dengan alur kerja &amp; infrastruktur AI tim mahasiswa
+        </p>
+        {!prefersReducedMotion && (
+          <button
+            type="button"
+            onClick={() => setIsPaused((prev) => !prev)}
+            aria-label={isPaused ? "Lanjutkan animasi ekosistem" : "Jeda animasi ekosistem"}
+            aria-pressed={isPaused}
+            className="inline-flex min-h-7 items-center gap-1 rounded-full border border-line-subtle bg-surface px-2.5 py-0.5 font-mono text-[10px] font-medium text-ink-secondary transition-colors duration-150 hover:border-line-default hover:text-ink-primary active:scale-[0.97]"
+          >
+            {isPaused ? (
+              <>
+                <Play className="size-2.5" aria-hidden="true" />
+                <span>Putar</span>
+              </>
+            ) : (
+              <>
+                <Pause className="size-2.5" aria-hidden="true" />
+                <span>Jeda</span>
+              </>
+            )}
+          </button>
+        )}
+      </div>
 
       <div
         className="relative mt-5 overflow-hidden py-1"
-        style={{
-          maskImage:
-            "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-          WebkitMaskImage:
-            "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-        }}
+        style={
+          shouldAnimate
+            ? {
+                maskImage:
+                  "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+                WebkitMaskImage:
+                  "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+              }
+            : undefined
+        }
       >
         <motion.div
-          className="flex w-max items-center gap-3"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{
-            duration: 32,
-            ease: "linear",
-            repeat: Infinity,
-          }}
+          className={
+            shouldAnimate
+              ? "flex w-max items-center gap-3"
+              : "flex flex-wrap items-center justify-center gap-2.5"
+          }
+          animate={shouldAnimate ? { x: ["0%", "-50%"] } : { x: 0 }}
+          transition={
+            shouldAnimate
+              ? {
+                  duration: 32,
+                  ease: "linear",
+                  repeat: Infinity,
+                }
+              : { duration: 0.2 }
+          }
         >
           {repeatedBrands.map((brand, idx) => (
             <div

@@ -14,7 +14,11 @@
  * Do not re-derive or substitute paired hex values.
  */
 :root {
-  /* Ramps Semantic Tokens — Light Mode (Default) */
+  /* Ramps Semantic Tokens - Light Mode (Default) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
   --bg-canvas: #e9ebef;
   --bg-surface: #f4f6f9;
   --bg-surface-raised: #f4f6f9;
@@ -115,7 +119,7 @@
 }
 
 .dark {
-  /* Ramps Semantic Tokens — Dark Mode */
+  /* Ramps Semantic Tokens - Dark Mode */
   --bg-canvas: #1d1e21;
   --bg-surface: #323337;
   --bg-surface-raised: #45474b;
@@ -288,10 +292,41 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
   body {
     @apply bg-background text-foreground antialiased min-h-screen font-sans;
   }
-  html {
-    @apply font-sans;
+  a[href],
+  button:not(:disabled),
+  summary,
+  select:not(:disabled),
+  label[for],
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="switch"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  button:disabled,
+  select:disabled,
+  input:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

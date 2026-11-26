@@ -129,7 +129,7 @@ export function CreateTeamDialog({
                 setName(e.target.value)
                 if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }))
               }}
-              placeholder="Contoh: Kelompok 7 — Smart Campus"
+              placeholder="Contoh: Kelompok 7 (Smart Campus)"
               aria-invalid={Boolean(errors.name)}
               className={cn(
                 "bg-surface text-ink-primary",

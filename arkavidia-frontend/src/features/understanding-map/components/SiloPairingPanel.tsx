@@ -5,7 +5,7 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
-  Sparkles,
+  Compass,
   TrendingUp,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -129,13 +129,13 @@ export function SiloPairingPanel({
             return (
               <Card
                 key={item.id}
-                className="group relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all hover:border-brand/50 hover:shadow-md"
+                className="group relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out hover:border-brand/50 hover:shadow-md"
               >
                 <CardContent className="space-y-4 p-5">
                   {/* Top Meta Bar */}
                   <div className="flex items-center justify-between border-b border-line-subtle pb-3">
                     <div className="flex items-center gap-1.5">
-                      <Sparkles className="size-3.5 text-accent-violet" />
+                      <Compass className="size-3.5 text-accent-violet" aria-hidden="true" />
                       <span className="font-mono text-xs font-semibold text-ink-primary">
                         {item.kcName}
                       </span>
@@ -250,7 +250,7 @@ export function SiloPairingPanel({
                         onClick={() => handleStartSession(item)}
                         className="bg-brand text-on-brand hover:bg-brand-hover active:bg-brand-active shadow-sm font-medium text-xs"
                       >
-                        <Sparkles className="size-3 mr-1" />
+                        <Clock className="size-3 mr-1" aria-hidden="true" />
                         Mulai Sesi 10 Menit
                       </Button>
                     </div>

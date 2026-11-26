@@ -50,7 +50,7 @@ export function ComparisonSection() {
                     Ringkasan Chat Otomatis
                   </p>
                   <p className="mt-1.5 text-xs leading-relaxed text-ink-secondary">
-                    &ldquo;Tim sepakat pakai JWT. Task beres.&rdquo; — Semua anggota membalas &ldquo;Oke sip&rdquo; tanpa diuji apakah paham alasannya.
+                    &ldquo;Tim sepakat pakai JWT. Task beres.&rdquo; Semua anggota membalas &ldquo;Oke sip&rdquo; tanpa diuji apakah paham alasannya.
                   </p>
                 </div>
                 <div className="space-y-2 rounded-xl border border-line-subtle bg-canvas/70 p-3.5">

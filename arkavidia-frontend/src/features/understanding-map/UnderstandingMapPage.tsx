@@ -3,8 +3,9 @@ import { useParams } from "react-router"
 import { BarChart3, Info, PieChart, ShieldCheck } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Pill, PillIndicator } from "@/components/kibo-ui/pill"
+import { getStoredDemoUser } from "@/features/auth/components/demoSession"
 import { bersamaApi } from "@/services/api"
-import { CURRENT_USER, SEED_USERS } from "@/mocks/seedData"
+import { SEED_USERS } from "@/mocks/seedData"
 import type { Team, TeamUnderstandingMetrics } from "@/types/bersama"
 import { BusFactorGauge } from "./components/BusFactorGauge"
 import { CoverageMatrix } from "./components/CoverageMatrix"
@@ -16,6 +17,7 @@ export function UnderstandingMapPage() {
   const [metrics, setMetrics] = useState<TeamUnderstandingMetrics | null>(null)
   const [team, setTeam] = useState<Team | null>(null)
   const [selectedKcId, setSelectedKcId] = useState<string | null>("kc-jwt") // Default to silo KC for immediate team awareness
+  const activeUser = getStoredDemoUser()
 
   useEffect(() => {
     void bersamaApi.getTeamUnderstanding(teamId).then((data) => {
@@ -35,10 +37,20 @@ export function UnderstandingMapPage() {
 
   if (!metrics) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <p className="font-mono text-xs text-ink-tertiary animate-pulse">
-          Memuat visualisasi peta pemahaman tim...
-        </p>
+      <div className="space-y-6 pb-12" role="status" aria-label="Memuat peta pemahaman tim">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {[1, 2, 3].map((slot) => (
+            <div
+              key={slot}
+              className="h-48 rounded-xl border border-line-subtle bg-surface p-5 shadow-surface"
+            >
+              <div className="h-3.5 w-32 rounded bg-muted" />
+              <div className="mt-4 h-8 w-24 rounded bg-muted/80" />
+              <div className="mt-4 h-3 w-full rounded bg-muted/60" />
+            </div>
+          ))}
+        </div>
+        <div className="h-64 rounded-xl border border-line-subtle bg-surface p-5 shadow-surface" />
       </div>
     )
   }
@@ -74,7 +86,7 @@ export function UnderstandingMapPage() {
             variant="secondary"
             className="border border-line-subtle bg-surface shadow-surface text-ink-secondary font-mono text-[11px]"
           >
-            <PillIndicator variant="success" pulse />
+            <PillIndicator variant="success" />
             <span>Murni formatif · Bukan nilai kuliah</span>
           </Pill>
         </div>
@@ -93,7 +105,7 @@ export function UnderstandingMapPage() {
             Metrik ini murni formatif untuk kolaborasi tim dan tidak pernah dipakai untuk nilai mata
             kuliah. Skor probabilitas penguasaan individu{" "}
             <span className="font-mono font-semibold text-brand">P(L)</span> hanya ditampilkan
-            secara eksak untuk akunmu (<strong>{CURRENT_USER.name}</strong>). Untuk rekan tim lain,
+            secara eksak untuk akunmu (<strong>{activeUser.name}</strong>). Untuk rekan tim lain,
             sistem menampilkan framing kesiapan positif (
             <span className="font-medium text-text-success">Bisa Membantu</span> atau{" "}
             <span className="font-medium text-ink-tertiary">Terbuka Sesi Bareng</span>) tanpa
@@ -113,7 +125,7 @@ export function UnderstandingMapPage() {
         />
 
         {/* Metric 2: Coverage Keseluruhan Tim (Expressive Data Exception: Violet + Cyan + Brand) */}
-        <Card className="relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all">
+        <Card className="relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="font-mono text-xs font-medium tracking-wide text-ink-tertiary">
@@ -143,17 +155,17 @@ export function UnderstandingMapPage() {
               </div>
               <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
                 <div
-                  className="bg-brand transition-all duration-500"
+                  className="bg-brand transition-[width] duration-300 ease-out"
                   style={{ width: "25%" }}
                   title="KC-01 MVC (3/4 anggota paham)"
                 />
                 <div
-                  className="bg-accent-violet transition-all duration-500"
+                  className="bg-accent-violet transition-[width] duration-300 ease-out"
                   style={{ width: "12.5%" }}
-                  title="KC-02 JWT (1/4 anggota paham — Silo)"
+                  title="KC-02 JWT (1/4 anggota paham - Silo)"
                 />
                 <div
-                  className="bg-tertiary transition-all duration-500"
+                  className="bg-tertiary transition-[width] duration-300 ease-out"
                   style={{ width: "12.5%" }}
                   title="KC-03 DB (2/4 anggota paham)"
                 />
@@ -185,7 +197,7 @@ export function UnderstandingMapPage() {
         </Card>
 
         {/* Metric 3: Konsentrasi Pengetahuan (Indeks Gini) */}
-        <Card className="relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all">
+        <Card className="relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="font-mono text-xs font-medium tracking-wide text-ink-tertiary">
@@ -217,7 +229,7 @@ export function UnderstandingMapPage() {
               </div>
               <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-muted">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-success via-warning to-error transition-all duration-500"
+                  className="h-full rounded-full bg-gradient-to-r from-success via-warning to-error transition-[width] duration-300 ease-out"
                   style={{ width: "100%" }}
                 />
                 <div
@@ -251,7 +263,7 @@ export function UnderstandingMapPage() {
         coverageList={metrics.coverageByKc}
         members={members}
         masteryMatrix={metrics.masteryMatrix}
-        currentUserId={CURRENT_USER.id}
+        currentUserId={activeUser.id}
         selectedKcId={selectedKcId}
         onSelectKc={setSelectedKcId}
       />

@@ -1,5 +1,5 @@
 import { Link } from "react-router"
-import { ArrowRight, Sparkles } from "lucide-react"
+import { ArrowRight, ShieldCheck } from "lucide-react"
 import {
   Announcement,
   AnnouncementTag,
@@ -31,7 +31,7 @@ export function LandingPage() {
                 HACKVIDIA 11.0
               </AnnouncementTag>
               <AnnouncementTitle className="gap-1.5 font-sans text-xs">
-                <Sparkles className="size-3.5 text-ink-link" />
+                <ShieldCheck className="size-3.5 text-ink-link" aria-hidden="true" />
                 <span>AI for Learning &amp; Self-Growth</span>
               </AnnouncementTitle>
             </Announcement>

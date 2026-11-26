@@ -180,11 +180,10 @@ export function PersonalAgentPage() {
         <Button
           type="button"
           variant="outline"
-          size="icon-sm"
           onClick={() => setIsFullscreen((prev) => !prev)}
           aria-label={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
           title={isFullscreen ? "Keluar layar penuh (Esc)" : "Layar penuh"}
-          className="shrink-0 border-line-subtle bg-canvas text-ink-secondary hover:text-ink-primary"
+          className="size-10 shrink-0 border-line-subtle bg-canvas text-ink-secondary hover:text-ink-primary sm:size-8"
         >
           {isFullscreen ? (
             <Minimize2 className="size-4" />

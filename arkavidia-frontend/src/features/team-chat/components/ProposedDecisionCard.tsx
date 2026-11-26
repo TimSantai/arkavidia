@@ -2,10 +2,10 @@ import { useState } from "react"
 import { Link } from "react-router"
 import {
   ArrowUpRight,
+  Bot,
   CheckCircle2,
   ChevronDown,
   GitPullRequestDraft,
-  Sparkles,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -80,7 +80,7 @@ export function ProposedDecisionCard({
 
           {item.aiAssisted && (
             <span className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-canvas px-2 py-0.5 font-mono text-[10px] font-medium text-ink-secondary">
-              <Sparkles className="size-2.5 text-text-warning" />
+              <Bot className="size-2.5 text-text-warning" aria-hidden="true" />
               Dibantu AI
             </span>
           )}

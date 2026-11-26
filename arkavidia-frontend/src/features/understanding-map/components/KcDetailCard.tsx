@@ -1,5 +1,5 @@
 import { Link } from "react-router"
-import { AlertTriangle, ArrowRight, CheckCircle2, Sparkles, Users } from "lucide-react"
+import { AlertTriangle, ArrowRight, CheckCircle2, ClipboardCheck, Users } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { AvatarStack } from "@/components/kibo-ui/avatar-stack"
 import { Badge } from "@/components/ui/badge"
@@ -32,7 +32,7 @@ export function KcDetailCard({ summary, teamId, className }: KcDetailCardProps) 
   return (
     <Card
       className={cn(
-        "overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all",
+        "overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out",
         className,
       )}
     >
@@ -216,7 +216,7 @@ export function KcDetailCard({ summary, teamId, className }: KcDetailCardProps) 
                 size="sm"
                 className="bg-brand text-on-brand hover:bg-brand-hover active:bg-brand-active shadow-sm font-medium"
               >
-                <Sparkles className="size-3.5 mr-1.5" />
+                <ClipboardCheck className="size-3.5 mr-1.5" aria-hidden="true" />
                 Explain-Back Check
                 <ArrowRight className="size-3.5 ml-1" />
               </Button>

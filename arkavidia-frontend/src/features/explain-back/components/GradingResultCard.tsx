@@ -4,8 +4,8 @@ import {
   ArrowRight,
   CheckCircle2,
   HelpCircle,
+  MessageSquare,
   RotateCcw,
-  Sparkles,
   TrendingUp,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -58,7 +58,7 @@ export function GradingResultCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all animate-in fade-in-50 zoom-in-98 duration-200",
+        "overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] animate-in fade-in-50 zoom-in-98 duration-200",
         className,
       )}
     >
@@ -132,9 +132,9 @@ export function GradingResultCard({
                     size="sm"
                     className="w-full bg-brand text-on-brand hover:bg-brand-hover active:bg-brand-active text-xs font-medium shadow-sm sm:w-auto"
                   >
-                    <Sparkles className="size-3.5 mr-1.5" />
+                    <MessageSquare className="size-3.5 mr-1.5" aria-hidden="true" />
                     Minta Penjelasan ke {peerAuthor.name.split(" ")[0]} (10 Mnt)
-                    <ArrowRight className="size-3.5 ml-1" />
+                    <ArrowRight className="size-3.5 ml-1" aria-hidden="true" />
                   </Button>
                 </Link>
               </div>
@@ -277,7 +277,7 @@ export function GradingResultCard({
                       size="sm"
                       className="bg-brand text-on-brand hover:bg-brand-hover text-xs font-medium"
                     >
-                      <Sparkles className="size-3.5 mr-1" />
+                      <CheckCircle2 className="size-3.5 mr-1" aria-hidden="true" />
                       Selesai Check Mingguan
                     </Button>
                   </Link>

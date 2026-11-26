@@ -73,10 +73,12 @@ export function TutoredBriefingPage() {
 
   if (isLoading || steps.length === 0) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <p className="font-mono text-xs text-ink-tertiary animate-pulse">
-          Menyiapkan modul Tutored Briefing...
-        </p>
+      <div className="space-y-4 pb-16" role="status" aria-label="Menyiapkan modul Tutored Briefing">
+        <div className="h-24 rounded-xl border border-line-subtle bg-surface p-5 shadow-surface" />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+          <div className="h-72 rounded-xl border border-line-subtle bg-surface p-5 shadow-surface lg:col-span-5" />
+          <div className="h-72 rounded-xl border border-line-subtle bg-surface p-5 shadow-surface lg:col-span-7" />
+        </div>
       </div>
     )
   }
@@ -97,7 +99,7 @@ export function TutoredBriefingPage() {
               variant="secondary"
               className="border border-line-subtle bg-surface shadow-surface text-ink-secondary font-mono text-[11px]"
             >
-              <PillIndicator variant="success" pulse />
+              <PillIndicator variant="success" />
               <span>Skenario Sari Wulandari · Minggu ke-3</span>
             </Pill>
           </div>
@@ -140,7 +142,7 @@ export function TutoredBriefingPage() {
                   type="button"
                   onClick={() => handleSelectStep(idx)}
                   className={cn(
-                    "flex items-center justify-between rounded-xl border p-2.5 text-left transition-all",
+                    "flex min-h-11 items-center justify-between rounded-xl border p-2.5 text-left transition-[border-color,background-color,box-shadow,transform] duration-150 ease-out active:scale-[0.99]",
                     isActive
                       ? "border-brand bg-brand/5 shadow-xs dark:bg-brand/10"
                       : isDone

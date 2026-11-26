@@ -3,18 +3,19 @@ import { Link } from "react-router"
 import {
   ArrowRight,
   Check,
+  Compass,
   Copy,
   KeyRound,
   Plus,
-  Sparkles,
   UserCheck,
   Users,
 } from "lucide-react"
 import { AvatarStack } from "@/components/kibo-ui/avatar-stack"
 import { ThemeSwitcher } from "@/components/kibo-ui/theme-switcher"
 import { useTheme } from "@/components/theme/useTheme"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
 import { cn } from "@/lib/utils"
 import { SEED_USERS } from "@/mocks/seedData"
 import { bersamaApi } from "@/services/api"
@@ -26,13 +27,26 @@ import { getStoredDemoUser, setStoredDemoUser } from "./components/demoSession"
 export function TeamsPage() {
   const { theme, setTheme } = useTheme()
   const [teams, setTeams] = useState<readonly Team[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [activeUser, setActiveUser] = useState<User>(() => getStoredDemoUser())
   const [createOpen, setCreateOpen] = useState(false)
   const [joinOpen, setJoinOpen] = useState(false)
   const [copiedTeamId, setCopiedTeamId] = useState<string | null>(null)
+  const activeAvatarSrc = USER_AVATAR_MAP[activeUser.id]
 
   useEffect(() => {
-    void bersamaApi.getTeams().then(setTeams)
+    let active = true
+    void bersamaApi
+      .getTeams()
+      .then((data) => {
+        if (active) setTeams(data)
+      })
+      .finally(() => {
+        if (active) setIsLoading(false)
+      })
+    return () => {
+      active = false
+    }
   }, [])
 
   const handleCopyInviteCode = async (team: Team) => {
@@ -88,6 +102,9 @@ export function TeamsPage() {
             <span className="hidden h-4 w-px bg-line-subtle sm:block" />
             <div className="hidden items-center gap-2 rounded-full border border-line-subtle bg-canvas px-2.5 py-1 sm:flex">
               <Avatar size="sm">
+                {activeAvatarSrc && (
+                  <AvatarImage src={activeAvatarSrc} alt={activeUser.name} className="object-cover" />
+                )}
                 <AvatarFallback className="text-[10px] font-semibold">
                   {activeUser.initials}
                 </AvatarFallback>
@@ -184,7 +201,7 @@ export function TeamsPage() {
           <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-line-subtle bg-info-subtle p-5 sm:flex-row sm:items-center">
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold text-text-info">
-                <Sparkles className="size-3.5" />
+                <Compass className="size-3.5" aria-hidden="true" />
                 <span>ONBOARDING ANGGOTA BARU • MINGGU KE-3</span>
               </div>
               <p className="text-sm font-semibold text-ink-primary">
@@ -208,6 +225,29 @@ export function TeamsPage() {
         )}
 
         {/* Team Cards Grid */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2" role="status" aria-label="Memuat daftar tim">
+            {[1, 2].map((slot) => (
+              <div
+                key={slot}
+                className="h-52 rounded-2xl border border-line-subtle bg-surface p-5 shadow-surface"
+              >
+                <div className="h-4 w-24 rounded bg-muted" />
+                <div className="mt-4 h-5 w-3/4 rounded bg-muted/80" />
+                <div className="mt-2 h-3.5 w-full rounded bg-muted/60" />
+              </div>
+            ))}
+          </div>
+        ) : teams.length === 0 ? (
+          <div className="rounded-2xl border border-line-subtle bg-surface p-8 text-center shadow-surface">
+            <p className="font-heading text-base font-semibold text-ink-primary">
+              Belum ada ruang tim
+            </p>
+            <p className="mt-1 text-sm text-ink-secondary">
+              Buat tim proyek baru atau masukkan kode undangan untuk bergabung ke tim yang sudah ada.
+            </p>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {teams.map((team) => {
             const isCopied = copiedTeamId === team.id
@@ -221,8 +261,8 @@ export function TeamsPage() {
                     <span className="rounded-full border border-line-subtle bg-canvas px-2.5 py-0.5 font-mono text-[11px] font-medium text-ink-secondary">
                       {team.courseCode}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-xs text-ink-tertiary">
-                      <Users className="size-3.5" />
+                    <span className="inline-flex items-center gap-1 text-xs text-ink-tertiary tabular-nums">
+                      <Users className="size-3.5" aria-hidden="true" />
                       {team.members.length} anggota
                     </span>
                   </div>
@@ -238,13 +278,19 @@ export function TeamsPage() {
 
                   <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
                     <AvatarStack size={30}>
-                      {team.members.map((member) => (
-                        <Avatar key={member.id}>
-                          <AvatarFallback className="border border-line-subtle bg-canvas text-[11px] font-medium text-ink-primary">
-                            {member.initials}
-                          </AvatarFallback>
-                        </Avatar>
-                      ))}
+                      {team.members.map((member) => {
+                        const avatarSrc = USER_AVATAR_MAP[member.id]
+                        return (
+                          <Avatar key={member.id}>
+                            {avatarSrc && (
+                              <AvatarImage src={avatarSrc} alt={member.name} className="object-cover" />
+                            )}
+                            <AvatarFallback className="border border-line-subtle bg-canvas text-[11px] font-medium text-ink-primary">
+                              {member.initials}
+                            </AvatarFallback>
+                          </Avatar>
+                        )
+                      })}
                     </AvatarStack>
 
                     <button
@@ -300,6 +346,7 @@ export function TeamsPage() {
             )
           })}
         </div>
+        )}
       </main>
 
       <CreateTeamDialog

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router"
 import {
+  AlertTriangle,
   ArrowLeft,
   CheckCircle2,
   Clock,
@@ -105,10 +106,9 @@ export function ExplainBackPage() {
 
   if (questions.length === 0) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <p className="font-mono text-xs text-ink-tertiary animate-pulse">
-          Memuat pertanyaan reflektif adaptif...
-        </p>
+      <div className="mx-auto max-w-2xl space-y-4 pb-16" role="status" aria-label="Memuat pertanyaan reflektif adaptif">
+        <div className="h-24 rounded-xl border border-line-subtle bg-surface p-5 shadow-surface" />
+        <div className="h-64 rounded-xl border border-line-subtle bg-surface p-5 shadow-surface" />
       </div>
     )
   }
@@ -219,7 +219,7 @@ export function ExplainBackPage() {
                 type="button"
                 onClick={() => handleSelectQuestionIndex(idx)}
                 className={cn(
-                  "h-1.5 flex-1 rounded-full transition-all duration-300",
+                  "h-1.5 flex-1 rounded-full transition-[background-color] duration-300 ease-out",
                   idx === currentIndex
                     ? "bg-brand"
                     : idx < currentIndex
@@ -368,16 +368,18 @@ export function ExplainBackPage() {
                 <button
                   type="button"
                   onClick={fillStrongAnswer}
-                  className="rounded-md border border-success/30 bg-success-subtle/40 px-2 py-1 text-[11px] font-medium text-text-success hover:bg-success-subtle transition-colors"
+                  className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-success/30 bg-success-subtle/40 px-2.5 py-1 text-[11px] font-medium text-text-success transition-colors duration-150 hover:bg-success-subtle active:scale-[0.98]"
                 >
-                  ✨ Isi Jawaban Kuat (Paham · Skor 2)
+                  <CheckCircle2 className="size-3 shrink-0" aria-hidden="true" />
+                  <span>Isi Jawaban Kuat (Paham · Skor 2)</span>
                 </button>
                 <button
                   type="button"
                   onClick={fillAmbiguousAnswer}
-                  className="rounded-md border border-warning/30 bg-warning-subtle/40 px-2 py-1 text-[11px] font-medium text-text-warning hover:bg-warning-subtle transition-colors"
+                  className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-warning/30 bg-warning-subtle/40 px-2.5 py-1 text-[11px] font-medium text-text-warning transition-colors duration-150 hover:bg-warning-subtle active:scale-[0.98]"
                 >
-                  ⚠️ Isi Jawaban Ambigu (Picu Conformal Abstain)
+                  <AlertTriangle className="size-3 shrink-0" aria-hidden="true" />
+                  <span>Isi Jawaban Ambigu (Picu Conformal Abstain)</span>
                 </button>
               </div>
             </div>

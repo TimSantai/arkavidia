@@ -1,5 +1,6 @@
 import { useState } from "react"
 import {
+  AlertTriangle,
   ArrowRight,
   Bot,
   CheckCircle2,
@@ -7,7 +8,6 @@ import {
   Lightbulb,
   MessageSquare,
   Send,
-  Sparkles,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -82,7 +82,7 @@ export function SocraticChatCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all",
+        "overflow-hidden border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out",
         className,
       )}
     >
@@ -187,7 +187,7 @@ export function SocraticChatCard({
         {feedbackState === "nudge" && (
           <div className="flex items-start gap-3 rounded-xl border border-warning/40 bg-warning-subtle/40 p-4 animate-in fade-in-50 duration-200">
             <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-warning-subtle text-text-warning">
-              <Sparkles className="size-4" />
+              <Lightbulb className="size-4" aria-hidden="true" />
             </div>
 
             <div className="space-y-1">
@@ -196,7 +196,7 @@ export function SocraticChatCard({
               </p>
               <p className="text-xs leading-relaxed text-ink-secondary">
                 Jawabanmu menarik, namun masih terlalu singkat! Coba pikirkan lebih dalam:{" "}
-                <strong className="text-ink-primary">{step.hint}</strong> — Menurutmu, bagaimana
+                <strong className="text-ink-primary">{step.hint}</strong>. Menurutmu, bagaimana
                 pilihan arsitektur ini mempermudah pembagian tugas antara 4 anggota?
               </p>
             </div>
@@ -281,16 +281,18 @@ export function SocraticChatCard({
                 <button
                   type="button"
                   onClick={handleFillDemoAnswer}
-                  className="rounded-md border border-success/30 bg-success-subtle/40 px-2 py-1 text-[11px] font-medium text-text-success hover:bg-success-subtle transition-colors"
+                  className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-success/30 bg-success-subtle/40 px-2.5 py-1 text-[11px] font-medium text-text-success transition-colors duration-150 hover:bg-success-subtle active:scale-[0.98]"
                 >
-                  ✨ Isi Jawaban Reflektif (Lulus)
+                  <CheckCircle2 className="size-3 shrink-0" aria-hidden="true" />
+                  <span>Isi Jawaban Reflektif (Lulus)</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleFillShortAnswer}
-                  className="rounded-md border border-warning/30 bg-warning-subtle/40 px-2 py-1 text-[11px] font-medium text-text-warning hover:bg-warning-subtle transition-colors"
+                  className="inline-flex min-h-8 items-center gap-1.5 rounded-md border border-warning/30 bg-warning-subtle/40 px-2.5 py-1 text-[11px] font-medium text-text-warning transition-colors duration-150 hover:bg-warning-subtle active:scale-[0.98]"
                 >
-                  ⚠️ Isi Jawaban Singkat (Picu Nudge)
+                  <AlertTriangle className="size-3 shrink-0" aria-hidden="true" />
+                  <span>Isi Jawaban Singkat (Picu Nudge)</span>
                 </button>
               </div>
             </div>

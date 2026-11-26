@@ -2,12 +2,12 @@ import { useState } from "react"
 import { Link } from "react-router"
 import {
   ArrowRight,
+  Bot,
   Brain,
   Lock,
   Mic,
   Network,
   ShieldAlert,
-  Sparkles,
 } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { AvatarStack } from "@/components/kibo-ui/avatar-stack"
@@ -361,7 +361,7 @@ export function HeroWorkspaceShowcase() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2.5 py-0.5 font-mono text-[10px] font-medium text-text-warning">
-                        <Sparkles className="size-3" />
+                        <Bot className="size-3" aria-hidden="true" />
                         Item Dibantu AI
                       </span>
                       <span className="font-mono text-[11px] tabular-nums text-ink-tertiary">
@@ -463,7 +463,8 @@ export function HeroWorkspaceShowcase() {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-[100px_repeat(4,1fr)] items-center gap-1.5 text-center">
+                  <div className="overflow-x-auto">
+                    <div className="grid min-w-[400px] grid-cols-[100px_repeat(4,1fr)] items-center gap-1.5 text-center">
                     <div />
                     {HEATMAP_KCS.map((kc) => (
                       <div key={kc.code} className="space-y-0.5 pb-1">
@@ -510,6 +511,7 @@ export function HeroWorkspaceShowcase() {
                         </div>
                       )
                     })}
+                    </div>
                   </div>
                 </div>
 

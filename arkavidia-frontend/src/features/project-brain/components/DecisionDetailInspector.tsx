@@ -3,12 +3,12 @@ import {
   AlertTriangle,
   ArrowRight,
   BookOpen,
+  Bot,
   CheckCircle2,
   Clock3,
   GitBranch,
   Link2,
   MessageSquareText,
-  Sparkles,
   X,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -184,7 +184,7 @@ export function DecisionDetailInspector({
 
           {item.aiAssisted && (
             <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-text-warning">
-              <Sparkles className="size-3" />
+              <Bot className="size-3" aria-hidden="true" />
               DIBANTU AI
             </span>
           )}

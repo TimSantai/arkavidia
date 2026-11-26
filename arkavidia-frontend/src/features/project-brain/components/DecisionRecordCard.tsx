@@ -1,4 +1,4 @@
-import { CheckCircle2, Clock3, GitCommitHorizontal, Sparkles } from "lucide-react"
+import { Bot, CheckCircle2, Clock3, GitCommitHorizontal } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
@@ -102,7 +102,7 @@ export function DecisionRecordCard({
 
             {item.aiAssisted && (
               <span className="inline-flex items-center gap-1 rounded-full bg-warning-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-text-warning">
-                <Sparkles className="size-3" />
+                <Bot className="size-3" aria-hidden="true" />
                 DIBANTU AI
               </span>
             )}

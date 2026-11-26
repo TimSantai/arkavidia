@@ -8,7 +8,6 @@ import {
   Pause,
   Play,
   RotateCcw,
-  Sparkles,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -171,7 +170,7 @@ function PairingSessionModalBody({
             variant="outline"
             className="border-accent-violet/30 bg-accent-violet/10 font-mono text-[11px] text-accent-violet dark:bg-accent-violet/20"
           >
-            <Sparkles className="size-3 mr-1" />
+            <Clock className="size-3 mr-1" aria-hidden="true" />
             Sesi 10 Menit · Jelaskan ke Aku
           </Badge>
 
@@ -303,7 +302,7 @@ function PairingSessionModalBody({
           {/* Time progress bar */}
           <div className="mt-3 overflow-hidden rounded-full bg-muted h-1.5">
             <div
-              className="h-full bg-brand transition-all duration-300"
+              className="h-full bg-brand transition-[width] duration-300 ease-out"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -318,34 +317,37 @@ function PairingSessionModalBody({
                 PANDUAN DISKUSI (DARI PROJECT BRAIN DEC-02)
               </h3>
             </div>
-            <span className="font-mono text-[11px] text-ink-tertiary">
+            <span className="font-mono text-[11px] text-ink-tertiary tabular-nums">
               {Object.values(checkedPoints).filter(Boolean).length}/3 Selesai Dibahas
             </span>
           </div>
 
           {isLoadingDecision ? (
-            <p className="font-mono text-xs text-ink-tertiary animate-pulse p-4 text-center">
-              Memuat konteks keputusan dari Project Brain...
-            </p>
+            <div className="space-y-2 py-2" role="status" aria-label="Memuat konteks keputusan">
+              {[1, 2].map((slot) => (
+                <div key={slot} className="h-14 rounded-xl border border-line-subtle bg-surface/60" />
+              ))}
+            </div>
           ) : (
             <div className="space-y-2.5">
               {checklistItems.map((item, idx) => {
                 const isChecked = Boolean(checkedPoints[idx])
                 return (
-                  <div
+                  <button
                     key={idx}
+                    type="button"
+                    role="checkbox"
+                    aria-checked={isChecked}
                     onClick={() => togglePoint(idx)}
                     className={cn(
-                      "group flex cursor-pointer items-start gap-3 rounded-xl border p-3.5 transition-all select-none",
+                      "group flex w-full cursor-pointer items-start gap-3 rounded-xl border p-3.5 text-left transition-[border-color,background-color,transform] duration-150 ease-out active:scale-[0.99] select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       isChecked
                         ? "border-success/30 bg-success-subtle/20 dark:bg-success-subtle/10"
                         : "border-line-subtle bg-surface hover:border-brand/40",
                     )}
                   >
-                    <button
-                      type="button"
-                      aria-checked={isChecked}
-                      role="checkbox"
+                    <span
+                      aria-hidden="true"
                       className={cn(
                         "mt-0.5 flex size-4.5 shrink-0 items-center justify-center rounded-md border transition-colors",
                         isChecked
@@ -354,7 +356,7 @@ function PairingSessionModalBody({
                       )}
                     >
                       {isChecked && <CheckCircle2 className="size-3.5 stroke-[2.5]" />}
-                    </button>
+                    </span>
 
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
@@ -365,7 +367,7 @@ function PairingSessionModalBody({
                       </div>
                       <p className="text-xs leading-relaxed text-ink-secondary">{item.detail}</p>
                     </div>
-                  </div>
+                  </button>
                 )
               })}
             </div>
@@ -398,7 +400,7 @@ function PairingSessionModalBody({
                 : "bg-brand text-on-brand hover:bg-brand-hover",
             )}
           >
-            <Sparkles className="size-3.5 mr-1.5" />
+            <CheckCircle2 className="size-3.5 mr-1.5" aria-hidden="true" />
             Selesai Sesi & Lanjut Explain-Back
             <ArrowRight className="size-3.5 ml-1" />
           </Button>

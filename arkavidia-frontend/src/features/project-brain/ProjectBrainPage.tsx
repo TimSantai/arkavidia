@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useParams } from "react-router"
-import { RotateCcw, Search, Sparkles } from "lucide-react"
+import { Bot, RotateCcw, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -298,7 +298,7 @@ export function ProjectBrainPage() {
                 : "border-line-subtle bg-canvas text-ink-secondary hover:border-line-strong hover:text-ink-primary"
             )}
           >
-            <Sparkles className="size-3" />
+            <Bot className="size-3" aria-hidden="true" />
             <span>Dibantu AI</span>
           </button>
         </div>
@@ -309,12 +309,16 @@ export function ProjectBrainPage() {
         {/* Left Master List */}
         <div className="space-y-3 lg:col-span-7">
           {isLoading ? (
-            <div className="space-y-3">
+            <div className="space-y-3" role="status" aria-label="Memuat Decision Record">
               {[1, 2, 3].map((slot) => (
                 <div
                   key={slot}
-                  className="h-36 animate-pulse rounded-xl border border-line-subtle bg-surface"
-                />
+                  className="h-36 rounded-xl border border-line-subtle bg-surface p-4 shadow-surface"
+                >
+                  <div className="h-4 w-28 rounded bg-muted" />
+                  <div className="mt-3 h-5 w-3/4 rounded bg-muted/80" />
+                  <div className="mt-2 h-3.5 w-full rounded bg-muted/60" />
+                </div>
               ))}
             </div>
           ) : filteredItems.length === 0 ? (

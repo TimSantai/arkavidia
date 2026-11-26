@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle2, Handshake, Sparkles, User as UserIcon } from "lucide-react"
+import { AlertTriangle, CheckCircle2, Handshake, User as UserIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
@@ -37,7 +37,7 @@ export function CoverageMatrix({
   return (
     <div
       className={cn(
-        "rounded-xl border border-line-subtle bg-surface shadow-surface transition-all",
+        "rounded-xl border border-line-subtle bg-surface shadow-surface transition-[border-color,box-shadow] duration-150 ease-out",
         className,
       )}
     >
@@ -129,7 +129,7 @@ export function CoverageMatrix({
                     }
                   }}
                   className={cn(
-                    "cursor-pointer transition-colors duration-150 focus:outline-none focus-visible:bg-muted/50",
+                    "cursor-pointer transition-colors duration-150 focus:outline-none focus-visible:bg-muted/50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
                     isSelected
                       ? "bg-accent-violet/5 hover:bg-accent-violet/10 dark:bg-accent-violet/10"
                       : "hover:bg-muted/30",
@@ -187,7 +187,7 @@ export function CoverageMatrix({
                             <div className="w-16 overflow-hidden rounded-full bg-muted">
                               <div
                                 className={cn(
-                                  "h-1.5 rounded-full transition-all duration-300",
+                                  "h-1.5 rounded-full transition-[width] duration-300 ease-out",
                                   isUnderstood ? "bg-brand" : "bg-accent-violet",
                                 )}
                                 style={{ width: `${Math.round(pMastery * 100)}%` }}
@@ -239,7 +239,7 @@ export function CoverageMatrix({
                           variant="outline"
                           className="gap-1 border-success/40 bg-success-subtle font-mono text-xs font-medium text-text-success"
                         >
-                          <Sparkles className="size-3 shrink-0" />
+                          <CheckCircle2 className="size-3 shrink-0" aria-hidden="true" />
                           {entry.understoodCount}/{entry.totalMembers} Paham
                         </Badge>
                       )}
