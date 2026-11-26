@@ -399,3 +399,28 @@ export const ETHICS_GUARDRAILS: readonly EthicsGuardrail[] = [
       "Dirancang selaras dengan prinsip minimalisasi data dan persetujuan eksplisit UU PDP No. 27/2022.",
   },
 ]
+
+export const CLOSING_CONTENT = {
+  title: "Mulai paham bersama.",
+  subtitle: "Buka demo dan rasakan siklus satu minggu dalam lima menit.",
+  primaryCta: { label: "Coba demo gratis", to: "/teams/team-pbo-01/chat" },
+  secondaryCta: {
+    label: "Lihat di GitHub",
+    href: "https://github.com/TimSantai/arkavidia",
+  },
+  clockCaption: "1 putaran = 1 minggu · 5 menit",
+  phases: [
+    { id: "capture", label: "Tangkap", days: [0, 1], color: "#4784ff" },
+    { id: "map", label: "Petakan", days: [2], color: "#9fc1ff" },
+    { id: "check", label: "Uji Paham", days: [3], color: "#f1d69b" },
+    { id: "close", label: "Tutup Celah", days: [4], color: "#e0bb6c" },
+  ],
+  days: ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"],
+  copyright: "© 2026 Tim BERSAMA · Hackvidia, Arkavidia 11.0",
+  legal: [
+    { label: "Ketentuan", href: "#etika" },
+    { label: "Privasi", href: "#privasi" },
+  ],
+  madeWithPrefix: "Dibuat dengan",
+  madeWithSuffix: "untuk Hackvidia",
+} as const
