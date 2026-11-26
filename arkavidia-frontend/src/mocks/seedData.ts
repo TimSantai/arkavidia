@@ -51,7 +51,7 @@ export const CURRENT_USER: User = SEED_USERS[0]
 export const SEED_TEAMS: readonly Team[] = [
   {
     id: "team-pbo-01",
-    name: "Kelompok 4 — Sistem Antrean Klinik",
+    name: "Kelompok 4 · Sistem Antrean Klinik",
     courseCode: "IF2210 PBO",
     description:
       "Proyek akhir Pemrograman Berorientasi Objek: manajemen antrean pasien real-time dengan arsitektur MVC dan autentikasi JWT.",
@@ -144,7 +144,7 @@ export const SEED_MEMORY_ITEMS: readonly MemoryItem[] = [
     sensitivity: "normal",
     status: "superseded",
     aiAssisted: false,
-    provenance: "Ruang Tim — diskusi pekan 1",
+    provenance: "Ruang Tim · diskusi pekan 1",
     kcIds: ["kc-jwt"],
     sourceMessageIds: ["msg-team-02"],
     validFrom: "2026-11-04T09:00:00+07:00",
@@ -236,7 +236,7 @@ export const SEED_TEAM_MESSAGES: readonly ChatMessage[] = [
     authorId: "user-dimas",
     authorName: "Dimas Pratama",
     isAgent: false,
-    body: "Setuju MVC. Untuk modul login aku ambil ya — kita pakai JWT bukan session server karena nanti antrean mobile juga akses API yang sama, dan aku sudah pernah implementasi JWT.",
+    body: "Setuju MVC. Untuk modul login aku ambil ya: kita pakai JWT bukan session server karena nanti antrean mobile juga akses API yang sama, dan aku sudah pernah implementasi JWT.",
     createdAt: "2026-11-10T14:18:00+07:00",
     scope: "team",
   },
@@ -318,7 +318,7 @@ export const SEED_PRIVATE_MESSAGES: readonly ChatMessage[] = [
     authorName: "Personal Agent (Rani)",
     isAgent: true,
     agentKind: "personal",
-    body: "Untuk durasi 4 minggu dengan 4 anggota, **MVC** paling pas: pemisahan Model–View–Controller cukup bersih untuk unit test tanpa boilerplate 5 lapis seperti Clean Architecture. Catatan ini berlabel `M1 PRIVATE` — gunakan **Context Passport** jika ingin membagikan ringkasannya ke tim (nomor HP dan email akan disamarkan otomatis).",
+    body: "Untuk durasi 4 minggu dengan 4 anggota, **MVC** paling pas: pemisahan Model-View-Controller cukup bersih untuk unit test tanpa boilerplate 5 lapis seperti Clean Architecture. Catatan ini berlabel `M1 PRIVATE`: gunakan **Context Passport** jika ingin membagikan ringkasannya ke tim (nomor HP dan email akan disamarkan otomatis).",
     createdAt: "2026-11-05T09:51:00+07:00",
     scope: "private",
     taintedPrivate: true,

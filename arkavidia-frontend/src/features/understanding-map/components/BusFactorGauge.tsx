@@ -1,5 +1,13 @@
-import { AlertTriangle, ShieldCheck, Info } from "lucide-react"
+import { AlertTriangle, HelpCircle, ShieldCheck } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 
 interface BusFactorGaugeProps {
@@ -22,15 +30,36 @@ export function BusFactorGauge({
   return (
     <Card
       className={cn(
-        "relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all",
+        "relative overflow-hidden border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150",
         className,
       )}
     >
       <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-xs font-medium tracking-wide text-ink-tertiary">
-            KNOWLEDGE BUS FACTOR
-          </span>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-semibold tracking-wide text-ink-secondary uppercase">
+              Bus Factor
+            </span>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Penjelasan Knowledge Bus Factor"
+                  className="inline-flex size-5 items-center justify-center rounded-full text-ink-tertiary transition-[background-color,color] duration-150 hover:bg-muted/60 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-ring"
+                >
+                  <HelpCircle className="size-3.5" aria-hidden="true" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-72">
+                <PopoverHeader>
+                  <PopoverTitle>Knowledge Bus Factor</PopoverTitle>
+                  <PopoverDescription>
+                    Mengukur jumlah minimum anggota yang perlu hadir agar konsep kritis tetap dipahami tim. Model adaptasi Truck Factor (Avelino et al., ICPC 2016).
+                  </PopoverDescription>
+                </PopoverHeader>
+              </PopoverContent>
+            </Popover>
+          </div>
           <span
             className={cn(
               "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold",
@@ -41,13 +70,13 @@ export function BusFactorGauge({
           >
             {isVulnerable ? (
               <>
-                <AlertTriangle className="size-3.5 shrink-0" />
-                Silo Kritis (Faktor 1)
+                <AlertTriangle className="size-3.5 shrink-0" aria-hidden="true" />
+                Silo Kritis
               </>
             ) : (
               <>
-                <ShieldCheck className="size-3.5 shrink-0" />
-                Terdistribusi Sehat
+                <ShieldCheck className="size-3.5 shrink-0" aria-hidden="true" />
+                Sehat
               </>
             )}
           </span>
@@ -55,14 +84,14 @@ export function BusFactorGauge({
         <CardTitle className="flex items-baseline gap-2 pt-1">
           <span
             className={cn(
-              "font-heading text-4xl font-semibold font-mono tabular-nums",
+              "kpi-hero text-4xl font-semibold",
               isVulnerable ? "text-text-warning" : "text-text-success",
             )}
           >
             {busFactor}
           </span>
-          <span className="font-mono text-sm text-ink-tertiary tabular-nums">
-            / {totalMembers} anggota tim
+          <span className="text-sm font-normal text-ink-secondary tabular-nums">
+            / {totalMembers} anggota
           </span>
         </CardTitle>
       </CardHeader>
@@ -70,9 +99,9 @@ export function BusFactorGauge({
       <CardContent className="space-y-3 pt-1">
         {/* Segmented Meter Bar */}
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] font-mono text-ink-tertiary">
-            <span>Level Ketahanan Tim</span>
-            <span className="tabular-nums">
+          <div className="flex items-center justify-between text-xs text-ink-secondary">
+            <span>Ketahanan Tim</span>
+            <span className="font-medium tabular-nums">
               {Math.round((busFactor / Math.max(1, totalMembers)) * 100)}%
             </span>
           </div>
@@ -83,7 +112,7 @@ export function BusFactorGauge({
                 <div
                   key={index}
                   className={cn(
-                    "h-2 rounded-full transition-all duration-300",
+                    "h-2 rounded-full transition-[background-color] duration-300 ease-out",
                     isFilled
                       ? isVulnerable
                         ? "bg-warning"
@@ -101,32 +130,22 @@ export function BusFactorGauge({
           className={cn(
             "rounded-lg p-2.5 text-xs leading-relaxed",
             isVulnerable
-              ? "bg-warning-subtle/40 text-ink-secondary"
-              : "bg-success-subtle/40 text-ink-secondary",
+              ? "bg-warning-subtle/50 text-ink-secondary"
+              : "bg-success-subtle/50 text-ink-secondary",
           )}
         >
           {isVulnerable ? (
             <p>
-              Jika <strong className="text-ink-primary">{siloExpertName}</strong> berhalangan,
-              Knowledge Component kritis{" "}
-              <strong className="text-ink-primary">{siloKcTitle}</strong> tidak lagi memiliki
-              anggota yang memahaminya. Sesi belajar berpasangan disarankan untuk meratakan
-              pemahaman.
+              Jika <strong className="text-ink-primary">{siloExpertName}</strong> berhalangan,{" "}
+              <strong className="text-ink-primary">{siloKcTitle}</strong> tidak memiliki cadangan
+              pemahaman tim.
             </p>
           ) : (
             <p>
-              Seluruh Knowledge Component kritis dipahami oleh setidaknya {busFactor} anggota tim.
-              Risiko kehilangan pengetahuan (knowledge loss) terminimalisir.
+              Seluruh konsep kritis dipahami minimal {busFactor} anggota sehingga risiko knowledge
+              loss rendah.
             </p>
           )}
-        </div>
-
-        {/* Academic & Algorithmic Citation */}
-        <div className="flex items-center gap-1.5 pt-1 text-[11px] text-ink-tertiary">
-          <Info className="size-3.5 shrink-0" />
-          <span>
-            Model adaptasi Truck Factor (Avelino et al., ICPC 2016) untuk silabus kolaborasi.
-          </span>
         </div>
       </CardContent>
     </Card>

@@ -3,23 +3,39 @@
 @import "shadcn/tailwind.css";
 @import "allo-font/allo.css";
 @import "@fontsource-variable/geist";
-@import "@fontsource-variable/geist-mono";
 
 @custom-variant dark (&:is(.dark *));
 
 /*
- * BERSAMA Design System Tokens
+ * BERSAMA Design System Tokens (4-Tier Chromatic Surface Ladder)
  * Source: https://www.ramps.studio/?b=3d7dff&m=full&s=analogous&c=AA
  * Contrast: WCAG AA (>= 4.5:1) verified across all foreground/background pairs.
- * Do not re-derive or substitute paired hex values.
+ * Typography: 2 voices only (Allo Variable >= 20px, Geist Variable >= 12px).
  */
 :root {
-  /* Ramps Semantic Tokens — Light Mode (Default) */
-  --bg-canvas: #e9ebef;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* 4-Tier Surface Ladder - Light Mode (Default) */
+  --bg-well: #e9ebef;
+  --bg-canvas: #eef0f4;
   --bg-surface: #f4f6f9;
-  --bg-surface-raised: #f4f6f9;
+  --bg-surface-card: #ffffff;
+  --bg-surface-top: #ffffff;
+  --bg-surface-raised: #ffffff;
   --bg-muted: #d7d9dd;
 
+  /* Room-Coded Chromatic Washes */
+  --wash-brand: rgb(26 81 196 / 0.08);
+  --wash-violet: rgb(127 81 219 / 0.09);
+  --wash-cyan: rgb(0 101 136 / 0.08);
+
+  --border-brand-subtle: #c6daff;
+  --border-violet-subtle: #dbd2ff;
+  --border-cyan-subtle: #aae2ff;
+
+  /* Brand & Domain Accents */
   --bg-brand: #1a51c4;
   --bg-brand-hover: #0c3c9f;
   --bg-brand-active: #042a7b;
@@ -31,6 +47,7 @@
   --bg-tertiary: #006588;
   --bg-tertiary-hover: #004e6a;
 
+  /* Feedback & Status */
   --bg-success: #006f31;
   --bg-success-subtle: #caf9d3;
   --bg-warning: #af8400;
@@ -40,11 +57,14 @@
   --bg-info: #006199;
   --bg-info-subtle: #dbeeff;
 
+  /* Text & Foreground */
   --text-primary: #323337;
   --text-secondary: #45474b;
   --text-tertiary: #5a5c60;
   --text-disabled: #9fa2a7;
   --text-link: #1a51c4;
+  --text-accent-violet: #673ab9;
+  --text-cyan: #006588;
 
   --text-on-brand: #f1f6ff;
   --text-on-accent: #f6f4ff;
@@ -59,6 +79,7 @@
   --text-warning: #755700;
   --text-info: #006199;
 
+  /* Borders & Focus */
   --border-subtle: #d7d9dd;
   --border-default: #bec0c5;
   --border-strong: #9fa2a7;
@@ -69,14 +90,19 @@
   --text-inverse: #f4f6f9;
   --ring-focus: #4784ff;
 
-  /* Elevation shadows (critical in Light Mode since bg-surface == bg-surface-raised) */
-  --shadow-surface: 0 1px 2px 0 rgb(29 30 33 / 0.04);
-  --shadow-raised: 0 6px 20px -4px rgb(29 30 33 / 0.1), 0 1px 3px 0 rgb(29 30 33 / 0.06);
+  /* Single-Edge Hue-Tinted Shadows (Light) */
+  --shadow-control: 0 1px 2px 0 rgb(29 30 33 / 0.06), 0 1px 0 0 rgb(255 255 255 / 0.8) inset;
+  --shadow-card: 0 1px 3px 0 rgb(29 30 33 / 0.06), 0 1px 2px -1px rgb(29 30 33 / 0.04);
+  --shadow-surface: var(--shadow-card);
+  --shadow-raised: 0 10px 28px -6px rgb(29 30 33 / 0.14), 0 2px 6px -1px rgb(29 30 33 / 0.06);
+  --shadow-primary: 0 2px 8px -1px rgb(26 81 196 / 0.28), 0 1px 2px 0 rgb(26 81 196 / 0.18);
+  --shadow-badge: 0 1px 2px 0 rgb(29 30 33 / 0.05);
+  --shadow-sticker: 0 4px 12px -2px rgb(29 30 33 / 0.14), 0 1px 3px 0 rgb(29 30 33 / 0.08);
 
   /* shadcn/ui & Kibo UI Variable Bridge */
   --background: var(--bg-canvas);
   --foreground: var(--text-primary);
-  --card: var(--bg-surface);
+  --card: var(--bg-surface-card);
   --card-foreground: var(--text-primary);
   --popover: var(--bg-surface-raised);
   --popover-foreground: var(--text-primary);
@@ -85,7 +111,7 @@
   --secondary: var(--bg-muted);
   --secondary-foreground: var(--text-primary);
   --muted: var(--bg-muted);
-  --muted-foreground: var(--text-tertiary);
+  --muted-foreground: var(--text-secondary);
   --accent: var(--bg-muted);
   --accent-foreground: var(--text-primary);
   --destructive: var(--bg-error);
@@ -104,23 +130,36 @@
   --chart-5: var(--bg-warning);
 
   /* Sidebar */
-  --sidebar: var(--bg-surface);
+  --sidebar: var(--bg-well);
   --sidebar-foreground: var(--text-primary);
   --sidebar-primary: var(--bg-brand);
   --sidebar-primary-foreground: var(--text-on-brand);
-  --sidebar-accent: var(--bg-muted);
+  --sidebar-accent: var(--bg-surface-top);
   --sidebar-accent-foreground: var(--text-primary);
   --sidebar-border: var(--border-subtle);
   --sidebar-ring: var(--ring-focus);
 }
 
 .dark {
-  /* Ramps Semantic Tokens — Dark Mode */
+  /* 4-Tier Surface Ladder - Dark Mode */
+  --bg-well: #141518;
   --bg-canvas: #1d1e21;
-  --bg-surface: #323337;
-  --bg-surface-raised: #45474b;
+  --bg-surface: #28292d;
+  --bg-surface-card: #323337;
+  --bg-surface-top: #323337;
+  --bg-surface-raised: #3d3f44;
   --bg-muted: #5a5c60;
 
+  /* Room-Coded Chromatic Washes */
+  --wash-brand: rgb(71 132 255 / 0.14);
+  --wash-violet: rgb(150 105 248 / 0.15);
+  --wash-cyan: rgb(0 152 202 / 0.15);
+
+  --border-brand-subtle: rgb(71 132 255 / 0.34);
+  --border-violet-subtle: rgb(150 105 248 / 0.36);
+  --border-cyan-subtle: rgb(0 152 202 / 0.36);
+
+  /* Brand & Domain Accents */
   --bg-brand: #4784ff;
   --bg-brand-hover: #6ea0ff;
   --bg-brand-active: #9fc1ff;
@@ -132,6 +171,7 @@
   --bg-tertiary: #0098ca;
   --bg-tertiary-hover: #3dafe0;
 
+  /* Feedback & Status */
   --bg-success: #16a64f;
   --bg-success-subtle: #003f19;
   --bg-warning: #c59b37;
@@ -141,11 +181,14 @@
   --bg-info: #0192e3;
   --bg-info-subtle: #003659;
 
+  /* Text & Foreground (verified >= 4.5:1 including #bec0c5 on #3d3f44 = 5.79:1) */
   --text-primary: #e9ebef;
   --text-secondary: #bec0c5;
   --text-tertiary: #9fa2a7;
   --text-disabled: #717479;
-  --text-link: #6ea0ff;
+  --text-link: #9fc1ff;
+  --text-accent-violet: #c4b3ff;
+  --text-cyan: #73cdf8;
 
   --text-on-brand: #001652;
   --text-on-accent: #25054f;
@@ -170,19 +213,29 @@
   --text-inverse: #323337;
   --ring-focus: #6ea0ff;
 
-  --shadow-surface: none;
-  --shadow-raised: 0 10px 28px -4px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(255 255 255 / 0.06);
+  /* Single-Edge Shadows + Ambient Top Highlights (Dark) */
+  --shadow-control: 0 1px 2px 0 rgb(0 0 0 / 0.32), 0 1px 0 0 rgb(255 255 255 / 0.06) inset;
+  --shadow-card: 0 2px 6px -1px rgb(0 0 0 / 0.32), 0 1px 0 0 rgb(255 255 255 / 0.05) inset;
+  --shadow-surface: var(--shadow-card);
+  --shadow-raised: 0 14px 34px -6px rgb(0 0 0 / 0.56), 0 1px 0 0 rgb(255 255 255 / 0.08) inset;
+  --shadow-primary: 0 3px 12px -2px rgb(71 132 255 / 0.36), 0 1px 0 0 rgb(255 255 255 / 0.18) inset;
+  --shadow-badge: 0 1px 2px 0 rgb(0 0 0 / 0.28);
+  --shadow-sticker: 0 6px 16px -3px rgb(0 0 0 / 0.48), 0 2px 4px 0 rgb(0 0 0 / 0.24);
 }
 
 @theme inline {
-  /* Typography */
+  /* 2-Voice Typography */
   --font-heading: 'Allo', 'Geist Variable', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Shadows */
+  /* Single-Edge Shadows */
+  --shadow-control: var(--shadow-control);
+  --shadow-card: var(--shadow-card);
   --shadow-surface: var(--shadow-surface);
   --shadow-raised: var(--shadow-raised);
+  --shadow-primary: var(--shadow-primary);
+  --shadow-badge: var(--shadow-badge);
+  --shadow-sticker: var(--shadow-sticker);
 
   /* shadcn/ui & Kibo UI Color Utilities */
   --color-background: var(--background);
@@ -221,10 +274,21 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Ramps Direct Semantic Utilities */
+  /* 4-Tier Surface & Chromatic Wash Utilities */
+  --color-well: var(--bg-well);
   --color-canvas: var(--bg-canvas);
   --color-surface: var(--bg-surface);
+  --color-surface-card: var(--bg-surface-card);
+  --color-surface-top: var(--bg-surface-top);
   --color-surface-raised: var(--bg-surface-raised);
+
+  --color-wash-brand: var(--wash-brand);
+  --color-wash-violet: var(--wash-violet);
+  --color-wash-cyan: var(--wash-cyan);
+
+  --color-brand-subtle: var(--border-brand-subtle);
+  --color-violet-subtle: var(--border-violet-subtle);
+  --color-cyan-subtle: var(--border-cyan-subtle);
 
   --color-brand: var(--bg-brand);
   --color-brand-hover: var(--bg-brand-hover);
@@ -251,6 +315,8 @@
   --color-ink-tertiary: var(--text-tertiary);
   --color-ink-disabled: var(--text-disabled);
   --color-ink-link: var(--text-link);
+  --color-ink-violet: var(--text-accent-violet);
+  --color-ink-cyan: var(--text-cyan);
 
   --color-on-brand: var(--text-on-brand);
   --color-on-accent: var(--text-on-accent);
@@ -288,10 +354,63 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
   body {
     @apply bg-background text-foreground antialiased min-h-screen font-sans;
   }
-  html {
-    @apply font-sans;
+  a[href],
+  button:not(:disabled),
+  summary,
+  select:not(:disabled),
+  label[for],
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="switch"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+  button:disabled,
+  select:disabled,
+  input:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-heading);
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 32, "ROND" 75;
+  }
+
+  .font-display-oblique {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 32, "ROND" 75;
+  }
+
+  .kpi-hero {
+    font-family: var(--font-heading);
+    font-variant-numeric: tabular-nums;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 32, "ROND" 75;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

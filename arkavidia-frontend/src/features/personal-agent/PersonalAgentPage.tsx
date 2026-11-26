@@ -1,6 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useParams } from "react-router"
-import { Bot, Lock, Maximize2, Minimize2, ShieldCheck } from "lucide-react"
+import {
+  HelpCircle,
+  Lock,
+  Maximize2,
+  Minimize2,
+  SlidersHorizontal,
+} from "lucide-react"
 import {
   Conversation,
   ConversationContent,
@@ -16,9 +22,19 @@ import {
   PromptInputTools,
 } from "@/components/ai-elements/prompt-input"
 import { Shimmer } from "@/components/ai-elements/shimmer"
-import { Suggestion } from "@/components/ai-elements/suggestion"
+import type { AgentSemanticState } from "@/components/bersama/agentConfig"
+import { AgentCustomizerDialog } from "@/components/bersama/AgentCustomizerDialog"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { getStoredDemoUser } from "@/features/auth/components/demoSession"
 import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
 import { cn } from "@/lib/utils"
@@ -39,7 +55,10 @@ export function PersonalAgentPage() {
   const [messages, setMessages] = useState<readonly ChatMessage[]>([])
   const [inputText, setInputText] = useState("")
   const [isAgentThinking, setIsAgentThinking] = useState(false)
+  const [isAgentSpeaking, setIsAgentSpeaking] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [customizerOpen, setCustomizerOpen] = useState(false)
+  const speakingTimerRef = useRef<number | null>(null)
 
   const [passportPreview, setPassportPreview] = useState<PassportPreview | null>(
     null
@@ -49,12 +68,26 @@ export function PersonalAgentPage() {
     string | null
   >(null)
 
+  const agentAvatarState: AgentSemanticState = isAgentThinking
+    ? "thinking"
+    : isAgentSpeaking
+      ? "speaking"
+      : "idle"
+
   useEffect(() => {
     window.scrollTo(0, 0)
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = "hidden"
     return () => {
       document.body.style.overflow = previousOverflow
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (speakingTimerRef.current) {
+        window.clearTimeout(speakingTimerRef.current)
+      }
     }
   }, [])
 
@@ -73,6 +106,15 @@ export function PersonalAgentPage() {
     void bersamaApi.getPrivateMessages(teamId).then(setMessages)
   }, [teamId])
 
+  const latestAgentMsgId = useMemo(() => {
+    for (let idx = messages.length - 1; idx >= 0; idx -= 1) {
+      if (messages[idx]?.isAgent) {
+        return messages[idx].id
+      }
+    }
+    return null
+  }, [messages])
+
   const handleOpenPassport = useCallback(async (message: ChatMessage) => {
     setLoadingPassportMsgId(message.id)
     try {
@@ -90,6 +132,11 @@ export function PersonalAgentPage() {
       if (!trimmed || isAgentThinking) return
 
       setInputText("")
+      if (speakingTimerRef.current) {
+        window.clearTimeout(speakingTimerRef.current)
+      }
+      setIsAgentSpeaking(false)
+
       const optimisticUserMsg: ChatMessage = {
         id: `msg-priv-user-${Date.now()}`,
         teamId,
@@ -143,6 +190,11 @@ export function PersonalAgentPage() {
             )
             .concat(smartAgentMsg)
         )
+
+        setIsAgentSpeaking(true)
+        speakingTimerRef.current = window.setTimeout(() => {
+          setIsAgentSpeaking(false)
+        }, 2200)
       } finally {
         setIsAgentThinking(false)
       }
@@ -159,7 +211,7 @@ export function PersonalAgentPage() {
           : "inset-x-0 top-14 bottom-0 z-20 lg:left-64"
       )}
     >
-      {/* Top Context Bar — docked safely into AppShell's left/center h-14 header on desktop */}
+      {/* Top Context Bar: docked safely into AppShell's left/center h-14 header on desktop */}
       <div
         className={cn(
           "flex shrink-0 flex-nowrap items-center justify-between gap-2 border-b border-line-subtle bg-surface px-4 py-2.5 sm:px-6",
@@ -168,55 +220,93 @@ export function PersonalAgentPage() {
         )}
       >
         <div className="flex min-w-0 items-center gap-2.5">
-          <Lock className="size-4 shrink-0 text-ink-tertiary" />
-          <h1 className="truncate font-heading text-base font-semibold text-ink-primary sm:text-lg">
-            Ruang Pribadi
+          <Lock
+            className="size-4 shrink-0 text-ink-link"
+            aria-hidden="true"
+          />
+          <h1 className="truncate font-display text-xl font-semibold tracking-tight text-ink-primary">
+            Ruang{" "}
+            <span className="font-display-oblique text-ink-link">
+              Pribadi
+            </span>
           </h1>
-          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-line-subtle bg-canvas px-2.5 py-0.5 font-mono text-[11px] font-medium text-ink-secondary">
-            M1 PRIVATE · TERENKRIPSI
+
+          <span className="hidden shrink-0 items-center rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-semibold text-ink-link shadow-badge sm:inline-flex">
+            M1 Private
           </span>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-xs"
+                aria-label="Info enkripsi M1 dan kepatuhan UU PDP"
+                className="rounded-full border-brand-subtle bg-wash-brand text-ink-link hover:bg-brand/15"
+              >
+                <HelpCircle className="size-3.5" aria-hidden="true" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="start" className="w-72">
+              <PopoverHeader>
+                <PopoverTitle>Ruang Pribadi · M1 Terenkripsi</PopoverTitle>
+                <PopoverDescription>
+                  Konteks mencakup M1 Pribadi, M2 Tim, dan skor M3 milikmu.
+                  Catatan ini terisolasi dan tidak terbaca anggota lain maupun
+                  Team Agent tanpa Context Passport (UU PDP).
+                </PopoverDescription>
+              </PopoverHeader>
+            </PopoverContent>
+          </Popover>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          size="icon-sm"
-          onClick={() => setIsFullscreen((prev) => !prev)}
-          aria-label={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
-          title={isFullscreen ? "Keluar layar penuh (Esc)" : "Layar penuh"}
-          className="shrink-0 border-line-subtle bg-canvas text-ink-secondary hover:text-ink-primary"
-        >
-          {isFullscreen ? (
-            <Minimize2 className="size-4" />
-          ) : (
-            <Maximize2 className="size-4" />
-          )}
-        </Button>
-      </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-subtle bg-wash-brand py-0.5 pr-1 pl-1 shadow-badge">
+            <AgentStickerAvatar
+              role="private"
+              state={agentAvatarState}
+              size={30}
+              interactive
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              onClick={() => setCustomizerOpen(true)}
+              aria-label="Kustomisasi stiker Personal Agent"
+              className="h-7 gap-1 rounded-full px-2 text-xs font-medium text-ink-link hover:bg-surface-top hover:text-ink-link"
+            >
+              <SlidersHorizontal className="size-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">Atur</span>
+            </Button>
+          </div>
 
-      {/* Top-Center Floating Context Pill */}
-      <div
-        className={cn(
-          "pointer-events-none absolute inset-x-0 z-20 flex justify-center px-4",
-          isFullscreen ? "top-14" : "top-14 lg:top-3"
-        )}
-      >
-        <div className="inline-flex items-center gap-2 rounded-full border border-line-subtle bg-surface-raised/95 px-3.5 py-1.5 text-xs font-medium text-ink-secondary shadow-surface backdrop-blur-md">
-          <ShieldCheck className="size-3.5 shrink-0 text-ink-link" />
-          <span className="truncate">
-            Konteks: M1 Pribadi · M2 Tim · Skor M3 Sendiri
-          </span>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsFullscreen((prev) => !prev)}
+            aria-label={isFullscreen ? "Keluar layar penuh" : "Layar penuh"}
+            title={isFullscreen ? "Keluar layar penuh (Esc)" : "Layar penuh"}
+            className="size-10 shrink-0 border-line-subtle bg-surface-top text-ink-secondary hover:text-ink-primary sm:size-8"
+          >
+            {isFullscreen ? (
+              <Minimize2 className="size-4" aria-hidden="true" />
+            ) : (
+              <Maximize2 className="size-4" aria-hidden="true" />
+            )}
+          </Button>
         </div>
       </div>
 
       {/* Scrollable AI Elements Conversation Stream */}
       <Conversation className="min-h-0 flex-1 overflow-hidden bg-canvas [&>div]:h-full [&>div]:overflow-y-auto">
-        <ConversationContent className="mx-auto w-full max-w-5xl gap-4 px-4 pt-14 pb-44 sm:px-8 sm:pb-40">
+        <ConversationContent className="mx-auto w-full max-w-5xl gap-4 px-4 pt-5 pb-44 sm:px-8 sm:pb-40">
           {messages.map((msg) => (
             <PrivateMessageItem
               key={msg.id}
               message={msg}
               activeUserId={activeUser.id}
+              isSpeaking={isAgentSpeaking && msg.id === latestAgentMsgId}
               isLoadingPassport={loadingPassportMsgId === msg.id}
               onOpenPassport={(targetMsg) => void handleOpenPassport(targetMsg)}
             />
@@ -224,13 +314,16 @@ export function PersonalAgentPage() {
 
           {isAgentThinking && (
             <div className="flex items-center gap-3 px-2 py-1">
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-line-subtle bg-surface text-ink-primary shadow-surface">
-                <Bot className="size-4 text-ink-link" />
-              </div>
-              <div className="inline-flex items-center gap-2 rounded-2xl border border-line-subtle bg-surface px-3.5 py-2 text-xs shadow-surface">
+              <AgentStickerAvatar
+                role="private"
+                state="thinking"
+                size={36}
+                interactive={false}
+              />
+              <div className="inline-flex items-center gap-2 rounded-2xl border border-brand-subtle bg-wash-brand px-3.5 py-2 text-xs shadow-card">
                 <Loader size={14} className="text-ink-link" />
-                <Shimmer duration={1.4} className="font-mono text-xs">
-                  Personal Agent menyusun jawaban di ruang M1 terenkripsi...
+                <Shimmer duration={1.4} className="text-xs font-medium">
+                  Personal Agent menyusun di ruang M1...
                 </Shimmer>
               </div>
             </div>
@@ -239,59 +332,63 @@ export function PersonalAgentPage() {
         <ConversationScrollButton className="right-6 bottom-40 left-auto translate-x-0 border-line-subtle bg-surface-raised text-ink-primary shadow-raised sm:bottom-36" />
       </Conversation>
 
-      {/* Floating Bottom Quick Prompt Chips + PromptInput Composer */}
+      {/* Floating Bottom Quick Preset Chips + PromptInput Composer */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-canvas via-canvas/90 to-transparent px-4 pt-8 pb-4 sm:px-8 sm:pb-5">
         <div className="pointer-events-auto mx-auto w-full max-w-4xl space-y-2.5">
           <div className="flex flex-wrap items-center gap-2">
             {PERSONAL_AGENT_SUGGESTIONS.map((chip) => (
-              <Suggestion
+              <button
                 key={chip.id}
-                suggestion={chip.prompt}
-                onClick={(prompt) => void handleSendText(prompt)}
-                className="h-7 max-w-full truncate rounded-full border border-line-subtle bg-surface/95 px-3 text-xs font-medium text-ink-secondary shadow-surface backdrop-blur-sm hover:border-line-default hover:text-ink-primary"
+                type="button"
+                onClick={() => void handleSendText(chip.prompt)}
+                className="inline-flex min-h-8 max-w-full items-center truncate rounded-full border border-brand-subtle bg-surface-card/95 px-3 py-1 text-xs font-medium text-ink-secondary shadow-control backdrop-blur-sm transition-[background-color,border-color,color,transform] duration-150 hover:border-line-active hover:bg-wash-brand hover:text-ink-link active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 <span className="truncate">{chip.label}</span>
-              </Suggestion>
+              </button>
             ))}
           </div>
 
           <PromptInput
             onSubmit={({ text }) => void handleSendText(text || inputText)}
-            className="[&_[data-slot=input-group]]:rounded-2xl [&_[data-slot=input-group]]:border-line-subtle [&_[data-slot=input-group]]:bg-surface-raised [&_[data-slot=input-group]]:shadow-raised"
+            className="[&_[data-slot=input-group]]:rounded-2xl [&_[data-slot=input-group]]:border-brand-subtle [&_[data-slot=input-group]]:bg-surface-raised [&_[data-slot=input-group]]:shadow-raised"
           >
             <PromptInputBody>
               <PromptInputTextarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder="Tulis catatan atau tanya Personal Agent (hanya terlihat olehmu)..."
-                className="min-h-11 px-3.5 py-2.5 text-sm text-ink-primary"
+                placeholder="Tulis catatan privat atau tanya Personal Agent..."
+                className="min-h-11 px-3.5 py-2.5 text-base text-ink-primary sm:text-sm"
               />
             </PromptInputBody>
             <PromptInputFooter className="border-t border-line-subtle/60 px-3 py-1.5">
               <PromptInputTools className="gap-2">
                 <div className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface py-0.5 pr-2.5 pl-1">
-                  <Avatar size="sm" className="size-4">
+                  <Avatar size="sm" className="size-5">
                     {activeAvatarSrc && (
-                      <AvatarImage src={activeAvatarSrc} alt={activeUser.name} />
+                      <AvatarImage
+                        src={activeAvatarSrc}
+                        alt={activeUser.name}
+                        className="object-cover"
+                      />
                     )}
-                    <AvatarFallback className="text-[9px] font-semibold">
+                    <AvatarFallback className="text-xs font-semibold">
                       {activeUser.initials}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-[11px] font-medium text-ink-secondary">
+                  <span className="text-xs font-medium text-ink-secondary">
                     {activeUser.name.split(" ")[0]}
                   </span>
                 </div>
-                <span className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-surface px-2 py-0.5 font-mono text-[10px] font-medium text-ink-secondary">
-                  <Lock className="size-2.5 text-ink-tertiary" />
-                  M1 PRIVATE
+                <span className="inline-flex items-center gap-1 rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-semibold text-ink-link">
+                  <Lock className="size-3" aria-hidden="true" />
+                  M1 Private
                 </span>
               </PromptInputTools>
 
               <PromptInputSubmit
                 status={isAgentThinking ? "submitted" : undefined}
                 disabled={!inputText.trim() || isAgentThinking}
-                className="bg-brand text-on-brand hover:bg-brand-hover disabled:opacity-40"
+                className="bg-brand text-on-brand shadow-card hover:bg-brand-hover active:bg-brand-active disabled:opacity-40"
               />
             </PromptInputFooter>
           </PromptInput>
@@ -305,6 +402,13 @@ export function PersonalAgentPage() {
         activeUserName={activeUser.name}
         preview={passportPreview}
         onOpenChange={setIsPassportOpen}
+      />
+
+      {/* Personal Agent Sticker Customizer */}
+      <AgentCustomizerDialog
+        open={customizerOpen}
+        onOpenChange={setCustomizerOpen}
+        initialRole="private"
       />
     </div>
   )

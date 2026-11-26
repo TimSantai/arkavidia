@@ -52,16 +52,7 @@ export function VoiceRecorderInput({
   const [seconds, setSeconds] = useState(0)
   const [speechConfidence, setSpeechConfidence] = useState<number | null>(null)
   const recognitionRef = useRef<BrowserSpeechRecognition | null>(null)
-
-  // Determine speech support once on initial render
-  const [isSpeechSupported] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false
-    const win = window as unknown as {
-      SpeechRecognition?: SpeechRecognitionConstructor
-      webkitSpeechRecognition?: SpeechRecognitionConstructor
-    }
-    return Boolean(win.SpeechRecognition || win.webkitSpeechRecognition)
-  })
+  const fallbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -104,6 +95,9 @@ export function VoiceRecorderInput({
     }
 
     return () => {
+      if (fallbackTimeoutRef.current) {
+        clearTimeout(fallbackTimeoutRef.current)
+      }
       if (recognitionRef.current) {
         try {
           recognitionRef.current.abort()
@@ -114,7 +108,6 @@ export function VoiceRecorderInput({
     }
   }, [onChange])
 
-  // Timer while recording
   useEffect(() => {
     if (!isRecording) return
     const timer = setInterval(() => {
@@ -128,6 +121,10 @@ export function VoiceRecorderInput({
 
     if (isRecording) {
       setIsRecording(false)
+      if (fallbackTimeoutRef.current) {
+        clearTimeout(fallbackTimeoutRef.current)
+        fallbackTimeoutRef.current = null
+      }
       if (recognitionRef.current) {
         try {
           recognitionRef.current.stop()
@@ -135,26 +132,27 @@ export function VoiceRecorderInput({
           // ignore
         }
       }
-    } else {
-      setIsRecording(true)
-      setSeconds(0)
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.start()
-        } catch {
-          // ignore if active
-        }
-      } else {
-        // Fallback simulation when Web Speech API is unavailable
-        setTimeout(() => {
-          if (!value) {
-            onChange(
-              "Kami menggunakan JWT karena stateless sehingga tidak membebani RAM server ketika klien mobile dan web mengakses bersamaan.",
-            )
-            setSpeechConfidence(0.92)
-          }
-        }, 3000)
+      return
+    }
+
+    setIsRecording(true)
+    setSeconds(0)
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.start()
+      } catch {
+        // ignore if active
       }
+    } else {
+      fallbackTimeoutRef.current = setTimeout(() => {
+        if (!value) {
+          onChange(
+            "Kami menggunakan JWT karena stateless sehingga tidak membebani RAM server ketika klien mobile dan web mengakses bersamaan.",
+          )
+          setSpeechConfidence(0.92)
+        }
+        setIsRecording(false)
+      }, 2500)
     }
   }
 
@@ -175,16 +173,17 @@ export function VoiceRecorderInput({
 
   return (
     <div className={cn("space-y-3", className)}>
-      {/* Recording Control & Waveform Display */}
-      <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-line-subtle bg-canvas/40 p-4 sm:flex-row">
+      {/* Cyan Recording Deck */}
+      <div className="flex flex-col items-center justify-between gap-3 rounded-xl border border-brand-subtle bg-wash-brand p-4 sm:flex-row">
         <div className="flex items-center gap-3">
           <Button
             type="button"
             size="lg"
             disabled={disabled}
             onClick={toggleRecording}
+            aria-label={isRecording ? "Hentikan rekaman suara" : "Mulai rekaman suara"}
             className={cn(
-              "size-12 rounded-full p-0 shadow-sm transition-all",
+              "size-12 rounded-full p-0 shadow-card transition-[transform,background-color,box-shadow] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)]",
               isRecording
                 ? "animate-pulse bg-error text-on-error hover:bg-error/90"
                 : "bg-brand text-on-brand hover:bg-brand-hover",
@@ -195,25 +194,25 @@ export function VoiceRecorderInput({
 
           <div className="space-y-0.5">
             <div className="flex items-center gap-2">
-              <span className="font-heading text-xs font-semibold text-ink-primary">
-                {isRecording ? "Merekam Suara..." : "Tekan untuk Mulai Rekam"}
+              <span className="text-sm font-semibold text-ink-primary">
+                {isRecording ? "Merekam suara..." : "Rekam Jawaban"}
               </span>
               {isRecording && <span className="flex size-2 rounded-full bg-error animate-ping" />}
             </div>
-            <p className="font-mono text-xs text-ink-tertiary tabular-nums">
-              {formatTimer(seconds)} / 02:00 maks
+            <p className="text-xs text-ink-secondary tabular-nums">
+              {formatTimer(seconds)} / 02:00
             </p>
           </div>
         </div>
 
-        {/* Animated Waveform Simulation */}
-        <div className="flex items-center gap-1">
+        {/* Waveform */}
+        <div className="flex items-center gap-1" aria-hidden="true">
           {Array.from({ length: 16 }).map((_, idx) => (
             <div
               key={idx}
               className={cn(
-                "w-1 rounded-full bg-brand transition-all duration-150",
-                isRecording ? "animate-pulse opacity-80" : "h-2 bg-muted opacity-40",
+                "w-1 rounded-full transition-[height,opacity,background-color] duration-150 ease-out",
+                isRecording ? "bg-brand opacity-85" : "h-2 bg-muted opacity-50",
               )}
               style={{
                 height: isRecording
@@ -224,32 +223,29 @@ export function VoiceRecorderInput({
           ))}
         </div>
 
-        {/* Reset button */}
         {value && !isRecording && (
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={handleReset}
-            className="border-line-subtle text-xs"
-            title="Rekam Ulang"
           >
-            <RotateCcw className="size-3 mr-1" />
-            Rekam Ulang
+            <RotateCcw className="size-3.5" aria-hidden="true" />
+            <span>Ulang</span>
           </Button>
         )}
       </div>
 
-      {/* Transcription Preview & Edit Box */}
+      {/* Transcript Box */}
       <div className="space-y-1.5">
-        <div className="flex items-center justify-between text-xs text-ink-secondary">
-          <span className="flex items-center gap-1 font-medium">
-            <Volume2 className="size-3.5 text-brand" />
-            Transkripsi Suara (Dapat Diedit Sebelum Kirim)
+        <div className="flex items-center justify-between gap-2 text-xs text-ink-secondary">
+          <span className="flex items-center gap-1.5 font-medium">
+            <Volume2 className="size-3.5 text-ink-link" aria-hidden="true" />
+            <span>Transkripsi Suara</span>
           </span>
           {speechConfidence !== null && (
-            <span className="font-mono text-[11px] text-text-success">
-              Confidence: {Math.round(speechConfidence * 100)}%
+            <span className="rounded-full bg-success-subtle px-2.5 py-0.5 text-xs font-medium text-text-success tabular-nums">
+              Akurasi {Math.round(speechConfidence * 100)}%
             </span>
           )}
         </div>
@@ -258,18 +254,9 @@ export function VoiceRecorderInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled || isRecording}
-          placeholder="Hasil rekaman suara akan muncul di sini secara otomatis. Kamu dapat mengedit atau memperbaiki kalimat kapan saja sebelum dikirim."
-          className="min-h-[100px] border-line-subtle bg-surface text-sm leading-relaxed text-ink-primary shadow-xs"
+          placeholder="Hasil transkripsi suara akan muncul di sini dan dapat diedit..."
+          className="min-h-[100px] border-line-default bg-surface-card text-base leading-relaxed text-ink-primary sm:text-sm"
         />
-
-        <div className="flex items-center justify-between text-[11px] text-ink-tertiary">
-          <span>
-            {isSpeechSupported
-              ? "Didukung Web Speech API Bahasa Indonesia."
-              : "Mode fallback suara lokal aktif."}
-          </span>
-          <span className="font-mono tabular-nums">{value.length} karakter</span>
-        </div>
       </div>
     </div>
   )

@@ -1,23 +1,32 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router"
 import {
+  AlertTriangle,
   ArrowLeft,
   CheckCircle2,
   Clock,
-  Compass,
+  HelpCircle,
   History,
-  Info,
   Mic,
   Send,
   Type,
 } from "lucide-react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
+import { Pill, PillIndicator } from "@/components/kibo-ui/pill"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Pill, PillIndicator } from "@/components/kibo-ui/pill"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
-import { bersamaApi } from "@/services/api"
-import { SEED_USERS } from "@/mocks/seedData"
 import { cn } from "@/lib/utils"
+import { SEED_USERS } from "@/mocks/seedData"
+import { bersamaApi } from "@/services/api"
 import type { CheckAttempt, ExplainBackQuestion, User } from "@/types/bersama"
 import { GradingResultCard } from "./components/GradingResultCard"
 import { VoiceRecorderInput } from "./components/VoiceRecorderInput"
@@ -32,20 +41,15 @@ export function ExplainBackPage() {
   const [pastAttempts, setPastAttempts] = useState<readonly CheckAttempt[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isPostponed, setIsPostponed] = useState(false)
-  const [showIrtDetails, setShowIrtDetails] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
 
-  // Load questions & past check attempts on mount
   useEffect(() => {
-    void bersamaApi.getAllChecks().then((data) => {
-      setQuestions(data)
-    })
+    void bersamaApi.getAllChecks().then(setQuestions)
     void bersamaApi.getCheckAttempts().then(setPastAttempts)
   }, [teamId])
 
   const currentQuestion: ExplainBackQuestion | undefined = questions[currentIndex]
 
-  // Resolve author of current question decision
   const authorUser: User =
     SEED_USERS.find((u) => u.id === currentQuestion?.decisionAuthorId) ??
     SEED_USERS.find((u) => u.id === "user-dimas") ??
@@ -75,7 +79,6 @@ export function ExplainBackPage() {
       setCurrentIndex((prev) => prev + 1)
       setAnswerText("")
       setLatestAttempt(null)
-      setShowIrtDetails(false)
     }
   }
 
@@ -83,14 +86,12 @@ export function ExplainBackPage() {
     setCurrentIndex(index)
     setAnswerText("")
     setLatestAttempt(null)
-    setShowIrtDetails(false)
   }
 
   const handleRetry = () => {
     setLatestAttempt(null)
   }
 
-  // Demo helper simulators
   const fillStrongAnswer = () => {
     setInputMode("text")
     setAnswerText(
@@ -105,251 +106,251 @@ export function ExplainBackPage() {
 
   if (questions.length === 0) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <p className="font-mono text-xs text-ink-tertiary animate-pulse">
-          Memuat pertanyaan reflektif adaptif...
-        </p>
+      <div
+        className="mx-auto max-w-2xl space-y-4 pb-16"
+        role="status"
+        aria-label="Memuat pertanyaan reflektif adaptif"
+      >
+        <div className="h-28 rounded-2xl border border-brand-subtle bg-wash-brand p-5 shadow-card" />
+        <div className="h-64 rounded-xl border border-line-subtle bg-surface-card p-5 shadow-card" />
       </div>
     )
   }
 
-  // =========================================================================
-  // VIEW: POSTPONED STATE (Ramah & Bebas Penalti)
-  // =========================================================================
   if (isPostponed) {
     return (
-      <div className="mx-auto max-w-xl space-y-6 pt-10 text-center">
-        <Card className="border border-line-subtle bg-surface p-8 shadow-surface">
-          <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-info-subtle text-text-info">
-            <CheckCircle2 className="size-8" />
+      <div className="mx-auto max-w-xl pt-10 text-center">
+        <Card className="border-brand-subtle bg-surface-card p-8 shadow-card">
+          <div className="mx-auto flex justify-center">
+            <AgentStickerAvatar role="tutor" state="idle" size={56} />
           </div>
 
-          <h2 className="font-heading pt-4 text-xl font-semibold text-ink-primary">
-            Check Berhasil Ditunda
+          <h2 className="font-display pt-4 text-2xl font-semibold text-ink-primary">
+            Check <span className="font-display-oblique text-ink-link">Ditunda</span>
           </h2>
 
-          <p className="pt-2 text-xs leading-relaxed text-ink-secondary">
-            Tidak masalah! Sesuai prinsip etika formatif BERSAMA, sesi check ini tidak memiliki batas
-            waktu hukuman dan bebas risiko akademis. Kamu dapat melanjutkan kapan saja sebelum akhir
+          <p className="pt-2 text-sm leading-relaxed text-ink-secondary">
+            Sesi ini murni formatif tanpa batas waktu penalti. Lanjutkan kapan saja sebelum akhir
             pekan.
           </p>
 
           <div className="flex flex-col justify-center gap-2 pt-6 sm:flex-row">
-            <Button
-              onClick={() => setIsPostponed(false)}
-              className="bg-brand text-on-brand hover:bg-brand-hover text-xs font-medium"
-            >
+            <Button onClick={() => setIsPostponed(false)}>
               Lanjutkan Check Sekarang
             </Button>
-            <Link to={`/teams/${teamId}/understanding`}>
-              <Button variant="outline" className="border-line-subtle text-xs w-full sm:w-auto">
+            <Button asChild variant="outline">
+              <Link to={`/teams/${teamId}/understanding`}>
                 Kembali ke Peta Pemahaman
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </Card>
       </div>
     )
   }
 
+  const progressPct = Math.round(((currentIndex + 1) / questions.length) * 100)
+
   return (
     <div className="mx-auto max-w-2xl space-y-6 pb-16">
-      {/* 1. Header & Formative Ethics Pill */}
-      <div className="space-y-3">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2">
-            <Link
-              to={`/teams/${teamId}/understanding`}
-              className="inline-flex items-center text-xs text-ink-tertiary hover:text-ink-primary"
-            >
-              <ArrowLeft className="size-3.5 mr-1" />
-              Peta Pemahaman
-            </Link>
-            <span className="text-ink-disabled">/</span>
-            <span className="font-mono text-xs font-semibold text-accent-violet uppercase">
-              TRACK B · FITUR F5 · EXPLAIN-BACK
-            </span>
-          </div>
-
-          <Pill
-            variant="secondary"
-            className="border border-line-subtle bg-surface shadow-surface text-ink-secondary font-mono text-[11px]"
+      {/* 1. Fresh Cyan Room Header & Progress Hero */}
+      <section className="space-y-4 rounded-2xl border border-brand-subtle bg-wash-brand p-5 shadow-card">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <Link
+            to={`/teams/${teamId}/understanding`}
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-link hover:underline"
           >
-            <PillIndicator variant="success" pulse />
-            <span>Murni formatif · Bukan nilai kuliah</span>
-          </Pill>
+            <ArrowLeft className="size-3.5" aria-hidden="true" />
+            <span>Peta Pemahaman</span>
+          </Link>
+
+          <div className="flex items-center gap-2">
+            <Pill
+              variant="secondary"
+              className="border border-brand-subtle bg-surface-card text-xs font-medium text-ink-secondary shadow-badge"
+            >
+              <PillIndicator variant="success" pulse />
+              <span>Formatif · Bukan nilai</span>
+            </Pill>
+
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsPostponed(true)}
+              className="text-xs text-ink-secondary hover:text-ink-primary"
+            >
+              Tunda
+            </Button>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
-          <div>
-            <h1 className="font-heading text-2xl font-semibold text-ink-primary">
-              Explain-Back Check
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="space-y-1">
+            <h1 className="font-display text-2xl font-semibold text-ink-primary sm:text-3xl">
+              Explain-Back <span className="font-display-oblique text-ink-link">Check</span>
             </h1>
-            <p className="text-xs text-ink-secondary">
-              Pertanyaan reflektif adaptif 5 menit untuk mengonfirmasi pemahaman konsep mandiri.
+            <p className="text-sm text-ink-secondary">
+              Konfirmasi pemahaman konsep tim dalam 5 menit.
             </p>
           </div>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsPostponed(true)}
-            className="text-xs text-ink-tertiary hover:text-ink-primary hover:bg-muted self-start sm:self-auto"
-          >
-            Tunda Check
-          </Button>
-        </div>
-
-        {/* Progress Bar & Question Stepper */}
-        <div className="space-y-1.5 pt-1">
-          <div className="flex items-center justify-between text-[11px] font-mono text-ink-tertiary">
-            <span>
-              Pertanyaan {currentIndex + 1} dari {questions.length}
+          <div className="flex items-baseline gap-2 sm:flex-col sm:items-end sm:gap-0.5">
+            <span className="kpi-hero text-[36px] leading-none font-semibold text-ink-link">
+              {progressPct}%
             </span>
-            <span className="flex items-center gap-1">
-              <Clock className="size-3" />
-              Estimasi: {currentQuestion?.estimatedSeconds ?? 90} detik
+            <span className="flex items-center gap-1 text-xs font-medium text-ink-secondary tabular-nums">
+              <Clock className="size-3.5" aria-hidden="true" />
+              <span>
+                Soal {currentIndex + 1}/{questions.length} · ~{currentQuestion?.estimatedSeconds ?? 90} dtk
+              </span>
             </span>
           </div>
-
-          <div className="flex gap-1.5">
-            {questions.map((q, idx) => (
-              <button
-                key={q.id}
-                type="button"
-                onClick={() => handleSelectQuestionIndex(idx)}
-                className={cn(
-                  "h-1.5 flex-1 rounded-full transition-all duration-300",
-                  idx === currentIndex
-                    ? "bg-brand"
-                    : idx < currentIndex
-                      ? "bg-success"
-                      : "bg-muted hover:bg-line-default",
-                )}
-                title={`Pindah ke soal ${idx + 1}`}
-              />
-            ))}
-          </div>
         </div>
-      </div>
+
+        {/* Question Stepper */}
+        <div className="flex gap-2">
+          {questions.map((q, idx) => (
+            <button
+              key={q.id}
+              type="button"
+              onClick={() => handleSelectQuestionIndex(idx)}
+              className={cn(
+                "h-2 flex-1 rounded-full transition-[background-color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                idx === currentIndex
+                  ? "bg-brand"
+                  : idx < currentIndex
+                    ? "bg-success"
+                    : "bg-surface-card/80 hover:bg-surface-card",
+              )}
+              aria-label={`Pindah ke soal ${idx + 1}: ${q.decisionCode}`}
+            />
+          ))}
+        </div>
+      </section>
 
       {/* 2. Main Question Card */}
       {currentQuestion && (
-        <Card className="border border-line-subtle bg-surface shadow-surface">
-          <CardHeader className="border-b border-line-subtle bg-canvas/30 p-5 pb-4">
+        <Card className="border-line-subtle bg-surface-card py-0 shadow-card">
+          <CardHeader className="border-b border-line-subtle bg-wash-brand/45 p-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs font-semibold text-ink-primary">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-md bg-brand px-2.5 py-0.5 text-xs font-semibold text-on-brand">
                   {currentQuestion.decisionCode}
                 </span>
 
-                <span className="rounded-full bg-info-subtle px-2 py-0.5 font-mono text-[10px] font-semibold text-text-info uppercase">
-                  BLOOM: {currentQuestion.bloomLevel}
+                <span className="rounded-full bg-info-subtle px-2.5 py-0.5 text-xs font-semibold text-text-info uppercase">
+                  {currentQuestion.bloomLevel}
                 </span>
 
                 {currentQuestion.aiAssistedContext && (
-                  <span className="rounded-full bg-warning-subtle px-2 py-0.5 font-mono text-[10px] font-semibold text-text-warning">
-                    ITEM DIBANTU AI
+                  <span className="rounded-full bg-warning-subtle px-2.5 py-0.5 text-xs font-semibold text-text-warning">
+                    Dibantu AI
                   </span>
                 )}
               </div>
 
-              {/* Technical IRT Collapsible Toggle */}
-              <button
-                type="button"
-                onClick={() => setShowIrtDetails((prev) => !prev)}
-                className="flex items-center gap-1 font-mono text-[11px] text-ink-tertiary hover:text-brand"
-              >
-                <Compass className="size-3" />
-                <span>Kenapa soal ini dipilih?</span>
-              </button>
+              {/* Compact ? Popover for IRT 2PL Details */}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label="Kenapa soal ini dipilih secara adaptif"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-line-subtle bg-surface-card px-2.5 py-1 text-xs font-medium text-ink-secondary transition-[background-color,color,border-color] duration-150 hover:border-line-default hover:text-ink-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <HelpCircle className="size-3.5 text-ink-link" aria-hidden="true" />
+                    <span>Seleksi Adaptif</span>
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-80">
+                  <PopoverHeader>
+                    <PopoverTitle>Seleksi Adaptif IRT 2PL</PopoverTitle>
+                    <PopoverDescription className="text-ink-secondary">
+                      Prioritas soal dipilih karena keputusan dibuat oleh{" "}
+                      <strong className="text-ink-primary">{authorUser.name}</strong> dan bertanda{" "}
+                      <strong className="text-ink-primary">dibantu AI</strong>.
+                    </PopoverDescription>
+                  </PopoverHeader>
+                  <div className="space-y-1.5 rounded-lg border border-line-subtle bg-surface p-2.5 text-xs text-ink-secondary tabular-nums">
+                    <div className="flex items-center justify-between">
+                      <span>Diskriminasi (a)</span>
+                      <span className="font-semibold text-ink-primary">{currentQuestion.irtA}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Kesulitan (b)</span>
+                      <span className="font-semibold text-ink-primary">{currentQuestion.irtB}</span>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
 
-            {/* IRT Reasoning Drawer */}
-            {showIrtDetails && (
-              <div className="mt-3 rounded-lg border border-line-subtle bg-canvas/60 p-3 text-[11px] leading-relaxed text-ink-secondary animate-in fade-in-50 duration-150">
-                <p className="font-semibold text-ink-primary pb-1">
-                  Model Pemilihan Adaptif Item Response Theory (IRT 2PL):
-                </p>
-                <p>
-                  Soal ini memiliki parameter diskriminasi tinggi (
-                  <span className="font-mono font-semibold">a = {currentQuestion.irtA}</span>) dan
-                  tingkat kesulitan sedang (
-                  <span className="font-mono font-semibold">b = {currentQuestion.irtB}</span>). Bobot
-                  prioritas dimaksimalkan karena keputusan ini{" "}
-                  <strong>dibuat oleh rekanmu ({authorUser.name})</strong> dan bertanda{" "}
-                  <strong>"dibantu AI"</strong>, sehingga perlu diverifikasi agar tidak terjadi
-                  ketergantungan pemahaman sepihak.
-                </p>
-              </div>
-            )}
-
-            <CardTitle className="font-heading pt-3 text-lg font-medium leading-relaxed text-ink-primary">
-              {currentQuestion.prompt}
-            </CardTitle>
+            <div className="flex items-start gap-3.5 pt-3">
+              <AgentStickerAvatar
+                role="tutor"
+                state={isSubmitting ? "thinking" : "idle"}
+                size={44}
+                label="Socratic Tutor"
+              />
+              <CardTitle className="font-sans text-lg font-semibold leading-snug text-ink-primary">
+                {currentQuestion.prompt}
+              </CardTitle>
+            </div>
           </CardHeader>
 
           <CardContent className="space-y-4 p-5">
-            {/* Rubric Points Clue */}
-            <div className="space-y-1 rounded-xl bg-canvas/30 p-3 text-xs text-ink-secondary">
-              <span className="font-semibold text-ink-primary flex items-center gap-1">
-                <Info className="size-3 text-brand" />
-                Poin refleksi yang diharapkan:
+            {/* Compact Rubric Clues */}
+            <div className="space-y-1.5 rounded-xl border border-line-subtle bg-surface p-3.5">
+              <span className="text-xs font-semibold text-ink-primary">
+                Poin kunci refleksi:
               </span>
-              <ul className="list-disc pl-5 space-y-0.5 text-[11px] text-ink-tertiary">
+              <ul className="list-disc space-y-1 pl-4 text-xs text-ink-secondary">
                 {currentQuestion.rubricPoints.map((point, idx) => (
                   <li key={idx}>{point}</li>
                 ))}
               </ul>
             </div>
 
-            {/* Input Mode Selector Tabs */}
-            <div className="flex items-center gap-2 border-b border-line-subtle pb-2">
+            {/* Mode Tabs */}
+            <div className="flex items-center gap-2 border-b border-line-subtle pb-2.5">
               <button
                 type="button"
                 onClick={() => setInputMode("text")}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                  "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-[background-color,color] duration-150",
                   inputMode === "text"
-                    ? "bg-brand text-on-brand shadow-xs"
-                    : "text-ink-tertiary hover:bg-muted hover:text-ink-primary",
+                    ? "bg-brand text-on-brand shadow-badge"
+                    : "text-ink-secondary hover:bg-muted hover:text-ink-primary",
                 )}
               >
-                <Type className="size-3.5" />
-                Tulis Jawaban (Teks)
+                <Type className="size-3.5" aria-hidden="true" />
+                <span>Tulis Jawaban</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setInputMode("voice")}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                  "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-[background-color,color] duration-150",
                   inputMode === "voice"
-                    ? "bg-brand text-on-brand shadow-xs"
-                    : "text-ink-tertiary hover:bg-muted hover:text-ink-primary",
+                    ? "bg-brand text-on-brand shadow-badge"
+                    : "text-ink-secondary hover:bg-muted hover:text-ink-primary",
                 )}
               >
-                <Mic className="size-3.5" />
-                Rekam Suara (Voice Note)
+                <Mic className="size-3.5" aria-hidden="true" />
+                <span>Rekam Suara</span>
               </button>
             </div>
 
             {/* Dual Input Area */}
             {inputMode === "text" ? (
-              <div className="space-y-2">
-                <Textarea
-                  value={answerText}
-                  onChange={(e) => setAnswerText(e.target.value)}
-                  disabled={isSubmitting || latestAttempt !== null}
-                  placeholder="Jelaskan dengan pemahamanmu sendiri mengapa keputusan arsitektur ini diambil oleh tim dan trade-off apa yang dipertimbangkan..."
-                  className="min-h-[120px] border-line-subtle bg-surface text-sm leading-relaxed text-ink-primary shadow-xs"
-                />
-
-                <div className="flex items-center justify-between text-[11px] text-ink-tertiary">
-                  <span>Jawab dengan kalimat sendiri, bukan kutipan kode mentah.</span>
-                  <span className="font-mono tabular-nums">{answerText.length} karakter</span>
-                </div>
-              </div>
+              <Textarea
+                value={answerText}
+                onChange={(e) => setAnswerText(e.target.value)}
+                disabled={isSubmitting || latestAttempt !== null}
+                placeholder="Jelaskan alasan arsitektur dan trade-off-nya dengan bahasamu sendiri..."
+                className="min-h-[120px] border-line-default bg-surface-card text-base leading-relaxed text-ink-primary sm:text-sm"
+              />
             ) : (
               <VoiceRecorderInput
                 value={answerText}
@@ -358,52 +359,44 @@ export function ExplainBackPage() {
               />
             )}
 
-            {/* Quick Demo Simulator Buttons (Khusus Demo Juri) */}
-            <div className="rounded-lg border border-dashed border-line-subtle bg-canvas/30 p-2.5">
-              <div className="flex items-center justify-between pb-1 text-[11px] text-ink-tertiary">
-                <span className="font-semibold text-ink-secondary">Bantuan Cepat Skenario Demo:</span>
-                <span>Uji 2 jalur evaluasi AI</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={fillStrongAnswer}
-                  className="rounded-md border border-success/30 bg-success-subtle/40 px-2 py-1 text-[11px] font-medium text-text-success hover:bg-success-subtle transition-colors"
-                >
-                  ✨ Isi Jawaban Kuat (Paham · Skor 2)
-                </button>
-                <button
-                  type="button"
-                  onClick={fillAmbiguousAnswer}
-                  className="rounded-md border border-warning/30 bg-warning-subtle/40 px-2 py-1 text-[11px] font-medium text-text-warning hover:bg-warning-subtle transition-colors"
-                >
-                  ⚠️ Isi Jawaban Ambigu (Picu Conformal Abstain)
-                </button>
-              </div>
+            {/* Quick Simulation Chips */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-medium text-ink-tertiary">Simulasi:</span>
+              <button
+                type="button"
+                onClick={fillStrongAnswer}
+                className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-success/35 bg-success-subtle/50 px-3 py-1 text-xs font-medium text-text-success transition-[background-color,transform] duration-150 hover:bg-success-subtle active:scale-[0.98]"
+              >
+                <CheckCircle2 className="size-3.5 shrink-0" aria-hidden="true" />
+                <span>Jawaban Kuat (Skor 2)</span>
+              </button>
+              <button
+                type="button"
+                onClick={fillAmbiguousAnswer}
+                className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-warning/35 bg-warning-subtle/50 px-3 py-1 text-xs font-medium text-text-warning transition-[background-color,transform] duration-150 hover:bg-warning-subtle active:scale-[0.98]"
+              >
+                <AlertTriangle className="size-3.5 shrink-0" aria-hidden="true" />
+                <span>Jawaban Ambigu (Abstain)</span>
+              </button>
             </div>
 
-            {/* Submit Action */}
+            {/* Submit Bar */}
             {!latestAttempt && (
-              <div className="flex items-center justify-between border-t border-line-subtle pt-3">
-                <p className="text-[11px] text-ink-tertiary">
-                  Jawaban dievaluasi oleh LLM Grader dengan Conformal Risk Control.
-                </p>
-
+              <div className="flex items-center justify-end border-t border-line-subtle pt-3">
                 <Button
                   type="button"
                   disabled={!answerText.trim() || isSubmitting}
                   onClick={() => handleSubmit()}
-                  className="bg-brand text-on-brand hover:bg-brand-hover active:bg-brand-active shadow-sm font-medium text-xs"
                 >
                   {isSubmitting ? (
                     <>
-                      <span className="size-3.5 animate-spin rounded-full border-2 border-on-brand border-t-transparent mr-1.5" />
-                      Mengevaluasi...
+                      <span className="size-3.5 animate-spin rounded-full border-2 border-on-brand border-t-transparent" />
+                      <span>Mengevaluasi...</span>
                     </>
                   ) : (
                     <>
-                      <Send className="size-3.5 mr-1.5" />
-                      Kirim Jawaban Reflektif
+                      <Send className="size-3.5" aria-hidden="true" />
+                      <span>Kirim Jawaban</span>
                     </>
                   )}
                 </Button>
@@ -413,7 +406,7 @@ export function ExplainBackPage() {
         </Card>
       )}
 
-      {/* 3. Grading Result Card (Evaluated or Conformal Abstention) */}
+      {/* 3. Grading Result Card */}
       {latestAttempt && currentQuestion && (
         <GradingResultCard
           attempt={latestAttempt}
@@ -426,59 +419,65 @@ export function ExplainBackPage() {
       )}
 
       {/* 4. Riwayat Check Pribadi (M3 Private) */}
-      <div className="rounded-xl border border-line-subtle bg-surface p-4 shadow-surface">
+      <div className="rounded-xl border border-line-subtle bg-surface-card p-4 shadow-card">
         <button
           type="button"
           onClick={() => setShowHistory((prev) => !prev)}
           className="flex w-full items-center justify-between text-left text-xs font-medium text-ink-secondary hover:text-ink-primary"
         >
-          <span className="flex items-center gap-1.5">
-            <History className="size-4 text-ink-tertiary" />
-            Riwayat Check Pribadi (M3 Private · {pastAttempts.length} riwayat)
+          <span className="flex items-center gap-2">
+            <History className="size-4 text-ink-link" aria-hidden="true" />
+            <span>Riwayat Pribadi ({pastAttempts.length})</span>
           </span>
-          <span className="font-mono text-[11px] text-brand">
-            {showHistory ? "Sembunyikan" : "Tampilkan"}
+          <span className="font-semibold text-ink-link">
+            {showHistory ? "Tutup" : "Lihat"}
           </span>
         </button>
 
         {showHistory && (
           <div className="mt-3 space-y-2 border-t border-line-subtle pt-3">
             {pastAttempts.length === 0 ? (
-              <p className="text-xs text-ink-tertiary">Belum ada riwayat check tersimpan.</p>
+              <p className="text-xs text-ink-tertiary">Belum ada riwayat check.</p>
             ) : (
-              pastAttempts.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-start justify-between rounded-lg bg-canvas/40 p-2.5 text-xs text-ink-secondary"
-                >
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1.5">
-                      <span
-                        className={cn(
-                          "rounded-full px-2 py-0.2 font-mono text-[10px] font-semibold",
-                          item.abstained
-                            ? "bg-warning-subtle text-text-warning"
-                            : item.grade === 2
-                              ? "bg-success-subtle text-text-success"
-                              : "bg-info-subtle text-text-info",
-                        )}
-                      >
-                        {item.abstained ? "ABSTAIN" : `SKOR ${item.grade ?? 0}/2`}
-                      </span>
-                      <span className="font-mono text-[11px] text-ink-tertiary">
-                        s = {item.uncertainty}
-                      </span>
+              pastAttempts.map((item) => {
+                const itemConfidencePct = Math.max(
+                  0,
+                  Math.min(100, Math.round((1 - item.uncertainty) * 100)),
+                )
+                return (
+                  <div
+                    key={item.id}
+                    className="flex items-start justify-between gap-3 rounded-lg border border-line-subtle bg-surface p-3 text-xs text-ink-secondary"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span
+                          className={cn(
+                            "rounded-full px-2.5 py-0.5 text-xs font-semibold",
+                            item.abstained
+                              ? "bg-warning-subtle text-text-warning"
+                              : item.grade === 2
+                                ? "bg-success-subtle text-text-success"
+                                : "bg-info-subtle text-text-info",
+                          )}
+                        >
+                          {item.abstained ? "ABSTAIN" : `SKOR ${item.grade ?? 0}/2`}
+                        </span>
+                        <span className="text-xs text-ink-tertiary tabular-nums">
+                          Keyakinan {itemConfidencePct}%
+                        </span>
+                      </div>
+                      <p className="line-clamp-1 text-ink-secondary">"{item.answer}"</p>
                     </div>
-                    <p className="line-clamp-1 italic text-ink-tertiary">"{item.answer}"</p>
+                    <span className="shrink-0 text-xs text-ink-tertiary tabular-nums">
+                      {new Date(item.createdAt).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "short",
+                      })}
+                    </span>
                   </div>
-                  <span className="font-mono text-[10px] text-ink-tertiary">
-                    {new Date(item.createdAt).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "short",
-                    })}
-                  </span>
-                </div>
-              ))
+                )
+              })
             )}
           </div>
         )}

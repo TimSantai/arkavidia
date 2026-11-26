@@ -5,27 +5,26 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
-  Sparkles,
+  Compass,
+  HelpCircle,
   TrendingUp,
 } from "lucide-react"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
 import { cn } from "@/lib/utils"
 import type { PairingSuggestion } from "@/types/bersama"
 import { PairingSessionModal } from "./PairingSessionModal"
-import avatarRani from "@/features/landing/assets/avatar-rani.jpg"
-import avatarDimas from "@/features/landing/assets/avatar-dimas.jpg"
-import avatarBudi from "@/features/landing/assets/avatar-budi.jpg"
-import avatarSari from "@/features/landing/assets/avatar-sari.jpg"
-
-const USER_AVATARS: Record<string, string> = {
-  "user-rani": avatarRani,
-  "user-dimas": avatarDimas,
-  "user-budi": avatarBudi,
-  "user-sari": avatarSari,
-}
 
 interface SiloPairingPanelProps {
   readonly suggestions: readonly PairingSuggestion[]
@@ -61,64 +60,73 @@ export function SiloPairingPanel({
 
   return (
     <section id="silo-pairing-section" className={cn("space-y-4", className)}>
-      {/* 1. Silo Alert Banner (DESIGN.md: bg-warning-subtle border border-line-subtle text-text-warning) */}
+      {/* 1. Silo Alert Banner */}
       {isVulnerable && (
-        <div className="flex flex-col gap-3 rounded-xl border border-line-subtle bg-warning-subtle p-4 text-text-warning shadow-surface sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <div className="rounded-lg bg-surface/60 p-2 text-text-warning shadow-xs">
-              <AlertTriangle className="size-5 shrink-0" />
+        <div className="flex items-start gap-3 rounded-xl border border-line-subtle bg-warning-subtle p-4 shadow-card">
+          <div className="rounded-lg bg-surface-card p-2 text-text-warning shadow-badge">
+            <AlertTriangle className="size-5 shrink-0" aria-hidden="true" />
+          </div>
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-sans text-sm font-semibold text-ink-primary">
+                Peringatan Silo Pengetahuan (Bus Factor = 1)
+              </span>
+              <span className="rounded-full bg-surface-card px-2.5 py-0.5 text-xs font-semibold text-text-warning shadow-badge">
+                Prioritas Tinggi
+              </span>
             </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="font-heading text-sm font-semibold text-ink-primary">
-                  Peringatan Silo Pengetahuan (Knowledge Bus Factor = 1)
-                </span>
-                <span className="rounded-full bg-surface/80 px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-text-warning uppercase shadow-xs">
-                  Prioritas Tinggi
-                </span>
-              </div>
-              <p className="text-xs leading-relaxed text-ink-secondary">
-                Konsep kritis <strong className="text-ink-primary">{siloKcTitle}</strong> saat ini
-                hanya dikuasai oleh{" "}
-                <strong className="text-ink-primary">{siloExpertName}</strong> (1/4 anggota).{" "}
-                <span className="font-medium text-text-warning">
-                  {siloExpertName} bisa membantu menjelaskan
-                </span>{" "}
-                ke anggota lain lewat sesi kilat 10 menit agar pemahaman tidak terpusat pada satu
-                orang.
-              </p>
-            </div>
+            <p className="text-xs leading-relaxed text-ink-secondary">
+              <strong className="text-ink-primary">{siloKcTitle}</strong> hanya dikuasai{" "}
+              <strong className="text-ink-primary">{siloExpertName}</strong>. Sesi 10 menit membantu
+              pemahaman merata di tim.
+            </p>
           </div>
         </div>
       )}
 
-      {/* 2. Section Header */}
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="font-heading text-lg font-semibold text-ink-primary">
-              Rekomendasi Sesi 'Jelaskan ke Aku' (Pairing Flow)
+      {/* 2. Section Header with AI Tutor Insight */}
+      <div className="flex items-center gap-3">
+        <AgentStickerAvatar
+          role="tutor"
+          state={isVulnerable ? "nudge" : "idle"}
+          size={42}
+        />
+        <div className="space-y-0.5">
+          <div className="flex items-center gap-1.5">
+            <h2 className="font-display text-xl font-semibold text-ink-primary">
+              Rekomendasi Sesi <span className="font-display-oblique text-ink-link">Jelaskan ke Aku</span>
             </h2>
-            <Badge
-              variant="outline"
-              className="border-accent-violet/30 bg-accent-violet/10 font-mono text-[10px] text-accent-violet dark:bg-accent-violet/20"
-            >
-              Fitur F7 · Submodular Optimizer
-            </Badge>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Cara kerja rekomendasi pairing"
+                  className="inline-flex size-5 items-center justify-center rounded-full text-ink-tertiary transition-[background-color,color] duration-150 hover:bg-muted/60 hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-ring"
+                >
+                  <HelpCircle className="size-3.5" aria-hidden="true" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-72">
+                <PopoverHeader>
+                  <PopoverTitle>Submodular Pairing Optimizer</PopoverTitle>
+                  <PopoverDescription>
+                    AI Tutor memilih pasangan belajar dengan proyeksi peningkatan coverage tim tertinggi untuk memecah knowledge silo.
+                  </PopoverDescription>
+                </PopoverHeader>
+              </PopoverContent>
+            </Popover>
           </div>
           <p className="text-xs text-ink-secondary">
-            Algoritma memilih pasangan belajar dengan proyeksi peningkatan coverage tim terbesar
-            untuk memecah silo pengetahuan secara efisien.
+            Pasangan belajar dengan proyeksi kenaikan coverage tim terbesar.
           </p>
         </div>
       </div>
 
       {/* 3. Pairing Suggestion Cards */}
       {suggestions.length === 0 ? (
-        <Card className="border border-line-subtle bg-surface p-6 text-center shadow-surface">
-          <p className="text-xs text-ink-tertiary">
-            Tidak ada knowledge silo mendesak. Seluruh Knowledge Component telah dipahami secara
-            merata.
+        <Card className="border border-line-subtle bg-surface-card p-6 text-center shadow-card">
+          <p className="text-xs text-ink-secondary">
+            Tidak ada knowledge silo mendesak. Semua konsep telah dipahami secara merata.
           </p>
         </Card>
       ) : (
@@ -129,33 +137,31 @@ export function SiloPairingPanel({
             return (
               <Card
                 key={item.id}
-                className="group relative overflow-hidden border border-line-subtle bg-surface shadow-surface transition-all hover:border-brand/50 hover:shadow-md"
+                className="group relative overflow-hidden border border-line-subtle bg-surface-card shadow-card transition-[border-color,box-shadow] duration-150 hover:border-line-active hover:shadow-raised"
               >
                 <CardContent className="space-y-4 p-5">
                   {/* Top Meta Bar */}
                   <div className="flex items-center justify-between border-b border-line-subtle pb-3">
                     <div className="flex items-center gap-1.5">
-                      <Sparkles className="size-3.5 text-accent-violet" />
-                      <span className="font-mono text-xs font-semibold text-ink-primary">
+                      <Compass className="size-4 text-ink-link" aria-hidden="true" />
+                      <span className="text-sm font-semibold text-ink-primary">
                         {item.kcName}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 font-mono text-[11px] font-medium text-ink-secondary">
-                        <Clock className="size-3 text-ink-tertiary" />
-                        {item.durationMinutes} Menit Sesi
-                      </span>
-                    </div>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-surface px-2.5 py-0.5 text-xs font-medium tabular-nums text-ink-secondary">
+                      <Clock className="size-3.5 text-ink-link" aria-hidden="true" />
+                      {item.durationMinutes} Menit
+                    </span>
                   </div>
 
-                  {/* Mentor ↔ Learner Visual Row */}
-                  <div className="flex items-center justify-between gap-3 rounded-xl bg-canvas/40 p-3.5 transition-colors group-hover:bg-canvas/60">
+                  {/* Mentor -> Learner Visual Row */}
+                  <div className="flex items-center justify-between gap-3 rounded-xl bg-surface p-3.5 transition-[background-color] duration-150 group-hover:bg-wash-brand/50">
                     {/* Mentor */}
-                    <div className="flex items-center gap-3">
-                      <Avatar className="size-10 border-2 border-success/40 shadow-xs">
+                    <div className="flex items-center gap-2.5">
+                      <Avatar className="size-10 border-2 border-success/50 shadow-badge">
                         <AvatarImage
-                          src={USER_AVATARS[item.mentor.id]}
+                          src={USER_AVATAR_MAP[item.mentor.id]}
                           alt={item.mentor.name}
                           className="object-cover"
                         />
@@ -164,34 +170,34 @@ export function SiloPairingPanel({
                         </AvatarFallback>
                       </Avatar>
                       <div className="space-y-0.5">
-                        <p className="font-heading text-xs font-semibold text-ink-primary">
+                        <p className="font-sans text-sm font-semibold text-ink-primary">
                           {item.mentor.name}
                         </p>
-                        <p className="text-[10px] font-medium text-text-success">
-                          Bisa Membantu Menjelaskan
+                        <p className="text-xs font-medium text-text-success">
+                          Mentor
                         </p>
                       </div>
                     </div>
 
                     {/* Arrow Divider */}
-                    <div className="flex flex-col items-center">
-                      <ArrowRight className="size-4 shrink-0 text-brand" />
-                      <span className="text-[9px] font-mono text-ink-tertiary">Pairing</span>
+                    <div className="flex flex-col items-center gap-0.5">
+                      <ArrowRight className="size-4 shrink-0 text-ink-link" aria-hidden="true" />
+                      <span className="text-xs text-ink-secondary">Pairing</span>
                     </div>
 
                     {/* Learner */}
-                    <div className="flex items-center gap-3 text-right">
+                    <div className="flex items-center gap-2.5 text-right">
                       <div className="space-y-0.5">
-                        <p className="font-heading text-xs font-semibold text-ink-primary">
+                        <p className="font-sans text-sm font-semibold text-ink-primary">
                           {item.learner.name}
                         </p>
-                        <p className="text-[10px] font-medium text-ink-tertiary">
-                          Terbuka Sesi Bareng
+                        <p className="text-xs font-medium text-ink-secondary">
+                          Belajar Bareng
                         </p>
                       </div>
-                      <Avatar className="size-10 border-2 border-line-subtle shadow-xs">
+                      <Avatar className="size-10 border-2 border-line-subtle shadow-badge">
                         <AvatarImage
-                          src={USER_AVATARS[item.learner.id]}
+                          src={USER_AVATAR_MAP[item.learner.id]}
                           alt={item.learner.name}
                           className="object-cover"
                         />
@@ -205,42 +211,36 @@ export function SiloPairingPanel({
                   {/* Positive Framing Narrative */}
                   <p className="text-xs leading-relaxed text-ink-secondary">
                     <strong className="text-ink-primary">{item.mentor.name.split(" ")[0]}</strong>{" "}
-                    bisa membantu menjelaskan{" "}
-                    <strong className="text-ink-primary">{item.kcName}</strong> ke{" "}
-                    <strong className="text-ink-primary">{item.learner.name.split(" ")[0]}</strong>{" "}
-                    lewat sesi 'Jelaskan ke Aku' terarah 10 menit.
+                    menjelaskan <strong className="text-ink-primary">{item.kcName}</strong> ke{" "}
+                    <strong className="text-ink-primary">{item.learner.name.split(" ")[0]}</strong>.
                   </p>
 
                   {/* Submodular Gain & Action Buttons */}
-                  <div className="flex flex-col gap-3 border-t border-line-subtle/70 pt-3 sm:flex-row sm:items-center sm:justify-between">
-                    {/* Projected Coverage Gain Pill */}
-                    <div className="flex items-center gap-1.5 font-mono text-xs">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-success/30 bg-success-subtle px-2.5 py-1 text-xs font-semibold text-text-success shadow-xs">
-                        <TrendingUp className="size-3.5" />
-                        Coverage: {item.projectedCoverageBefore} → {item.projectedCoverageAfter}
-                      </span>
-                    </div>
+                  <div className="flex flex-col gap-3 border-t border-line-subtle pt-3 sm:flex-row sm:items-center sm:justify-between">
+                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-success-subtle px-2.5 py-1 text-xs font-semibold tabular-nums text-text-success shadow-badge">
+                      <TrendingUp className="size-3.5" aria-hidden="true" />
+                      Coverage: {item.projectedCoverageBefore} → {item.projectedCoverageAfter}
+                    </span>
 
-                    {/* Action CTAs */}
                     <div className="flex items-center gap-2">
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => handleScheduleLater(item.id)}
                         className={cn(
-                          "border-line-subtle text-xs transition-colors",
-                          isScheduled && "border-brand/40 bg-brand/5 text-brand",
+                          "text-xs",
+                          isScheduled && "border-brand-subtle bg-wash-brand text-ink-link",
                         )}
                       >
                         {isScheduled ? (
                           <>
-                            <CheckCircle2 className="size-3 mr-1 text-brand" />
+                            <CheckCircle2 className="mr-1 size-3.5 text-ink-link" aria-hidden="true" />
                             Terjadwal
                           </>
                         ) : (
                           <>
-                            <Calendar className="size-3 mr-1" />
-                            Jadwalkan Nanti
+                            <Calendar className="mr-1 size-3.5" aria-hidden="true" />
+                            Nanti
                           </>
                         )}
                       </Button>
@@ -248,10 +248,10 @@ export function SiloPairingPanel({
                       <Button
                         size="sm"
                         onClick={() => handleStartSession(item)}
-                        className="bg-brand text-on-brand hover:bg-brand-hover active:bg-brand-active shadow-sm font-medium text-xs"
+                        className="bg-brand text-xs font-medium text-on-brand shadow-primary hover:bg-brand-hover active:bg-brand-active"
                       >
-                        <Sparkles className="size-3 mr-1" />
-                        Mulai Sesi 10 Menit
+                        <Clock className="mr-1 size-3.5" aria-hidden="true" />
+                        Mulai 10 Menit
                       </Button>
                     </div>
                   </div>

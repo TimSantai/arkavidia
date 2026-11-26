@@ -25,6 +25,7 @@ export interface EmpiricalStat {
   readonly value: string
   readonly description: string
   readonly citation: string
+  readonly methodNote: string
   readonly barPercentA: number
   readonly barPercentB: number
   readonly barLabelA: string
@@ -39,6 +40,7 @@ export interface WeeklyCyclePhase {
   readonly mechanismTitle: string
   readonly formulaTag: string
   readonly mechanismPlain: string
+  readonly technicalNote: string
   readonly demoPath: string
   readonly demoCta: string
 }
@@ -48,6 +50,7 @@ export interface EthicsGuardrail {
   readonly badge: string
   readonly title: string
   readonly description: string
+  readonly technicalNote: string
 }
 
 export interface DemoTeamMember {
@@ -85,7 +88,7 @@ export const DEMO_TEAM_MEMBERS: readonly DemoTeamMember[] = [
     name: "Rani Kusuma",
     shortName: "Rani",
     initials: "RK",
-    roleLabel: "Lead • MVC",
+    roleLabel: "Lead · MVC",
     avatarSrc: avatarRani,
   },
   {
@@ -93,7 +96,7 @@ export const DEMO_TEAM_MEMBERS: readonly DemoTeamMember[] = [
     name: "Dimas Pratama",
     shortName: "Dimas",
     initials: "DP",
-    roleLabel: "Member • JWT",
+    roleLabel: "Member · JWT",
     avatarSrc: avatarDimas,
   },
   {
@@ -101,7 +104,7 @@ export const DEMO_TEAM_MEMBERS: readonly DemoTeamMember[] = [
     name: "Budi Santoso",
     shortName: "Budi",
     initials: "BS",
-    roleLabel: "Member • DB",
+    roleLabel: "Member · DB",
     avatarSrc: avatarBudi,
   },
   {
@@ -109,7 +112,7 @@ export const DEMO_TEAM_MEMBERS: readonly DemoTeamMember[] = [
     name: "Sari Wulandari",
     shortName: "Sari",
     initials: "SW",
-    roleLabel: "Member • API",
+    roleLabel: "Member · API",
     avatarSrc: avatarSari,
   },
 ]
@@ -132,9 +135,10 @@ export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
   {
     id: "bastani",
     value: "-17%",
-    description:
-      "Penurunan performa siswa saat akses GPT-4 tanpa guardrail dicabut.",
+    description: "Skor siswa turun saat akses AI tanpa guardrail dicabut.",
     citation: "Bastani et al., PNAS 2025",
+    methodNote:
+      "Studi eksperimental pada pembelajaran pemrograman menunjukkan ketergantungan pada jawaban instan AI menurunkan transfer pemahaman mandiri ketika bantuan dilepas.",
     barPercentA: 83,
     barPercentB: 100,
     barLabelA: "Tanpa Guardrail",
@@ -143,20 +147,22 @@ export const EMPIRICAL_STATS: readonly EmpiricalStat[] = [
   {
     id: "anthropic",
     value: "50% vs 67%",
-    description:
-      "Skor pemahaman debugging developer memakai AI pasif dibanding manual.",
+    description: "Pemahaman debugging dengan AI pasif lebih rendah dibanding aktif.",
     citation: "Anthropic Research, Jan 2026",
+    methodNote:
+      "Developer yang hanya menyalin solusi LLM mencetak skor pemahaman konseptual lebih rendah dibanding yang melakukan penjelasan aktif.",
     barPercentA: 50,
     barPercentB: 67,
     barLabelA: "AI Pasif",
-    barLabelB: "Manual Aktif",
+    barLabelB: "Aktif",
   },
   {
     id: "cscl",
     value: "g = 0.61",
-    description:
-      "Kenaikan self-regulated learning lewat Group Awareness Tools kolaboratif.",
+    description: "Kenaikan self-regulated learning lewat Group Awareness kolaboratif.",
     citation: "Chen et al., IJCSCL 2024",
+    methodNote:
+      "Meta-analisis Computer-Supported Collaborative Learning menunjukkan alat kesadaran kelompok meningkatkan regulasi belajar dan koordinasi tim.",
     barPercentA: 45,
     barPercentB: 84,
     barLabelA: "Chat Biasa",
@@ -169,11 +175,13 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
     id: "capture",
     step: "01",
     title: "Tangkap",
-    shortSummary: "Ekstrak keputusan dari chat via propose-confirm & histori bitemporal.",
-    mechanismTitle: "Bitemporal Knowledge Graph + Propose-Confirm",
-    formulaTag: "M1 → CONTEXT PASSPORT → M2",
+    shortSummary: "Ekstrak keputusan dari chat lewat konfirmasi tim.",
+    mechanismTitle: "Project Brain & Propose-Confirm",
+    formulaTag: "M1 · Context Passport · M2",
     mechanismPlain:
-      "Kandidat keputusan, alasan, dan alternatif yang ditolak diekstrak terstruktur dengan rujukan pesan asli. Manusia selalu mengonfirmasi sebelum masuk Project Brain.",
+      "Kandidat keputusan, alasan, dan alternatif yang ditolak diekstrak dari diskusi. Anggota tim tetap memegang konfirmasi akhir.",
+    technicalNote:
+      "Disimpan pada graf bitemporal (valid_from / recorded_at) dengan tautan langsung ke pesan sumber M2.",
     demoPath: "/teams/team-pbo-01/brain",
     demoCta: "Lihat Project Brain",
   },
@@ -181,11 +189,13 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
     id: "map",
     step: "02",
     title: "Petakan",
-    shortSummary: "Deteksi cakupan tiap KC, Gini, dan Knowledge Bus Factor.",
-    mechanismTitle: "Knowledge Coverage Matrix & Bus Factor",
-    formulaTag: "BUS FACTOR = min |S| : cov < 50%",
+    shortSummary: "Sorot penguasaan tiap topik & silo pengetahuan.",
+    mechanismTitle: "Knowledge Coverage & Bus Factor",
+    formulaTag: "Bus Factor = min |S| : cov < 50%",
     mechanismPlain:
-      "Setiap keputusan tertaut ke Knowledge Component (KC). Sistem memetakan siapa yang sudah paham P(L) ≥ τ dan menyorot silo tunggal sebelum presentasi.",
+      "Setiap keputusan tertaut ke Knowledge Component (KC) untuk memetakan siapa yang sudah paham dan mencegah silo sebelum presentasi.",
+    technicalNote:
+      "Ambang penguasaan memakai probabilitas BKT P(L) >= 0.70 serta deteksi konsentrasi Gini.",
     demoPath: "/teams/team-pbo-01/understanding",
     demoCta: "Buka Peta Pemahaman",
   },
@@ -193,11 +203,13 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
     id: "check",
     step: "03",
     title: "Uji Paham",
-    shortSummary: "Explain-back IRT 2PL (≤ 5 mnt) dengan Conformal Abstention.",
-    mechanismTitle: "Adaptive IRT 2PL + Conformal Risk Control",
-    formulaTag: "I_j(θ) × w_j • s > λ̂ → ABSTAIN",
+    shortSummary: "Explain-back adaptif maksimal 5 menit per minggu.",
+    mechanismTitle: "Adaptive Explain-Back Check",
+    formulaTag: "IRT 2PL · Conformal s > lambda",
     mechanismPlain:
-      "Soal adaptif memprioritaskan keputusan rekan lain & item dibantu AI. Jika grader ragu (s > λ̂), sistem abstain alih-alih memberi skor keliru.",
+      "Pertanyaan singkat memprioritaskan keputusan rekan lain atau item berbantuan AI. Saat grader ragu, sistem abstain dan meneruskan ke rekan.",
+    technicalNote:
+      "Pemilihan item memakai informasi Fisher I_j(theta) * w_j dan kontrol risiko konformal alpha = 0.10.",
     demoPath: "/teams/team-pbo-01/check",
     demoCta: "Coba Explain-Back Check",
   },
@@ -205,11 +217,13 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
     id: "close",
     step: "04",
     title: "Tutup Celah",
-    shortSummary: "Pairing 10 menit 'Jelaskan ke aku' & Tutored Briefing Socratic.",
-    mechanismTitle: "Submodular Pairing & BKT dengan Forgetting",
-    formulaTag: "PAIRING 10 MNT • SOCRATIC",
+    shortSummary: "Pairing 10 menit & briefing anggota baru.",
+    mechanismTitle: "Peer Pairing & Tutored Briefing",
+    formulaTag: "Pairing 10 mnt · Socratic BKT",
     mechanismPlain:
-      "Optimizer greedy memasangkan rekan untuk transfer pemahaman 10 menit, sementara anggota baru mendapat dialog Socratic dari riwayat Project Brain.",
+      "Pasangkan anggota untuk transfer pemahaman 10 menit, dan bantu anggota baru mengejar konteks lewat dialog Socratic.",
+    technicalNote:
+      "Rekomendasi pairing memakai optimasi submodular greedy dan pembaruan BKT dengan faktor pelupaan.",
     demoPath: "/teams/team-pbo-01/briefing",
     demoCta: "Lihat Tutored Briefing",
   },
@@ -218,30 +232,38 @@ export const WEEKLY_CYCLES: readonly WeeklyCyclePhase[] = [
 export const ETHICS_GUARDRAILS: readonly EthicsGuardrail[] = [
   {
     id: "no-override",
-    badge: "PROPOSE → CONFIRM",
+    badge: "Propose · Confirm",
     title: "Tidak memutuskan atas nama tim",
     description:
-      "AI hanya mengekstrak kandidat keputusan dari diskusi; konfirmasi akhir dan revisi tetap di tangan mahasiswa.",
+      "AI hanya mengekstrak kandidat keputusan; konfirmasi dan revisi tetap di tangan mahasiswa.",
+    technicalNote:
+      "Setiap usulan dari chat atau Context Passport berstatus proposed hingga disetujui anggota di Ruang Tim.",
   },
   {
     id: "no-leak",
-    badge: "RLS + CEDAR + PII MASK",
+    badge: "IFC Zero-Leak",
     title: "Tidak membocorkan M1 tanpa Context Passport",
     description:
-      "Catatan pribadi M1 dikunci Postgres RLS + Cedar Policy dan wajib melewati pratinjau masking PII sebelum masuk M2.",
+      "Catatan pribadi M1 terisolasi dan wajib melewati pratinjau penyamaran PII sebelum dibagikan.",
+    technicalNote:
+      "Isolasi ditegakkan lewat Postgres Row-Level Security (RLS), Cedar Policy pre-LLM gate, dan deteksi PII otomatis.",
   },
   {
     id: "no-grading",
-    badge: "FORMATIF ONLY",
-    title: "Skor pemahaman tidak dipakai untuk nilai kuliah",
+    badge: "Formatif Only",
+    title: "Skor pemahaman bukan untuk nilai kuliah",
     description:
-      "Probabilitas P(L) adalah cermin belajar formatif agar mahasiswa jujur menutup celah, bukan alat pemeringkatan.",
+      "Probabilitas P(L) hanya menjadi cermin belajar pribadi agar tim berani menutup celah.",
+    technicalNote:
+      "Tidak ada ekspor nilai individu ke rubrik penilaian akademik atau peringkat kelas.",
   },
   {
     id: "no-surveillance",
-    badge: "AGREGAT TIM ONLY",
+    badge: "Agregat Tim",
     title: "Tidak mengirim skor individu ke dosen",
     description:
-      "Sesuai UU PDP No. 27/2022, dosen hanya melihat metrik kesehatan tim agregat tanpa akses ke M1 atau P(L) pribadi.",
+      "Dosen hanya melihat kesehatan belajar agregat tim tanpa akses ke catatan M1 maupun skor pribadi.",
+    technicalNote:
+      "Dirancang selaras dengan prinsip minimalisasi data dan persetujuan eksplisit UU PDP No. 27/2022.",
   },
 ]

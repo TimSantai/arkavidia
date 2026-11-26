@@ -73,13 +73,14 @@ export function JoinTeamDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="border border-line-subtle bg-surface-raised shadow-raised sm:max-w-md">
+      <DialogContent className="border border-line-subtle bg-surface-raised shadow-raised ring-0 sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-heading text-lg font-semibold text-ink-primary">
+          <DialogTitle className="font-display text-xl font-semibold text-ink-primary">
             Gabung Tim via Kode Undangan
           </DialogTitle>
           <DialogDescription className="text-ink-secondary">
-            Masukkan kode undangan dari ketua kelompok untuk mengakses Ruang Tim &amp; Project Brain.
+            Masukkan kode dari ketua kelompok untuk mengakses Ruang Tim &amp;
+            Project Brain.
           </DialogDescription>
         </DialogHeader>
 
@@ -87,7 +88,10 @@ export function JoinTeamDialog({
           <div className="space-y-4">
             <div className="rounded-xl border border-line-subtle bg-success-subtle p-4 text-text-success">
               <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
+                <CheckCircle2
+                  className="mt-0.5 size-4 shrink-0"
+                  aria-hidden="true"
+                />
                 <div className="space-y-1">
                   <p className="text-sm font-semibold">
                     {alreadyMember
@@ -96,21 +100,18 @@ export function JoinTeamDialog({
                   </p>
                   <p className="text-xs opacity-90">
                     {activeUser.id === "user-sari"
-                      ? "Karena kamu baru bergabung di Minggu ke-3, disarankan mulai lewat Tutored Briefing."
-                      : "Semua memori tim terkonfirmasi (M2) kini tersedia untukmu."}
+                      ? "Disarankan mulai lewat Tutored Briefing Minggu ke-3."
+                      : "Semua memori tim terkonfirmasi (M2) kini tersedia."}
                   </p>
                 </div>
               </div>
             </div>
 
-            <DialogFooter className="border-t border-line-subtle bg-canvas/60">
+            <DialogFooter className="border-t border-line-subtle bg-surface/60">
               <Button variant="outline" onClick={() => handleOpenChange(false)}>
                 Tutup
               </Button>
-              <Button
-                className="gap-1.5 bg-brand text-on-brand hover:bg-brand-hover"
-                asChild
-              >
+              <Button className="gap-1.5" asChild>
                 <Link
                   to={
                     activeUser.id === "user-sari"
@@ -121,7 +122,7 @@ export function JoinTeamDialog({
                   {activeUser.id === "user-sari"
                     ? "Mulai Tutored Briefing"
                     : "Buka Ruang Tim"}
-                  <ArrowRight className="size-4" />
+                  <ArrowRight className="size-4" aria-hidden="true" />
                 </Link>
               </Button>
             </DialogFooter>
@@ -142,7 +143,7 @@ export function JoinTeamDialog({
                     setInviteCode("PBO-K4-2026")
                     setErrorMsg(null)
                   }}
-                  className="font-mono text-[11px] font-medium text-ink-link hover:underline"
+                  className="font-sans text-xs font-medium text-ink-link hover:underline"
                 >
                   Pakai kode demo: PBO-K4-2026
                 </button>
@@ -157,7 +158,7 @@ export function JoinTeamDialog({
                 placeholder="PBO-K4-2026"
                 aria-invalid={Boolean(errorMsg)}
                 className={cn(
-                  "bg-surface font-mono uppercase text-ink-primary",
+                  "bg-surface font-sans text-base uppercase tabular-nums text-ink-primary sm:text-sm",
                   errorMsg ? "border-line-error" : "border-line-default"
                 )}
               />
@@ -166,7 +167,7 @@ export function JoinTeamDialog({
               )}
             </div>
 
-            <DialogFooter className="border-t border-line-subtle bg-canvas/60">
+            <DialogFooter className="border-t border-line-subtle bg-surface/60">
               <Button
                 type="button"
                 variant="outline"
@@ -174,11 +175,8 @@ export function JoinTeamDialog({
               >
                 Batal
               </Button>
-              <Button
-                type="submit"
-                className="gap-1.5 bg-brand text-on-brand hover:bg-brand-hover"
-              >
-                <KeyRound className="size-4" />
+              <Button type="submit" className="gap-1.5">
+                <KeyRound className="size-4" aria-hidden="true" />
                 Gabung Tim
               </Button>
             </DialogFooter>

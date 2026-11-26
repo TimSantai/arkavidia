@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useParams } from "react-router"
-import { RotateCcw, Search, Sparkles } from "lucide-react"
+import { Bot, RotateCcw, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -111,9 +111,10 @@ export function ProjectBrainPage() {
       if (aiAssistedOnly && !item.aiAssisted) return false
       if (!query) return true
 
-      const displayCode = item.id.endsWith("-v0") && !item.code.endsWith("-v0")
-        ? `${item.code}-v0`
-        : item.code
+      const displayCode =
+        item.id.endsWith("-v0") && !item.code.endsWith("-v0")
+          ? `${item.code}-v0`
+          : item.code
       return (
         item.code.toLowerCase().includes(query) ||
         displayCode.toLowerCase().includes(query) ||
@@ -165,7 +166,6 @@ export function ProjectBrainPage() {
         return
       }
 
-      // Target exists outside current time-travel snapshot: switch to Live so user sees full graph node
       const inLive = allTeamItems.some((entry) => entry.id === memoryId)
       if (inLive) {
         handleResetFilters()
@@ -206,7 +206,7 @@ export function ProjectBrainPage() {
       {/* Filter & Search Bar */}
       <section
         aria-label="Filter dan pencarian Decision Record"
-        className="space-y-3 rounded-xl border border-line-subtle bg-surface p-3.5 shadow-surface"
+        className="space-y-3 rounded-xl border border-line-subtle bg-surface-card p-3.5 shadow-card"
       >
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="relative flex-1">
@@ -215,16 +215,16 @@ export function ProjectBrainPage() {
               type="search"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Cari kode (DEC-02), judul, ringkasan, atau alasan..."
+              placeholder="Cari kode (DEC-02), judul, atau alasan..."
               aria-label="Cari Decision Record"
-              className="border-line-default bg-canvas pl-8 text-ink-primary placeholder:text-ink-tertiary"
+              className="border-line-default bg-surface pl-8 text-base text-ink-primary placeholder:text-ink-tertiary sm:text-sm"
             />
           </div>
 
           <div
             role="tablist"
             aria-label="Filter status keputusan"
-            className="inline-flex flex-wrap items-center gap-1 rounded-lg border border-line-subtle bg-canvas p-1"
+            className="inline-flex flex-wrap items-center gap-1 rounded-lg border border-line-subtle bg-surface p-1"
           >
             {STATUS_TABS.map((tab) => {
               const isActive = statusFilter === tab.value
@@ -236,10 +236,10 @@ export function ProjectBrainPage() {
                   aria-selected={isActive}
                   onClick={() => setStatusFilter(tab.value)}
                   className={cn(
-                    "rounded-md px-2.5 py-1 text-xs font-medium transition-colors duration-150",
+                    "rounded-md px-2.5 py-1 text-xs font-medium transition-[background-color,color,box-shadow] duration-150",
                     isActive
-                      ? "bg-brand text-on-brand shadow-surface"
-                      : "text-ink-secondary hover:bg-surface hover:text-ink-primary"
+                      ? "bg-brand text-on-brand shadow-badge"
+                      : "text-ink-secondary hover:bg-surface-top hover:text-ink-primary"
                   )}
                 >
                   {tab.label}
@@ -257,10 +257,10 @@ export function ProjectBrainPage() {
               aria-pressed={kcFilter === "all"}
               onClick={() => setKcFilter("all")}
               className={cn(
-                "rounded-full border px-2.5 py-1 text-xs font-medium transition-colors duration-150",
+                "rounded-full border px-2.5 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
                 kcFilter === "all"
-                  ? "border-line-active bg-info-subtle text-text-info"
-                  : "border-line-subtle bg-canvas text-ink-secondary hover:border-line-strong hover:text-ink-primary"
+                  ? "border-brand-subtle bg-wash-brand text-ink-link"
+                  : "border-line-subtle bg-surface text-ink-secondary hover:border-line-default hover:text-ink-primary"
               )}
             >
               Semua KC
@@ -274,13 +274,13 @@ export function ProjectBrainPage() {
                   aria-pressed={isActive}
                   onClick={() => setKcFilter((prev) => (prev === kc.id ? "all" : kc.id))}
                   className={cn(
-                    "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors duration-150",
+                    "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
                     isActive
-                      ? "border-line-active bg-info-subtle text-text-info"
-                      : "border-line-subtle bg-canvas text-ink-secondary hover:border-line-strong hover:text-ink-primary"
+                      ? "border-brand-subtle bg-wash-brand text-ink-link"
+                      : "border-line-subtle bg-surface text-ink-secondary hover:border-line-default hover:text-ink-primary"
                   )}
                 >
-                  <span className="font-mono text-[11px]">{kc.code}</span>
+                  <span className="font-semibold">{kc.code}</span>
                   <span className="hidden sm:inline">· {kc.name}</span>
                 </button>
               )
@@ -292,13 +292,13 @@ export function ProjectBrainPage() {
             aria-pressed={aiAssistedOnly}
             onClick={() => setAiAssistedOnly((prev) => !prev)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors duration-150",
+              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-[background-color,border-color,color] duration-150",
               aiAssistedOnly
                 ? "border-line-strong bg-warning-subtle text-text-warning"
-                : "border-line-subtle bg-canvas text-ink-secondary hover:border-line-strong hover:text-ink-primary"
+                : "border-line-subtle bg-surface text-ink-secondary hover:border-line-default hover:text-ink-primary"
             )}
           >
-            <Sparkles className="size-3" />
+            <Bot className="size-3.5" aria-hidden="true" />
             <span>Dibantu AI</span>
           </button>
         </div>
@@ -309,23 +309,27 @@ export function ProjectBrainPage() {
         {/* Left Master List */}
         <div className="space-y-3 lg:col-span-7">
           {isLoading ? (
-            <div className="space-y-3">
+            <div className="space-y-3" role="status" aria-label="Memuat Decision Record">
               {[1, 2, 3].map((slot) => (
                 <div
                   key={slot}
-                  className="h-36 animate-pulse rounded-xl border border-line-subtle bg-surface"
-                />
+                  className="h-36 rounded-xl border border-line-subtle bg-surface-card p-4 shadow-card"
+                >
+                  <div className="h-4 w-28 rounded bg-muted" />
+                  <div className="mt-3 h-5 w-3/4 rounded bg-muted/80" />
+                  <div className="mt-2 h-3.5 w-full rounded bg-muted/60" />
+                </div>
               ))}
             </div>
           ) : filteredItems.length === 0 ? (
-            <div className="rounded-xl border border-line-subtle bg-surface p-8 text-center shadow-surface">
-              <p className="font-heading text-base font-semibold text-ink-primary">
-                Tidak ada Decision Record yang cocok
+            <div className="rounded-xl border border-line-subtle bg-surface-card p-8 text-center shadow-card">
+              <p className="font-display text-xl font-semibold text-ink-primary">
+                Tidak ada keputusan yang cocok
               </p>
               <p className="mt-1 text-sm text-ink-secondary">
                 {asOf
-                  ? "Coba ubah filter pencarian atau kembali ke linimasa Live untuk melihat seluruh keputusan tim."
-                  : "Coba ubah kata kunci pencarian atau reset filter yang aktif."}
+                  ? "Ubah filter atau kembali ke Live untuk melihat semua keputusan."
+                  : "Ubah kata kunci pencarian atau reset filter aktif."}
               </p>
               <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
                 {hasActiveFilters && (
@@ -334,7 +338,7 @@ export function ProjectBrainPage() {
                     variant="outline"
                     size="sm"
                     onClick={handleResetFilters}
-                    className="gap-1.5 border-line-default bg-canvas"
+                    className="gap-1.5"
                   >
                     <RotateCcw className="size-3.5" />
                     <span>Reset Filter</span>
@@ -386,7 +390,7 @@ export function ProjectBrainPage() {
 
       {/* Responsive Mobile Detail Dialog (< lg) */}
       <Dialog open={mobileDialogOpen} onOpenChange={setMobileDialogOpen}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto border border-line-subtle bg-surface-raised p-5 shadow-raised sm:max-w-lg lg:hidden">
+        <DialogContent className="max-h-[85vh] overflow-y-auto border border-line-subtle bg-surface-raised p-5 ring-0 shadow-raised sm:max-w-lg lg:hidden">
           <DialogHeader className="sr-only">
             <DialogTitle>
               {selectedItem ? `${selectedItem.code}: ${selectedItem.content.title}` : "Detail Keputusan"}

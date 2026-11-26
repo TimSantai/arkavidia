@@ -104,13 +104,14 @@ export function CreateTeamDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="border border-line-subtle bg-surface-raised shadow-raised sm:max-w-md">
+      <DialogContent className="border border-line-subtle bg-surface-raised shadow-raised ring-0 sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-heading text-lg font-semibold text-ink-primary">
+          <DialogTitle className="font-display text-xl font-semibold text-ink-primary">
             Buat Tim Proyek Baru
           </DialogTitle>
           <DialogDescription className="text-ink-secondary">
-            Setiap tim mendapat Ruang Tim (M2), Project Brain, serta Personal Agent terisolasi untuk tiap anggota.
+            Setiap tim mendapat Ruang Tim (M2), Project Brain, serta Ruang
+            Pribadi M1 per anggota.
           </DialogDescription>
         </DialogHeader>
 
@@ -129,10 +130,10 @@ export function CreateTeamDialog({
                 setName(e.target.value)
                 if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }))
               }}
-              placeholder="Contoh: Kelompok 7 — Smart Campus"
+              placeholder="Contoh: Kelompok 7 (Smart Campus)"
               aria-invalid={Boolean(errors.name)}
               className={cn(
-                "bg-surface text-ink-primary",
+                "bg-surface text-base text-ink-primary sm:text-sm",
                 errors.name ? "border-line-error" : "border-line-default"
               )}
             />
@@ -160,7 +161,7 @@ export function CreateTeamDialog({
               placeholder="Contoh: IF3270 Machine Learning"
               aria-invalid={Boolean(errors.courseCode)}
               className={cn(
-                "bg-surface text-ink-primary",
+                "bg-surface text-base text-ink-primary sm:text-sm",
                 errors.courseCode ? "border-line-error" : "border-line-default"
               )}
             />
@@ -185,10 +186,10 @@ export function CreateTeamDialog({
                   setErrors((prev) => ({ ...prev, description: undefined }))
                 }
               }}
-              placeholder="Jelaskan ruang lingkup tugas besar atau capstone tim kalian."
+              placeholder="Jelaskan ruang lingkup tugas besar tim kalian."
               aria-invalid={Boolean(errors.description)}
               className={cn(
-                "min-h-20 bg-surface text-ink-primary",
+                "min-h-20 bg-surface text-base text-ink-primary sm:text-sm",
                 errors.description ? "border-line-error" : "border-line-default"
               )}
             />
@@ -197,7 +198,7 @@ export function CreateTeamDialog({
             )}
           </div>
 
-          <DialogFooter className="border-t border-line-subtle bg-canvas/60">
+          <DialogFooter className="border-t border-line-subtle bg-surface/60">
             <Button
               type="button"
               variant="outline"
@@ -205,11 +206,8 @@ export function CreateTeamDialog({
             >
               Batal
             </Button>
-            <Button
-              type="submit"
-              className="gap-1.5 bg-brand text-on-brand hover:bg-brand-hover"
-            >
-              <Plus className="size-4" />
+            <Button type="submit" className="gap-1.5">
+              <Plus className="size-4" aria-hidden="true" />
               Buat Tim
             </Button>
           </DialogFooter>

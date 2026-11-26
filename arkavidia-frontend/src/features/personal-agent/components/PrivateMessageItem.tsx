@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
-import { Bot, Lock, ShieldCheck } from "lucide-react"
+import { Lock, ShieldCheck } from "lucide-react"
 import { Message, MessageContent } from "@/components/ai-elements/message"
+import { AgentStickerAvatar } from "@/components/bersama/AgentStickerAvatar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { USER_AVATAR_MAP, USER_ROLE_LABEL } from "@/features/team-chat/components/teamChatAvatars"
@@ -12,11 +13,15 @@ import { formatPrivateMessageTime } from "./personalAgentData"
 interface PrivateMessageItemProps {
   readonly message: ChatMessage
   readonly activeUserId: string
+  readonly isSpeaking?: boolean
   readonly isLoadingPassport: boolean
   readonly onOpenPassport: (message: ChatMessage) => void
 }
 
-function renderInlineFormatting(text: string): readonly ReactNode[] {
+function renderInlineFormatting(
+  text: string,
+  isCurrentUser: boolean
+): readonly ReactNode[] {
   const tokens = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g)
   return tokens.map((token, idx) => {
     if (token.startsWith("**") && token.endsWith("**") && token.length > 4) {
@@ -30,7 +35,12 @@ function renderInlineFormatting(text: string): readonly ReactNode[] {
       return (
         <code
           key={idx}
-          className="rounded border border-line-subtle bg-canvas px-1.5 py-0.5 font-mono text-[11px] font-medium text-ink-primary"
+          className={cn(
+            "rounded px-1.5 py-0.5 font-sans text-xs font-semibold",
+            isCurrentUser
+              ? "bg-surface-card/90 text-ink-primary"
+              : "border border-brand-subtle bg-wash-brand text-ink-link"
+          )}
         >
           {token.slice(1, -1)}
         </code>
@@ -43,6 +53,7 @@ function renderInlineFormatting(text: string): readonly ReactNode[] {
 export function PrivateMessageItem({
   message,
   activeUserId,
+  isSpeaking = false,
   isLoadingPassport,
   onOpenPassport,
 }: PrivateMessageItemProps) {
@@ -72,15 +83,22 @@ export function PrivateMessageItem({
             isCurrentUser && "flex-row-reverse"
           )}
         >
-          {/* Avatar */}
+          {/* Avatar: Cozy Violet BoopFace Sticker vs Human Portrait */}
           {isAgent ? (
-            <div className="flex size-8 shrink-0 items-center justify-center rounded-full border border-line-subtle bg-surface text-ink-primary shadow-surface">
-              <Bot className="size-4 text-ink-link" />
-            </div>
+            <AgentStickerAvatar
+              role="private"
+              state={isSpeaking ? "speaking" : "idle"}
+              size={36}
+              interactive
+            />
           ) : (
-            <Avatar className="size-8 shrink-0">
+            <Avatar className="size-9 shrink-0">
               {avatarSrc && (
-                <AvatarImage src={avatarSrc} alt={message.authorName} />
+                <AvatarImage
+                  src={avatarSrc}
+                  alt={message.authorName}
+                  className="object-cover"
+                />
               )}
               <AvatarFallback className="border border-line-subtle bg-surface text-xs font-semibold text-ink-primary">
                 {initials}
@@ -107,17 +125,17 @@ export function PrivateMessageItem({
               </span>
 
               {!isAgent && roleLabel && (
-                <span className="rounded-full border border-line-subtle bg-canvas px-2 py-0.5 text-[10px] font-medium text-ink-tertiary">
+                <span className="rounded-full border border-line-subtle bg-surface-top px-2.5 py-0.5 text-xs font-medium text-ink-secondary">
                   {roleLabel}
                 </span>
               )}
 
-              <span className="inline-flex items-center gap-1 rounded-full border border-line-subtle bg-surface px-2 py-0.5 font-mono text-[10px] font-medium text-ink-secondary">
-                <Lock className="size-2.5 text-ink-tertiary" />
-                {message.taintedPrivate ? "M1 TAINTED" : "M1 PRIVATE"}
+              <span className="inline-flex items-center gap-1 rounded-full border border-brand-subtle bg-wash-brand px-2.5 py-0.5 text-xs font-medium text-ink-link">
+                <Lock className="size-3" aria-hidden="true" />
+                {message.taintedPrivate ? "M1 Privat" : "M1"}
               </span>
 
-              <span className="font-mono text-[10px] tabular-nums text-ink-tertiary">
+              <span className="text-xs tabular-nums text-ink-tertiary">
                 {formatPrivateMessageTime(message.createdAt)}
               </span>
             </div>
@@ -127,12 +145,12 @@ export function PrivateMessageItem({
               className={cn(
                 "rounded-2xl px-4 py-3 text-sm leading-relaxed",
                 isCurrentUser
-                  ? "ml-auto w-fit max-w-full rounded-tr-sm bg-brand text-on-brand group-[.is-user]:bg-brand group-[.is-user]:text-on-brand"
-                  : "w-fit max-w-full rounded-tl-sm border border-line-subtle bg-surface text-ink-primary shadow-surface"
+                  ? "ml-auto w-fit max-w-full rounded-tr-sm bg-brand text-on-brand shadow-card group-[.is-user]:bg-brand group-[.is-user]:text-on-brand"
+                  : "w-fit max-w-full rounded-tl-sm border border-brand-subtle bg-surface-card text-ink-primary shadow-card"
               )}
             >
               <p className="whitespace-pre-wrap">
-                {renderInlineFormatting(message.body)}
+                {renderInlineFormatting(message.body, isCurrentUser)}
               </p>
             </MessageContent>
 
@@ -146,12 +164,12 @@ export function PrivateMessageItem({
               <Button
                 type="button"
                 variant="outline"
-                size="xs"
+                size="sm"
                 disabled={isLoadingPassport}
                 onClick={() => onOpenPassport(message)}
-                className="gap-1.5 rounded-full border-line-subtle bg-surface px-2.5 text-[11px] font-medium text-ink-secondary shadow-surface hover:border-line-active hover:bg-surface-raised hover:text-ink-primary"
+                className="gap-1.5 rounded-full border-brand-subtle bg-surface-card px-3 text-xs font-medium text-ink-link shadow-control hover:border-line-active hover:bg-wash-brand hover:text-ink-link"
               >
-                <ShieldCheck className="size-3 text-ink-link" />
+                <ShieldCheck className="size-3.5" aria-hidden="true" />
                 <span>
                   {isLoadingPassport
                     ? "Memindai PII..."
