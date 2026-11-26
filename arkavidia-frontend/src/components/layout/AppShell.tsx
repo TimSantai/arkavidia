@@ -38,7 +38,7 @@ interface NavItem {
   readonly icon: typeof MessageSquare
 }
 
-const ACTIVE_NAV_CLASSES = "bg-brand text-on-brand shadow-primary"
+const ACTIVE_NAV_CLASSES = "bg-[#1d1e21] text-white rounded-full shadow-none"
 
 function resolveActiveAgentRole(pathname: string): AgentRole {
   if (pathname.includes("/private")) return "private"
@@ -141,7 +141,7 @@ export function AppShell() {
     isMobile = false
   ) => (
     <div className="space-y-1">
-      <p className="px-2.5 pb-1 text-xs font-medium tracking-wide text-ink-secondary">
+      <p className="px-3 pb-1 text-[11px] font-medium tracking-normal text-ink-tertiary">
         {title}
       </p>
       {items.map(({ to, label, badge, icon: Icon }) => (
@@ -151,11 +151,11 @@ export function AppShell() {
           onClick={isMobile ? closeMobileMenu : undefined}
           className={({ isActive }) =>
             cn(
-              "group relative flex items-center justify-between rounded-lg px-2.5 text-[13px] font-medium transition-[background-color,color,transform,box-shadow] duration-150 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+              "group relative flex items-center justify-between rounded-full px-3 text-[13px] font-medium transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
               isMobile ? "min-h-11 py-2.5" : "min-h-9 py-2",
               isActive
                 ? ACTIVE_NAV_CLASSES
-                : "text-ink-secondary hover:bg-surface-top hover:text-ink-primary"
+                : "text-ink-secondary hover:bg-[#f6f7f9] dark:hover:bg-surface-top hover:text-ink-primary"
             )
           }
         >
@@ -220,8 +220,8 @@ export function AppShell() {
   return (
     <div className="flex min-h-screen bg-canvas text-ink-primary">
       {/* Desktop Sidebar (lg:w-64 preserved for full-bleed chat layouts) */}
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-line-subtle bg-well lg:flex">
-        <div className="flex h-14 items-center justify-between border-b border-line-subtle bg-surface/80 px-4">
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-[#eef0f3] bg-white dark:border-line-subtle dark:bg-well lg:flex">
+        <div className="flex h-14 items-center justify-between border-b border-[#eef0f3] bg-white dark:border-line-subtle dark:bg-surface/80 px-4">
           <Link
             to="/"
             className="flex items-center gap-2 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
@@ -235,13 +235,13 @@ export function AppShell() {
           </Link>
           <Link
             to="/teams"
-            className="rounded-md px-2 py-1 text-xs font-medium text-ink-secondary transition-[background-color,color] duration-150 hover:bg-surface-top hover:text-ink-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="rounded-md px-2 py-1 text-xs font-medium text-ink-secondary transition-[background-color,color] duration-150 hover:bg-[#f6f7f9] hover:text-ink-primary dark:hover:bg-surface-top focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             Ganti Tim
           </Link>
         </div>
 
-        <div className="border-b border-line-subtle bg-surface/50 px-4 py-3">
+        <div className="border-b border-[#eef0f3] bg-white dark:border-line-subtle dark:bg-surface/50 px-4 py-3">
           <p className="text-xs font-medium text-ink-tertiary">
             {team?.courseCode ?? "PROYEK"}
           </p>
@@ -258,7 +258,7 @@ export function AppShell() {
           {renderLinkGroup("Pemahaman & Tutor", learningLinks)}
         </nav>
 
-        <div className="space-y-2.5 border-t border-line-subtle bg-surface/50 p-3">
+        <div className="space-y-2.5 border-t border-[#eef0f3] bg-white dark:border-line-subtle dark:bg-surface/50 p-3">
           {renderAgentCompanionWidget(false)}
 
           <Link
@@ -318,9 +318,9 @@ export function AppShell() {
               animate={{ x: 0 }}
               exit={{ x: -288 }}
               transition={{ duration: 0.24, ease: [0.32, 0.72, 0, 1] }}
-              className="relative z-10 flex w-72 flex-col border-r border-line-subtle bg-surface-raised shadow-raised"
+              className="relative z-10 flex w-72 flex-col border-r border-[#eef0f3] bg-white shadow-raised dark:border-line-subtle dark:bg-surface-raised"
             >
-              <div className="flex h-14 items-center justify-between border-b border-line-subtle px-4">
+              <div className="flex h-14 items-center justify-between border-b border-[#eef0f3] dark:border-line-subtle px-4">
                 <Link
                   to="/"
                   onClick={closeMobileMenu}
@@ -344,7 +344,7 @@ export function AppShell() {
                 </Button>
               </div>
 
-              <div className="flex items-center justify-between gap-2 border-b border-line-subtle px-4 py-3">
+              <div className="flex items-center justify-between gap-2 border-b border-[#eef0f3] dark:border-line-subtle px-4 py-3">
                 <div className="min-w-0">
                   <p className="text-xs font-medium text-ink-secondary">
                     {team?.courseCode ?? "PROYEK"}

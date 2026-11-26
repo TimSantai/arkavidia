@@ -1,9 +1,8 @@
+import { Link } from "react-router"
 import { formatDistanceToNow, parseISO } from "date-fns"
 import { id } from "date-fns/locale"
-import { Check, FileText } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { ArrowRight, Check } from "lucide-react"
 import type { KnowledgeComponent } from "@/types/bersama"
-import { PressedButton } from "./PressedButton"
 import type { DecisionProgress } from "../teamHomeData"
 
 export interface DecisionProgressRowProps {
@@ -20,7 +19,6 @@ export function DecisionProgressRow({
   const kc = kcs.find((k) => k.id === decision.kcId)
   const kcCode = kc ? kc.code : decision.kcId.toUpperCase()
 
-  // Format relative time concisely ("2 hari lalu")
   const relativeTime = (() => {
     try {
       return formatDistanceToNow(parseISO(decision.changedAt), {
@@ -32,73 +30,58 @@ export function DecisionProgressRow({
     }
   })()
 
-  // Circular progress ring for team aggregate
+  // Circular progress ring
   const progressRatio =
     decision.teamTotal > 0
       ? Math.min(decision.teamUnderstood / decision.teamTotal, 1)
       : 0
-  const ringRadius = 7
+  const ringRadius = 6.5
   const ringCircumference = 2 * Math.PI * ringRadius
   const strokeDashoffset = ringCircumference * (1 - progressRatio)
 
   return (
-    <div className="rounded-2xl bg-surface-raised border border-line-subtle shadow-card p-3.5 sm:p-4 flex items-center justify-between gap-3 sm:gap-4 transition-[border-color,box-shadow] duration-150">
-      {/* Left: Pastel Tile + Info */}
-      <div className="flex items-center gap-3 min-w-0">
-        <div
-          className="size-11 rounded-2xl bg-info-subtle text-text-info flex items-center justify-center shrink-0"
-          aria-hidden="true"
-        >
-          <FileText className="size-5" />
-        </div>
-
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <Badge
-              variant="outline"
-              className="rounded-full px-2 py-0 text-xs font-mono font-medium text-ink-secondary border-line-subtle"
-            >
-              {kcCode}
-            </Badge>
-            <span className="font-mono text-xs text-ink-tertiary">
-              {decision.id}
-            </span>
-          </div>
-
-          <p className="text-sm sm:text-base font-semibold text-ink-primary truncate mt-0.5 max-w-[200px] sm:max-w-[320px] md:max-w-[420px]">
-            {decision.title}
-          </p>
-        </div>
+    <div className="py-3.5 sm:py-4 flex items-center justify-between gap-3 border-t border-[#f1f2f4] dark:border-line-subtle/50 first:border-t-0 first:pt-1 last:pb-1">
+      {/* Kiri: Chip KC + Judul keputusan */}
+      <div className="flex items-center gap-2.5 min-w-0">
+        <span className="shrink-0 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium text-ink-secondary bg-[#f6f7f9] dark:bg-surface-top border border-[#eef0f3] dark:border-line-subtle">
+          {kcCode}
+        </span>
+        <p className="text-sm sm:text-[15px] font-medium text-ink-primary truncate max-w-[220px] sm:max-w-[340px] md:max-w-[420px]">
+          {decision.title}
+        </p>
       </div>
 
-      {/* Right Column Group */}
+      {/* Kolom tengah & kanan */}
       <div className="flex items-center gap-4 sm:gap-6 shrink-0">
         {/* Kolom "Diubah": Desktop only */}
         <div className="hidden md:block text-right">
           <span className="text-xs text-ink-tertiary tabular-nums">
-            {relativeTime}
+            Diubah {relativeTime}
           </span>
         </div>
 
-        {/* Kolom "Tim paham": Tablet & Desktop only */}
-        <div className="hidden sm:flex items-center gap-2" title={`${decision.teamUnderstood} dari ${decision.teamTotal} anggota tim paham`}>
-          <div className="relative size-5 shrink-0" aria-hidden="true">
-            <svg className="size-full -rotate-90" viewBox="0 0 20 20">
+        {/* Kolom "Tim paham": Tablet & Desktop */}
+        <div
+          className="hidden sm:flex items-center gap-1.5"
+          title={`${decision.teamUnderstood} dari ${decision.teamTotal} tim paham`}
+        >
+          <div className="relative size-4 shrink-0" aria-hidden="true">
+            <svg className="size-full -rotate-90" viewBox="0 0 18 18">
               <circle
-                cx="10"
-                cy="10"
+                cx="9"
+                cy="9"
                 r={ringRadius}
                 fill="none"
                 stroke="var(--border-subtle)"
-                strokeWidth="2.5"
+                strokeWidth="2"
               />
               <circle
-                cx="10"
-                cy="10"
+                cx="9"
+                cy="9"
                 r={ringRadius}
                 fill="none"
-                stroke="var(--bg-brand)"
-                strokeWidth="2.5"
+                stroke="#1a51c4"
+                strokeWidth="2"
                 strokeDasharray={ringCircumference}
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
@@ -125,14 +108,17 @@ export function DecisionProgressRow({
           )}
         </div>
 
-        {/* CTA */}
-        <PressedButton
+        {/* Aksi teks */}
+        <Link
           to={`/teams/${teamId}/brain`}
-          size="sm"
-          className="shrink-0"
+          className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-ink-link hover:underline shrink-0 group select-none"
         >
-          {decision.youUnderstood ? "Lihat" : "Pahami"}
-        </PressedButton>
+          <span>{decision.youUnderstood ? "Lihat" : "Pahami"}</span>
+          <ArrowRight
+            className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
+            aria-hidden="true"
+          />
+        </Link>
       </div>
     </div>
   )

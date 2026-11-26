@@ -1,15 +1,14 @@
 import type { ElementType } from "react"
 import {
   BookOpen,
-  CheckSquare,
   Database,
   KeyRound,
   LayoutGrid,
   Network,
-  Server,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { KnowledgeComponent } from "@/types/bersama"
+import { KC_SHORT_LABELS } from "../teamHomeData"
 
 export interface KcFilterChipsProps {
   readonly kcs: readonly KnowledgeComponent[]
@@ -17,22 +16,48 @@ export interface KcFilterChipsProps {
   readonly onSelectKc: (kcId: string | null) => void
 }
 
-const KC_ICON_MAP: Record<string, ElementType> = {
-  "kc-mvc": LayoutGrid,
-  "kc-jwt": KeyRound,
-  "kc-db": Database,
-  "kc-api": Network,
-  "kc-orm": Server,
-  "kc-test": CheckSquare,
+interface ChipStyle {
+  readonly icon: ElementType
+  readonly inactiveClass: string
+  readonly activeClass: string
 }
 
-const KC_COLOR_MAP: Record<string, string> = {
-  "kc-mvc": "bg-info-subtle text-text-info",
-  "kc-jwt": "bg-warning-subtle text-text-warning",
-  "kc-db": "bg-info-subtle text-text-info",
-  "kc-api": "bg-info-subtle text-text-info",
-  "kc-orm": "bg-info-subtle text-text-info",
-  "kc-test": "bg-success-subtle text-text-success",
+const CHIP_STYLES: Record<string, ChipStyle> = {
+  all: {
+    icon: BookOpen,
+    inactiveClass:
+      "border border-[#e4e6ea] text-ink-secondary hover:bg-[#f6f7f9] dark:border-line-subtle dark:hover:bg-surface-top",
+    activeClass:
+      "bg-[#1d1e21] text-white border-transparent font-semibold dark:bg-white dark:text-[#1d1e21]",
+  },
+  "kc-mvc": {
+    icon: LayoutGrid,
+    inactiveClass:
+      "border border-[#c6daff] text-[#1a51c4] hover:bg-[#f1f6ff]/60 dark:border-brand-subtle dark:text-text-info",
+    activeClass:
+      "bg-[#f1f6ff] text-[#1a51c4] border-transparent font-semibold dark:bg-info-subtle dark:text-text-info",
+  },
+  "kc-jwt": {
+    icon: KeyRound,
+    inactiveClass:
+      "border border-[#e0bb6c] text-[#755700] hover:bg-[#fef8ec]/60 dark:border-warning dark:text-text-warning",
+    activeClass:
+      "bg-[#fef8ec] text-[#755700] border-transparent font-semibold dark:bg-warning-subtle dark:text-text-warning",
+  },
+  "kc-db": {
+    icon: Database,
+    inactiveClass:
+      "border border-[#c6daff] text-[#1a51c4] hover:bg-[#f1f6ff]/60 dark:border-brand-subtle dark:text-text-info",
+    activeClass:
+      "bg-[#f1f6ff] text-[#1a51c4] border-transparent font-semibold dark:bg-info-subtle dark:text-text-info",
+  },
+  "kc-api": {
+    icon: Network,
+    inactiveClass:
+      "border border-[#c6daff] text-[#1a51c4] hover:bg-[#f1f6ff]/60 dark:border-brand-subtle dark:text-text-info",
+    activeClass:
+      "bg-[#f1f6ff] text-[#1a51c4] border-transparent font-semibold dark:bg-info-subtle dark:text-text-info",
+  },
 }
 
 export function KcFilterChips({
@@ -42,41 +67,41 @@ export function KcFilterChips({
 }: KcFilterChipsProps) {
   const isAllSelected = selectedKcId === null
 
+  // Display the 4 primary KCs
+  const primaryKcs = kcs.filter((k) =>
+    ["kc-mvc", "kc-jwt", "kc-db", "kc-api"].includes(k.id)
+  )
+
   return (
     <div
       role="toolbar"
       aria-label="Filter berdasarkan Knowledge Component"
-      className="flex items-center gap-3 overflow-x-auto pb-2 pt-1 px-0.5 snap-x scrollbar-none"
+      className="flex items-center gap-2 overflow-x-auto pb-1 px-0.5 scrollbar-none"
     >
-      {/* "Semua KC" Chip */}
+      {/* "Semua" Chip */}
       <button
         type="button"
         aria-pressed={isAllSelected}
         onClick={() => onSelectKc(null)}
         className={cn(
-          "rounded-2xl bg-surface-raised border p-2 pr-4 flex items-center gap-3 shrink-0 snap-start",
-          "shadow-[0_3px_0_0_var(--border-subtle)] text-sm font-medium cursor-pointer select-none",
-          "transition-[border-color,box-shadow,transform,background-color] duration-100 ease-out",
-          "active:translate-y-[1px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          "h-9 rounded-full px-3.5 text-sm font-medium inline-flex items-center gap-1.5 shrink-0 select-none cursor-pointer",
+          "transition-[background-color,border-color,color] duration-150 ease-out",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
           isAllSelected
-            ? "border-line-active text-ink-primary bg-surface-top ring-1 ring-line-active/30"
-            : "border-line-subtle text-ink-secondary hover:text-ink-primary hover:bg-surface-top"
+            ? CHIP_STYLES.all.activeClass
+            : CHIP_STYLES.all.inactiveClass
         )}
       >
-        <span
-          className="size-11 rounded-2xl bg-info-subtle text-text-info flex items-center justify-center shrink-0"
-          aria-hidden="true"
-        >
-          <BookOpen className="size-5" />
-        </span>
-        <span>Semua KC</span>
+        <BookOpen className="size-4 shrink-0" aria-hidden="true" />
+        <span>Semua</span>
       </button>
 
       {/* Per-KC Chips */}
-      {kcs.map((kc) => {
+      {primaryKcs.map((kc) => {
         const isSelected = selectedKcId === kc.id
-        const Icon = KC_ICON_MAP[kc.id] || BookOpen
-        const colorClass = KC_COLOR_MAP[kc.id] || "bg-info-subtle text-text-info"
+        const style = CHIP_STYLES[kc.id] || CHIP_STYLES.all
+        const Icon = style.icon
+        const label = KC_SHORT_LABELS[kc.id] || kc.name
 
         return (
           <button
@@ -85,30 +110,14 @@ export function KcFilterChips({
             aria-pressed={isSelected}
             onClick={() => onSelectKc(kc.id)}
             className={cn(
-              "rounded-2xl bg-surface-raised border p-2 pr-4 flex items-center gap-3 shrink-0 snap-start",
-              "shadow-[0_3px_0_0_var(--border-subtle)] text-sm font-medium cursor-pointer select-none",
-              "transition-[border-color,box-shadow,transform,background-color] duration-100 ease-out",
-              "active:translate-y-[1px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-              isSelected
-                ? "border-line-active text-ink-primary bg-surface-top ring-1 ring-line-active/30"
-                : "border-line-subtle text-ink-secondary hover:text-ink-primary hover:bg-surface-top"
+              "h-9 rounded-full px-3.5 text-sm font-medium inline-flex items-center gap-1.5 shrink-0 select-none cursor-pointer",
+              "transition-[background-color,border-color,color] duration-150 ease-out",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+              isSelected ? style.activeClass : style.inactiveClass
             )}
           >
-            <span
-              className={cn(
-                "size-11 rounded-2xl flex items-center justify-center shrink-0",
-                colorClass
-              )}
-              aria-hidden="true"
-            >
-              <Icon className="size-5" />
-            </span>
-            <div className="flex flex-col text-left">
-              <span className="font-mono text-xs text-ink-tertiary">{kc.code}</span>
-              <span className="text-ink-primary truncate max-w-[140px] sm:max-w-[200px]">
-                {kc.name}
-              </span>
-            </div>
+            <Icon className="size-4 shrink-0" aria-hidden="true" />
+            <span className="whitespace-nowrap">{label}</span>
           </button>
         )
       })}

@@ -1,124 +1,114 @@
-import { ClipboardCheck, FileCheck, Users } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
-import { AvatarStack } from "@/components/kibo-ui/avatar-stack"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { USER_AVATAR_MAP } from "@/features/team-chat/components/teamChatAvatars"
+import { Link } from "react-router"
+import { ArrowRight } from "lucide-react"
+import cardIndexDividersImg from "@/assets/illustrations/card-index-dividers.png"
+import handshakeImg from "@/assets/illustrations/handshake.png"
+import studioMicrophoneImg from "@/assets/illustrations/studio-microphone.png"
 import { cn } from "@/lib/utils"
 import type { KnowledgeComponent } from "@/types/bersama"
-import { PressedButton } from "./PressedButton"
 import type { WeeklyTask } from "../teamHomeData"
-import { getUserById } from "../teamHomeData"
 
 export interface WeeklyTaskCardProps {
   readonly task: WeeklyTask
   readonly kcs: readonly KnowledgeComponent[]
 }
 
+const KIND_THEMES: Record<
+  WeeklyTask["kind"],
+  {
+    readonly fillClass: string
+    readonly label: string
+    readonly illustration: string
+    readonly accentTextClass: string
+  }
+> = {
+  "explain-back": {
+    fillClass: "bg-[#fef8ec] dark:bg-warning-subtle",
+    label: "Explain-back",
+    illustration: studioMicrophoneImg,
+    accentTextClass: "text-[#755700] dark:text-text-warning",
+  },
+  pairing: {
+    fillClass: "bg-[#fff4f2] dark:bg-error-subtle",
+    label: "Sesi Pairing",
+    illustration: handshakeImg,
+    accentTextClass: "text-[#a22a27] dark:text-text-error",
+  },
+  "confirm-decision": {
+    fillClass: "bg-[#f1f6ff] dark:bg-info-subtle",
+    label: "Tinjau Keputusan",
+    illustration: cardIndexDividersImg,
+    accentTextClass: "text-[#1a51c4] dark:text-text-info",
+  },
+}
+
 export function WeeklyTaskCard({ task, kcs }: WeeklyTaskCardProps) {
-  const shouldReduceMotion = useReducedMotion()
   const kc = kcs.find((k) => k.id === task.kcId)
   const kcCode = kc ? kc.code : "KC"
-
-  const isExplainBack = task.kind === "explain-back"
-  const isPairing = task.kind === "pairing"
-
-  // Pastel header colors:
-  // explain-back = kuning (bg-warning-subtle text-text-warning)
-  // pairing = coral (bg-error-subtle text-text-error)
-  // confirm-decision = biru (bg-info-subtle text-text-info)
-  const headerBgClass = isExplainBack
-    ? "bg-warning-subtle text-text-warning"
-    : isPairing
-      ? "bg-error-subtle text-text-error"
-      : "bg-info-subtle text-text-info"
-
-  const HeaderIcon = isExplainBack
-    ? ClipboardCheck
-    : isPairing
-      ? Users
-      : FileCheck
+  const theme = KIND_THEMES[task.kind]
 
   return (
-    <article className="rounded-3xl bg-surface-raised border border-line-subtle shadow-raised p-2 flex flex-col justify-between group overflow-hidden transition-[box-shadow,border-color] duration-150">
-      <div>
-        {/* Playful Header Illustration */}
-        <div
+    <article
+      className={cn(
+        "rounded-3xl p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden min-h-[220px]",
+        "transition-[transform,opacity] duration-150 ease-out",
+        theme.fillClass
+      )}
+    >
+      {/* 3D Illustration positioned top-right */}
+      <img
+        src={theme.illustration}
+        alt=""
+        aria-hidden="true"
+        className="absolute top-4 right-4 size-[72px] sm:size-20 object-contain drop-shadow-[0_8px_16px_rgb(29_30_33/0.12)] pointer-events-none select-none"
+      />
+
+      {/* Top row: kind label + KC chip */}
+      <div className="flex items-center gap-2 pr-20">
+        <span
           className={cn(
-            "h-28 rounded-2xl m-1 relative overflow-hidden flex items-center justify-center",
-            headerBgClass
+            "text-xs font-semibold uppercase tracking-wider",
+            theme.accentTextClass
           )}
         >
-          {/* Top-left deadline chip */}
-          <span className="bg-surface-raised/90 backdrop-blur-xs border border-line-subtle/50 px-2.5 py-0.5 rounded-full text-xs font-medium text-ink-primary absolute top-2.5 left-2.5 shadow-xs">
-            Tenggat Jum
-          </span>
-
-          {/* Big Lucide Icon 64px with hover tilt */}
-          <motion.div
-            initial={false}
-            animate={
-              shouldReduceMotion
-                ? { rotate: -6, scale: 1 }
-                : undefined
-            }
-            whileHover={
-              shouldReduceMotion
-                ? undefined
-                : { rotate: -2, scale: 1.05 }
-            }
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="flex items-center justify-center -rotate-6 opacity-80"
-          >
-            <HeaderIcon className="size-16" aria-hidden="true" />
-          </motion.div>
-        </div>
-
-        {/* Content */}
-        <div className="p-3 pb-1">
-          <Badge
-            variant="outline"
-            className="rounded-full px-2.5 py-0.5 text-xs text-ink-secondary border-line-subtle font-mono font-medium"
-          >
-            {kcCode}
-          </Badge>
-
-          <h3 className="text-base font-sans font-semibold text-ink-primary mt-2 line-clamp-2 leading-snug">
-            {task.title}
-          </h3>
-
-          <p className="text-[13px] text-ink-tertiary mt-1 font-sans">
-            {task.meta}
-          </p>
-        </div>
+          {theme.label}
+        </span>
+        <span className="bg-white/80 dark:bg-black/30 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-xs font-mono font-medium text-ink-secondary">
+          {kcCode}
+        </span>
       </div>
 
-      {/* Footer Row */}
-      <div className="p-3 pt-2 flex items-center justify-between gap-2 mt-2 border-t border-line-subtle/40">
-        <div>
-          {isPairing && task.people && task.people.length > 0 ? (
-            <AvatarStack size={28} className="overflow-visible">
-              {task.people.map((personId) => {
-                const person = getUserById(personId)
-                const avatarUrl = USER_AVATAR_MAP[personId]
-                return (
-                  <Avatar key={personId} className="size-7 ring-2 ring-surface-raised">
-                    {avatarUrl && <AvatarImage src={avatarUrl} alt={person?.name || "Anggota"} />}
-                    <AvatarFallback className="text-xs bg-muted text-ink-primary font-medium">
-                      {person?.initials || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                )
-              })}
-            </AvatarStack>
-          ) : (
-            <span className="text-xs text-ink-tertiary font-sans">Mandiri</span>
-          )}
+      {/* Center: Big progress metric + Task Title */}
+      <div className="my-3">
+        <div className="flex items-baseline gap-1.5">
+          <span className="font-sans font-semibold text-3xl sm:text-4xl text-ink-primary tracking-tight leading-none tabular-nums">
+            {task.statBig}
+          </span>
+          <span className="text-xs text-ink-tertiary font-sans font-medium">
+            {task.statLabel}
+          </span>
         </div>
 
-        <PressedButton to={task.to} size="sm">
-          {task.cta}
-        </PressedButton>
+        <h3 className="font-sans font-semibold text-base sm:text-[17px] text-ink-primary mt-2 line-clamp-2 leading-snug">
+          {task.title}
+        </h3>
+      </div>
+
+      {/* Bottom: contextual deadline meta + text arrow link */}
+      <div className="pt-3 border-t border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between gap-3">
+        <span className="text-xs text-ink-tertiary font-sans font-medium">
+          {task.meta}
+        </span>
+
+        <Link
+          to={task.to}
+          className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-ink-primary hover:text-ink-link transition-colors duration-150 select-none group"
+        >
+          <span>{task.cta}</span>
+          <ArrowRight
+            className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
+            aria-hidden="true"
+          />
+        </Link>
       </div>
     </article>
   )

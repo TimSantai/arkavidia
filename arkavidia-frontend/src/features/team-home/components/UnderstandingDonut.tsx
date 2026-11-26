@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react"
 import { Lock } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
+import brainImg from "@/assets/illustrations/brain.png"
 import type { MyUnderstanding } from "../teamHomeData"
 
 export interface UnderstandingDonutProps {
   readonly understandings: readonly MyUnderstanding[]
 }
 
-const RADIUS = 64
-const STROKE_WIDTH = 14
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS // ~402.12
+const RADIUS = 54
+const STROKE_WIDTH = 10
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS // ~339.29
 const GAP_ANGLE = 4 // degrees gap between segments
 
 export function UnderstandingDonut({ understandings }: UnderstandingDonutProps) {
   const shouldReduceMotion = useReducedMotion()
   const totalCount = understandings.length
-  // User masters KC if pL >= 0.70
   const masteredCount = understandings.filter((u) => u.pL >= 0.7).length
 
-  // Count up animation for displayed mastered count
   const [animatedCount, setAnimatedCount] = useState(0)
 
   useEffect(() => {
@@ -30,8 +29,7 @@ export function UnderstandingDonut({ understandings }: UnderstandingDonutProps) 
     const animateCount = (now: number) => {
       const elapsed = now - startTime
       const progress = Math.min(elapsed / duration, 1)
-      const current = Math.round(progress * masteredCount)
-      setAnimatedCount(current)
+      setAnimatedCount(Math.round(progress * masteredCount))
 
       if (progress < 1) {
         requestAnimationFrame(animateCount)
@@ -44,48 +42,54 @@ export function UnderstandingDonut({ understandings }: UnderstandingDonutProps) 
 
   const displayedCount = shouldReduceMotion ? masteredCount : animatedCount
 
-  // Segment geometry
   const segmentAngle = 360 / (totalCount || 1)
   const segmentArcAngle = Math.max(segmentAngle - GAP_ANGLE, 1)
   const segmentLength = (segmentArcAngle / 360) * CIRCUMFERENCE
 
   return (
-    <div className="rounded-2xl bg-surface-raised border border-line-subtle shadow-card p-4 flex flex-col gap-3">
-      {/* Header */}
+    <div className="flex flex-col gap-3">
+      {/* Header: Title + Lock chip */}
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-ink-primary font-sans">
           Pemahamanmu
         </h3>
-        <span className="flex items-center gap-1 text-xs text-ink-tertiary bg-well/70 px-2.5 py-0.5 rounded-full select-none">
+        <span className="flex items-center gap-1 text-[11px] font-medium text-ink-tertiary bg-white/80 dark:bg-black/30 backdrop-blur-xs px-2.5 py-0.5 rounded-full select-none border border-black/[0.04] dark:border-white/[0.06]">
           <Lock className="size-3 text-ink-tertiary shrink-0" aria-hidden="true" />
-          <span>Hanya kamu yang melihat ini</span>
+          <span>Hanya kamu</span>
         </span>
       </div>
 
-      {/* Donut Graphic */}
+      {/* Brain 3D illustration centered */}
+      <div className="flex justify-center -my-1">
+        <img
+          src={brainImg}
+          alt=""
+          aria-hidden="true"
+          className="size-16 sm:size-[72px] object-contain drop-shadow-[0_8px_16px_rgb(29_30_33/0.12)] pointer-events-none select-none"
+        />
+      </div>
+
+      {/* Donut Graphic (Thin stroke 10px, round cap) */}
       <div
         role="img"
         aria-label={`Kamu menguasai ${masteredCount} dari ${totalCount} KC`}
-        className="relative flex items-center justify-center py-2"
+        className="relative flex items-center justify-center py-1"
       >
-        <svg
-          viewBox="0 0 180 180"
-          className="size-44 shrink-0 overflow-visible"
-        >
-          {/* Subtle background track for all segments */}
+        <svg viewBox="0 0 140 140" className="size-36 shrink-0 overflow-visible">
+          {/* Subtle background track */}
           {understandings.map((_, i) => {
             const startAngle = i * segmentAngle - 90 + GAP_ANGLE / 2
             return (
               <circle
                 key={`track-${i}`}
-                cx="90"
-                cy="90"
+                cx="70"
+                cy="70"
                 r={RADIUS}
                 fill="none"
                 stroke="var(--bg-well)"
                 strokeWidth={STROKE_WIDTH}
                 strokeDasharray={`${segmentLength} ${CIRCUMFERENCE - segmentLength}`}
-                transform={`rotate(${startAngle} 90 90)`}
+                transform={`rotate(${startAngle} 70 70)`}
                 strokeLinecap="round"
               />
             )
@@ -96,27 +100,27 @@ export function UnderstandingDonut({ understandings }: UnderstandingDonutProps) 
             const startAngle = i * segmentAngle - 90 + GAP_ANGLE / 2
 
             // Colors:
-            // < 0.5: kuning (bg-warning)
-            // 0.5–0.8: biru (bg-info)
-            // >= 0.8: hijau (bg-success)
+            // < 0.5: kuning (#755700 / bg-warning)
+            // 0.5–0.8: biru (#1a51c4 / bg-info)
+            // >= 0.8: hijau (#006f31 / bg-success)
             const segmentColor =
               kc.pL >= 0.8
-                ? "var(--bg-success)"
+                ? "#006f31"
                 : kc.pL >= 0.5
-                  ? "var(--bg-info)"
-                  : "var(--bg-warning)"
+                  ? "#1a51c4"
+                  : "#755700"
 
             return (
               <motion.circle
                 key={kc.kcId}
-                cx="90"
-                cy="90"
+                cx="70"
+                cy="70"
                 r={RADIUS}
                 fill="none"
                 stroke={segmentColor}
                 strokeWidth={STROKE_WIDTH}
                 strokeDasharray={`${segmentLength} ${CIRCUMFERENCE - segmentLength}`}
-                transform={`rotate(${startAngle} 90 90)`}
+                transform={`rotate(${startAngle} 70 70)`}
                 strokeLinecap="round"
                 initial={shouldReduceMotion ? false : { pathLength: 0 }}
                 animate={{ pathLength: 1 }}
@@ -132,28 +136,28 @@ export function UnderstandingDonut({ understandings }: UnderstandingDonutProps) 
 
         {/* Center Display */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none select-none">
-          <span className="font-heading font-semibold text-[44px] leading-none text-ink-primary tabular-nums tracking-tight">
+          <span className="font-heading font-semibold text-2xl text-ink-primary tabular-nums tracking-tight">
             {displayedCount}/{totalCount}
           </span>
-          <span className="text-xs text-ink-tertiary font-sans font-medium mt-1">
+          <span className="text-[11px] text-ink-tertiary font-sans font-medium">
             KC dikuasai
           </span>
         </div>
       </div>
 
       {/* Legend Chips */}
-      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 pt-1 border-t border-line-subtle/40 text-xs text-ink-secondary">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-ink-secondary pt-1 border-t border-black/[0.04] dark:border-white/[0.06]">
         <span className="inline-flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-success shrink-0" aria-hidden="true" />
-          <span>≥ 0.8 Paham</span>
+          <span className="size-2 rounded-full bg-[#006f31] shrink-0" aria-hidden="true" />
+          <span>Paham</span>
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-info shrink-0" aria-hidden="true" />
-          <span>0.5–0.8 Menengah</span>
+          <span className="size-2 rounded-full bg-[#1a51c4] shrink-0" aria-hidden="true" />
+          <span>Menengah</span>
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-warning shrink-0" aria-hidden="true" />
-          <span>&lt; 0.5 Perlu cek</span>
+          <span className="size-2 rounded-full bg-[#755700] shrink-0" aria-hidden="true" />
+          <span>Perlu cek</span>
         </span>
       </div>
     </div>

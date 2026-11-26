@@ -6,6 +6,8 @@ export interface WeeklyTask {
   readonly kind: "explain-back" | "pairing" | "confirm-decision"
   readonly title: string
   readonly meta: string
+  readonly statBig: string
+  readonly statLabel: string
   readonly kcId: string
   readonly people?: readonly string[]
   readonly to: string
@@ -39,16 +41,21 @@ export interface UserStats {
   readonly pairingSessions: number
 }
 
-/**
- * 6 Knowledge Components for the team home dashboard (matching 4/6 mastered in specification).
- */
+export const KC_SHORT_LABELS: Record<string, string> = {
+  "all": "Semua",
+  "kc-mvc": "MVC",
+  "kc-jwt": "JWT",
+  "kc-db": "Skema DB",
+  "kc-api": "REST",
+}
+
 export const TEAM_HOME_KCS: readonly KnowledgeComponent[] = [
   ...SEED_KCS,
   {
     id: "kc-orm",
     teamId: "team-pbo-01",
     code: "KC-05",
-    name: "DAO & Transaksi Antrean",
+    name: "DAO & Transaksi",
     description: "Pengelolaan isolasi transaksi dan rollback otomatis saat persistensi gagal.",
     criticality: "medium",
   },
@@ -56,7 +63,7 @@ export const TEAM_HOME_KCS: readonly KnowledgeComponent[] = [
     id: "kc-test",
     teamId: "team-pbo-01",
     code: "KC-06",
-    name: "Unit Testing & Mocking",
+    name: "Unit Testing",
     description: "Pengujian unit independen dengan mock service untuk alur antrean.",
     criticality: "low",
   },
@@ -75,30 +82,36 @@ export function getWeeklyTasks(teamId: string): readonly WeeklyTask[] {
     {
       id: "task-eb-01",
       kind: "explain-back",
-      title: "Jelaskan ulang DEC-02: Modul login JWT stateless",
-      meta: "3 pertanyaan · ≤ 5 menit",
+      title: "Jelaskan ulang DEC-02",
+      meta: "Tenggat Jumat · ≤ 5 menit",
+      statBig: "0/3",
+      statLabel: "pertanyaan",
       kcId: "kc-jwt",
       to: `/teams/${teamId}/check`,
-      cta: "Mulai",
+      cta: "Mulai sekarang",
     },
     {
       id: "task-pair-01",
       kind: "pairing",
-      title: "Sesi Pairing: Atasi Silo Autentikasi JWT",
-      meta: "Diskusi konsep · 15 menit",
+      title: "Pairing JWT dengan Dimas",
+      meta: "Jadwal fleksibel · 15 menit",
+      statBig: "10 mnt",
+      statLabel: "estimasi",
       kcId: "kc-jwt",
-      people: ["user-dimas", "user-sari"],
+      people: ["user-dimas"],
       to: `/teams/${teamId}/understanding`,
-      cta: "Jadwalkan",
+      cta: "Jadwalkan sesi",
     },
     {
       id: "task-dec-01",
       kind: "confirm-decision",
-      title: "Tinjau Usulan DEC-03: Constraint Database",
-      meta: "Usulan baru · 2 alternatif ditolak",
+      title: "Tinjau usulan DEC-03",
+      meta: "Tenggat Senin · 10 menit",
+      statBig: "2 alternatif",
+      statLabel: "ditinjau",
       kcId: "kc-db",
       to: `/teams/${teamId}/brain`,
-      cta: "Tinjau",
+      cta: "Tinjau usulan",
     },
   ]
 }
@@ -107,7 +120,7 @@ export function getDecisionProgressList(): readonly DecisionProgress[] {
   return [
     {
       id: "DEC-01",
-      title: "Pola arsitektur MVC untuk pemisahan tanggung jawab Model & Controller",
+      title: "Pola arsitektur MVC untuk pemisahan Model, View & Controller",
       kcId: "kc-mvc",
       changedAt: "2026-11-24T10:15:00+07:00",
       teamUnderstood: 3,
@@ -145,13 +158,6 @@ export function getDecisionProgressList(): readonly DecisionProgress[] {
 }
 
 export function getMyUnderstanding(): readonly MyUnderstanding[] {
-  // Exactly 4 out of 6 KCs mastered (pL >= 0.70 threshold)
-  // KC-01: 0.92 (>= 0.8 -> hijau)
-  // KC-02: 0.42 (< 0.5 -> kuning)
-  // KC-03: 0.72 (0.5-0.8 -> biru)
-  // KC-04: 0.78 (0.5-0.8 -> biru)
-  // KC-05: 0.65 (0.5-0.8 -> biru)
-  // KC-06: 0.85 (>= 0.8 -> hijau)
   return [
     { kcId: "kc-mvc", label: "KC-01 MVC", pL: 0.92 },
     { kcId: "kc-jwt", label: "KC-02 JWT", pL: 0.42 },

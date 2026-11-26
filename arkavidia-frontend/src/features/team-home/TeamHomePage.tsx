@@ -39,50 +39,32 @@ export function TeamHomePage() {
   }, [allDecisions, selectedKcId])
 
   return (
-    <div className="min-h-full bg-canvas text-ink-primary overflow-x-hidden p-4 sm:p-6 lg:p-8">
-      <div className="max-w-[1280px] mx-auto">
-        {/* Responsive Layout: Column on mobile (with profile on top), 2-col on desktop */}
-        <div className="flex flex-col lg:grid lg:grid-cols-[1fr_340px] gap-6 items-start">
-          {/* Mobile Profile Panel (shown at top on < 1024px) */}
-          <div className="block lg:hidden w-full">
-            <ProfilePanel
-              user={activeUser}
-              teamId={teamId}
-              stats={USER_STATS_DATA}
-              understandings={myUnderstanding}
-              health={TEAM_HEALTH_DATA}
-            />
-          </div>
+    <div className="min-h-full bg-white dark:bg-canvas text-ink-primary overflow-x-hidden p-4 sm:p-6 lg:p-8">
+      <div className="max-w-[1280px] mx-auto space-y-6 sm:space-y-7">
+        {/* 1. Top Bar: Sapaan halus + Aksi */}
+        <GreetingHeader
+          userName={activeUser.name}
+          teamId={teamId}
+          taskCount={allTasks.length}
+        />
 
-          {/* Main Column */}
-          <main className="w-full space-y-6 sm:space-y-8 min-w-0">
-            {/* 1. Greeting Header */}
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <GreetingHeader
-                userName={activeUser.name}
-                teamId={teamId}
-                courseSubtitle="Minggu ke-6 · Kelompok 4 PBO"
-              />
-            </motion.div>
+        {/* 2. Judul "Beranda" + Chip Filter KC */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1 pb-1">
+          <h1 className="font-heading font-medium text-[2.5rem] leading-none tracking-[-0.02em] text-ink-primary shrink-0">
+            Beranda
+          </h1>
+          <KcFilterChips
+            kcs={TEAM_HOME_KCS}
+            selectedKcId={selectedKcId}
+            onSelectKc={setSelectedKcId}
+          />
+        </div>
 
-            {/* 2. Knowledge Component Filter Chips */}
-            <motion.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.05, ease: "easeOut" }}
-            >
-              <KcFilterChips
-                kcs={TEAM_HOME_KCS}
-                selectedKcId={selectedKcId}
-                onSelectKc={setSelectedKcId}
-              />
-            </motion.div>
-
-            {/* 3. Section: Tugas minggu ini */}
+        {/* 3. Grid Utama: Kolom 1-2 (Tugas & Keputusan) + Kolom 3 (Panel Sorotan) */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr_320px] gap-6 items-start">
+          {/* Kolom 1-2: Tugas & Keputusan */}
+          <main className="col-span-1 lg:col-span-2 space-y-7 min-w-0">
+            {/* Bagian: Tugas minggu ini */}
             <section
               aria-labelledby="section-tasks-heading"
               className="space-y-4"
@@ -91,17 +73,17 @@ export function TeamHomePage() {
                 <div className="flex items-center gap-2">
                   <h2
                     id="section-tasks-heading"
-                    className="font-heading font-semibold text-xl sm:text-2xl text-ink-primary tracking-tight"
+                    className="font-heading font-medium text-xl sm:text-2xl text-ink-primary tracking-tight"
                   >
                     Tugas minggu ini
                   </h2>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-well text-ink-secondary tabular-nums">
+                  <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-[#f6f7f9] dark:bg-surface text-ink-secondary tabular-nums">
                     {filteredTasks.length}
                   </span>
                 </div>
                 <Link
                   to={`/teams/${teamId}/understanding`}
-                  className="text-sm font-medium text-ink-link hover:underline transition-colors"
+                  className="text-xs sm:text-sm font-semibold text-ink-link hover:underline transition-colors select-none"
                 >
                   Lihat semua
                 </Link>
@@ -112,34 +94,31 @@ export function TeamHomePage() {
                   {filteredTasks.map((task, index) => (
                     <motion.div
                       key={task.id}
-                      initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+                      initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{
-                        duration: 0.35,
-                        delay: shouldReduceMotion ? 0 : 0.05 + index * 0.05,
+                        duration: 0.3,
+                        delay: shouldReduceMotion ? 0 : index * 0.04,
                         ease: "easeOut",
                       }}
                       className="h-full"
                     >
-                      <WeeklyTaskCard
-                        task={task}
-                        kcs={TEAM_HOME_KCS}
-                      />
+                      <WeeklyTaskCard task={task} kcs={TEAM_HOME_KCS} />
                     </motion.div>
                   ))}
                 </div>
               ) : (
-                <div className="rounded-3xl bg-surface-raised border border-line-subtle shadow-card p-8 text-center space-y-2">
+                <div className="rounded-3xl bg-[#f6f7f9] dark:bg-surface p-8 text-center space-y-2">
                   <p className="font-semibold text-ink-primary">
-                    Tidak ada tugas untuk filter ini
+                    Tidak ada tugas untuk KC ini
                   </p>
                   <p className="text-xs text-ink-tertiary">
-                    Semua tugas terkait KC ini sudah diselesaikan atau dijadwalkan.
+                    Semua tugas terkait KC ini sudah selesai atau dijadwalkan.
                   </p>
                   <button
                     type="button"
                     onClick={() => setSelectedKcId(null)}
-                    className="mt-2 text-xs font-medium text-ink-link hover:underline"
+                    className="mt-2 text-xs font-semibold text-ink-link hover:underline"
                   >
                     Tampilkan semua KC
                   </button>
@@ -147,7 +126,7 @@ export function TeamHomePage() {
               )}
             </section>
 
-            {/* 4. Section: Keputusan yang menyangkut tugasmu */}
+            {/* Bagian: Keputusan yang menyangkut tugasmu */}
             <section
               aria-labelledby="section-decisions-heading"
               className="space-y-4"
@@ -156,55 +135,48 @@ export function TeamHomePage() {
                 <div className="flex items-center gap-2">
                   <h2
                     id="section-decisions-heading"
-                    className="font-heading font-semibold text-xl sm:text-2xl text-ink-primary tracking-tight"
+                    className="font-heading font-medium text-xl sm:text-2xl text-ink-primary tracking-tight"
                   >
                     Keputusan yang menyangkut tugasmu
                   </h2>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-well text-ink-secondary tabular-nums">
+                  <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-[#f6f7f9] dark:bg-surface text-ink-secondary tabular-nums">
                     {filteredDecisions.length}
                   </span>
                 </div>
                 <Link
                   to={`/teams/${teamId}/brain`}
-                  className="text-sm font-medium text-ink-link hover:underline transition-colors"
+                  className="text-xs sm:text-sm font-semibold text-ink-link hover:underline transition-colors select-none"
                 >
                   Lihat semua
                 </Link>
               </div>
 
               {filteredDecisions.length > 0 ? (
-                <div className="space-y-3">
-                  {filteredDecisions.map((decision, index) => (
-                    <motion.div
-                      key={decision.id}
-                      initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        duration: 0.35,
-                        delay: shouldReduceMotion ? 0 : 0.1 + index * 0.05,
-                        ease: "easeOut",
-                      }}
-                    >
+                /* Satu kartu Plain berisi daftar baris dengan pemisah border-t */
+                <div className="rounded-3xl bg-white dark:bg-surface border border-[#eef0f3] dark:border-line-subtle p-4 sm:p-5">
+                  <div className="divide-y divide-[#f1f2f4] dark:divide-line-subtle/50">
+                    {filteredDecisions.map((decision) => (
                       <DecisionProgressRow
+                        key={decision.id}
                         decision={decision}
                         kcs={TEAM_HOME_KCS}
                         teamId={teamId}
                       />
-                    </motion.div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               ) : (
-                <div className="rounded-2xl bg-surface-raised border border-line-subtle shadow-card p-8 text-center space-y-2">
+                <div className="rounded-3xl bg-[#f6f7f9] dark:bg-surface p-8 text-center space-y-2">
                   <p className="font-semibold text-ink-primary">
                     Tidak ada keputusan untuk KC ini
                   </p>
                   <p className="text-xs text-ink-tertiary">
-                    Belum ada memory record keputusan tim yang ditandai dengan KC ini.
+                    Belum ada catatan memori keputusan tim pada KC ini.
                   </p>
                   <button
                     type="button"
                     onClick={() => setSelectedKcId(null)}
-                    className="mt-2 text-xs font-medium text-ink-link hover:underline"
+                    className="mt-2 text-xs font-semibold text-ink-link hover:underline"
                   >
                     Tampilkan semua KC
                   </button>
@@ -213,8 +185,8 @@ export function TeamHomePage() {
             </section>
           </main>
 
-          {/* Desktop Profile Panel (Sticky on >= 1024px) */}
-          <div className="hidden lg:block w-[340px] shrink-0 sticky top-6">
+          {/* Kolom 3: Panel Sorotan */}
+          <div className="col-span-1 lg:sticky lg:top-6">
             <ProfilePanel
               user={activeUser}
               teamId={teamId}
