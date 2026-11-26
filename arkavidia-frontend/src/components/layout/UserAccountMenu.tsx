@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router"
-import { Check, ChevronDown, Lock, LogOut, Users } from "lucide-react"
+import { Check, ChevronDown, LogOut } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -18,11 +18,11 @@ import type { User } from "@/types/bersama"
 
 export interface UserAccountMenuProps {
   readonly user: User
-  readonly teamId: string
+  readonly teamId?: string
   readonly onSwitchUser?: (user: User) => void
 }
 
-export function UserAccountMenu({ user, teamId, onSwitchUser }: UserAccountMenuProps) {
+export function UserAccountMenu({ user, onSwitchUser }: UserAccountMenuProps) {
   const navigate = useNavigate()
   const avatarSrc = USER_AVATAR_MAP[user.id]
   const roleLabel = USER_ROLE_LABEL[user.id] || user.role
@@ -82,25 +82,6 @@ export function UserAccountMenu({ user, teamId, onSwitchUser }: UserAccountMenuP
             </span>
           </div>
         </div>
-
-        <DropdownMenuSeparator className="my-1.5 bg-line-subtle/60" />
-
-        <DropdownMenuGroup>
-          <DropdownMenuItem
-            onClick={() => void navigate(`/teams/${teamId}/private`)}
-            className="cursor-pointer gap-2 rounded-lg text-ink-secondary hover:text-ink-primary"
-          >
-            <Lock className="size-3.5 text-ink-link" />
-            <span>Ruang Pribadi (M1)</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => void navigate("/teams")}
-            className="cursor-pointer gap-2 rounded-lg text-ink-secondary hover:text-ink-primary"
-          >
-            <Users className="size-3.5 text-ink-secondary" />
-            <span>Ganti Tim Proyek</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
 
         <DropdownMenuSeparator className="my-1.5 bg-line-subtle/60" />
 
