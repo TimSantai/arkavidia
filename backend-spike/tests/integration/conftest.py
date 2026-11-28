@@ -17,8 +17,7 @@ import jwt
 import pytest
 from pydantic import SecretStr
 
-from app.config import Settings
-from app.db import Database
+from app.config import Database, Settings
 from app.gateway.factory import build_gateway
 from app.gateway.fake import FakeProvider
 from app.main import create_app
@@ -46,8 +45,10 @@ async def database_url():
     await admin.close()
     url = _with_db(ADMIN_DSN, name)
     conn = await asyncpg.connect(url)
+    # Arkavidia.sql is a reference/export schema, not a runnable migration.
+    # Applying it together with the canonical migration duplicates types/tables.
     for f in [ROOT / "supabase/local/00_supabase_shim.sql",
-              *sorted((ROOT / "supabase/migrations").glob("*.sql"))]:
+              ROOT / "supabase/migrations/20261125000000_init.sql"]:
         await conn.execute(f.read_text())
     await conn.close()
     yield url

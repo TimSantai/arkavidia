@@ -12,14 +12,13 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.auth import TokenVerifier
-from app.config import Settings, get_settings
-from app.db import Database
+from app.config import Database, Settings, get_settings
 from app.errors import AppError, problem
+from app.features import agents, auth, brain, checks, credits, health, messages, passport, teams
+from app.features.auth import TokenVerifier
 from app.gateway.base import ChatProvider
 from app.gateway.factory import build_gateway
-from app.logging import configure_logging
-from app.routers import agents, brain, checks, credits, health, messages, passport, teams
+from app.log import configure_logging
 
 log = structlog.get_logger(__name__)
 PROBLEM = "application/problem+json"
@@ -85,7 +84,7 @@ def create_app(settings: Settings | None = None,
         return JSONResponse(problem(500, "Kesalahan internal", "Terjadi kesalahan tak terduga",
                                     "about:blank", rid), status_code=500, media_type=PROBLEM)
 
-    for r in (health, teams, messages, brain, passport, agents, checks, credits):
+    for r in (health, auth, teams, messages, brain, passport, agents, checks, credits):
         app.include_router(r.router)
     return app
 
