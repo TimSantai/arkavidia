@@ -10,13 +10,16 @@ Backend FastAPI + worker AI asinkron di atas satu Postgres (Supabase), mengikuti
 | :--- | :--- | :--- |
 | Skema + RLS (IFC lapis 1) | `supabase/migrations/20261125000000_init.sql` | DBML + perbaikan A1–A7, B, C. Tabel internal tertutup bagi klien |
 | Shim Supabase lokal | `supabase/local/00_supabase_shim.sql` | Role `anon/authenticated/service_role`, `auth.users`, `auth.uid()`. **Jangan** dijalankan di Supabase cloud |
-| API | `app/main.py`, `app/routers/` | 29 path, error RFC 9457, `x-request-id`, idempotensi. Kontrak: `docs/openapi.json` |
-| Policy IFC lapis 2 | `app/policy.py` | Otorisasi per item sebelum LLM, aturan data tier Free, taint dari isi bundle |
-| Retrieval | `app/retrieval.py` | FTS `indonesian` + pgvector HNSW, RRF k=60, ekspansi graf 1-hop, as-of bitemporal |
+| API & Fitur Domain | `app/main.py`, `app/features/` | Vertical slice per fitur (`agents`, `brain`, `checks`, `credits`, `health`, `messages`, `passport`, `teams`, `common`). 29 path, error RFC 9457 (`app/errors/`), `x-request-id`, idempotensi. Kontrak: `docs/openapi.json` |
+| Konfigurasi & DB | `app/config/` | `Settings` (`settings.py`) dan akses Postgres dengan RLS (`db.py`) |
+| Autentikasi | `app/features/auth/` | Supabase OAuth start/callback, JWT verification, profile sync, and `Principal` dependency |
+| Logging | `app/log/` | Konfigurasi `structlog` (`logger.py`) |
+| Policy IFC lapis 2 | `app/policy/` | Otorisasi per item sebelum LLM, aturan data tier Free, taint dari isi bundle (`ifc.py`) |
+| Retrieval | `app/retrieval/` | FTS `indonesian` + pgvector HNSW, RRF k=60, ekspansi graf 1-hop, as-of bitemporal (`hybrid.py`) |
 | LLM gateway | `app/gateway/` | Fallback antar-provider, validasi JSON schema + 1 kali perbaikan, kuota harian, metering `llm_calls`, pre-authorization kredit Pro, mode `DEMO_REPLAY` |
 | Modul AI murni | `app/ai/` | Ekstraksi + verifier grounding, PII, IRT 2PL (EAP), BKT dengan forgetting, grader self-consistency + conformal risk control, coverage, bus factor eksak, Gini, pairing eksak |
-| Worker | `app/worker.py` | Antrean Postgres `FOR UPDATE SKIP LOCKED`, backoff 1/4/16 detik, job macet dikembalikan setelah 5 menit |
-| Ledger kredit | `app/billing.py` | Mode simulasi. hold −H → release +H → charge −P (bersih −P) |
+| Worker | `app/worker/` | Antrean Postgres `FOR UPDATE SKIP LOCKED`, backoff 1/4/16 detik, job macet dikembalikan setelah 5 menit (`runner.py`) |
+| Ledger kredit | `app/billing/` | Mode simulasi. hold −H → release +H → charge −P (bersih −P) (`ledger.py`) |
 
 ## Menjalankan secara lokal
 
@@ -36,7 +39,7 @@ python -m app.worker                           # terminal kedua: worker AI
 
 Dengan `LLM_BACKEND=fake` semuanya berjalan tanpa API key dan tanpa internet. Provider palsu memakai heuristik deterministik, jadi kualitas jawabannya **bukan** ukuran kualitas AI.
 
-Ke Supabase cloud: jalankan hanya file di `supabase/migrations/` (mis. `supabase db push`), isi `DATABASE_URL`, `SUPABASE_JWKS_URL` atau `SUPABASE_JWT_SECRET`, lalu set `LLM_BACKEND=litellm` beserta nama model dan kunci API.
+Ke Supabase cloud: jalankan hanya migrasi kanonik `supabase/migrations/20261125000000_init.sql` (mis. `supabase db push`), isi `DATABASE_URL`, Supabase OAuth/JWT variables seperti di `docs/auth.md`, lalu set `LLM_BACKEND=litellm` beserta nama model dan kunci API. `Arkavidia.sql` adalah export/reference, bukan migrasi runtime lengkap.
 
 ## Tes
 

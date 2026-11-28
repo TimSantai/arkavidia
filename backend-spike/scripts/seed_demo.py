@@ -15,8 +15,7 @@ import asyncpg
 import httpx
 import jwt
 
-from app.config import get_settings
-from app.db import Database
+from app.config import Database, get_settings
 from app.gateway.factory import build_gateway
 from app.main import create_app
 from app.worker import Worker

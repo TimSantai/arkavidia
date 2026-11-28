@@ -1,4 +1,4 @@
-name: nasa-space-app
+  name: nasa-space-app
 
 # ─────────────────────────────────────────────────────────────────────────────
 # NASA Space App Monorepo Docker Compose
